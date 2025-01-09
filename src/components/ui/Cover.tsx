@@ -14,7 +14,7 @@ function Cover() {
 	return (
 		<section
 			id="cover"
-			className="flex flex-col justify-center items-center pt-12 text-center gap-14 mb-[420px]"
+			className="flex flex-col justify-center items-center pt-12 text-center gap-14 mb-[470px]"
 		>
 			<div>
 				<h2 className="text-slate-800 font-bold text-4xl mb-3">
@@ -27,7 +27,7 @@ function Cover() {
 					Book your appointment at desired specialist
 				</button>
 			</div>
-			<div className="relative w-[1240px]">
+			<div className="relative w-[1240px] max-w-[85%]">
 				<Carousel>
 					<CarouselContent>
 						<CarouselItem>

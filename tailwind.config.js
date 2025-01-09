@@ -54,6 +54,9 @@ export default {
 			fontFamily: {
 				serif: ['"Source Serif 4"', "Serif"],
 			},
+			gridTemplateColumns: {
+				custom: "repeat(auto-fill, minmax(100px, 1fr))",
+			},
 		},
 	},
 	plugins: [require("tailwindcss-animate")],

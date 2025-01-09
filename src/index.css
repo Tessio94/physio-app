@@ -69,3 +69,66 @@ body {
 	@apply bg-slate-50;
 	@apply font-serif;
 }
+
+/* company logos horizontal animation */
+
+@keyframes slide {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-100%);
+	}
+}
+
+.scroller {
+	animation: 25s slide infinite linear;
+}
+@keyframes slide2 {
+	from {
+		transform: translateX(-100%);
+	}
+	to {
+		transform: translateX(0);
+	}
+}
+
+.scroller2 {
+	animation: 25s slide2 infinite linear;
+}
+
+#animation_container1 {
+	cursor: pointer;
+}
+#animation_container1:hover .scroller {
+	animation-play-state: paused;
+}
+#animation_container2 {
+	cursor: pointer;
+}
+#animation_container2:hover .scroller2 {
+	animation-play-state: paused;
+}
+
+/* company perosnel grid flip */
+.card {
+	perspective: 1000px; /* Adds 3D effect */
+}
+
+.card_inner {
+	transition: transform 0.6s;
+	transform-style: preserve-3d;
+}
+
+.card:hover .card_inner {
+	transform: rotateY(180deg); /* Flip animation */
+}
+
+.card_front,
+.card_back {
+	backface-visibility: hidden;
+}
+
+.card_back {
+	transform: rotateY(180deg); /* Back side starts flipped */
+}
