@@ -77,12 +77,12 @@ const fizioterapeuti = [
 
 function Grid() {
 	return (
-		<div className=" bg-gridBack pb-[80px] pt-[100px]">
+		<div className="pb-[80px] pt-[100px] bg-gridBack">
 			<div className="grid grid-cols-1 w-fit sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-10 px-10 max-w-[1200px] mx-[auto]">
 				{fizioterapeuti.map((fizio) => {
 					return (
 						<div className="card w-64 h-80">
-							<div className="card_inner w-full h-full relative shadow-2xl rounded-xl">
+							<div className="card_inner w-full h-full relative shadow-2xl shadow-slate-500 rounded-xl">
 								<div className="card_front absolute w-full h-full flex flex-col justify-center items-center gap-10 py-10 rounded-xl  bg-white">
 									<img
 										src={fizio.image}

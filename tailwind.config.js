@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+	plugins: [require("tailwindcss-animate")],
 	darkMode: ["class"],
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
@@ -60,7 +61,25 @@ export default {
 			backgroundImage: {
 				gridBack: "url('/src/assets/grid/background.svg')",
 			},
+			animation: {
+				name: "animate 1s ease-in-out  1 forwards",
+				des: "animate 1s ease-in-out 0.3s 1 forwards",
+				but: "animate 1s ease-in-out 0.6s 1 forwards",
+			},
+			keyframes: {
+				animate: {
+					"0%": {
+						opacity: "0",
+						transform: "translate(0,100px)",
+						filter: "blur(33px)",
+					},
+					"100%": {
+						opacity: "1",
+						transform: "translate(0)",
+						filter: "blur(0)",
+					},
+				},
+			},
 		},
 	},
-	plugins: [require("tailwindcss-animate")],
 };
