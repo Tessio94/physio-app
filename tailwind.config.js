@@ -57,6 +57,9 @@ export default {
 			gridTemplateColumns: {
 				custom: "repeat(auto-fill, minmax(100px, 1fr))",
 			},
+			backgroundImage: {
+				gridBack: "url('/src/assets/grid/background.svg')",
+			},
 		},
 	},
 	plugins: [require("tailwindcss-animate")],
