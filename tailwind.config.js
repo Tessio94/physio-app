@@ -61,6 +61,9 @@ export default {
 			backgroundImage: {
 				gridBack: "url('/src/assets/grid/background.svg')",
 			},
+			boxShadow: {
+				reverse: "0 -20px 25px -5px rgba(148, 163, 184, 0.3)",
+			},
 			animation: {
 				name: "animate 1s ease-in-out  1 forwards",
 				des: "animate 1s ease-in-out 0.3s 1 forwards",

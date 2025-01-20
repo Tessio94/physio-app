@@ -1,25 +1,21 @@
-import Banner from "./components/ui/Banner";
-import Cover from "./components/ui/Cover";
-import Footer from "./components/ui/Footer";
-import Grid from "./components/ui/Grid";
-import NavMenu from "./components/ui/NavMenu";
-import Partneri from "./components/ui/Partneri";
-import Gallery from "./components/ui/Gallery";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Homepage from "./pages/Homepage";
+import AppLayout from "./layout/AppLayout";
+import Login from "./pages/Login";
+import BookNow from "./pages/BookNow";
 
 function App() {
-	return (
-		<>
-			<NavMenu />
-			<Cover />
-			<Banner type="" />
-			<Grid />
-			<Banner type="partneri" />
-			<Partneri />
-			<Banner type="galerija" />
-			<Gallery />
-			<Footer />
-		</>
-	);
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<Homepage />} />
+          <Route path="login" element={<Login />} />
+          <Route path="book-now" element={<BookNow />} />
+        </Route>
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
