@@ -1,13 +1,13 @@
 const {
-  getAllServices,
-  getAvaliableSlots,
+	getAllServicesAndTherapists,
+	getAvaliableSlots,
 } = require("../controllers/bookController");
 
 const express = require("express");
 const router = express.Router();
 
-router.route("/booknow").get(getAllServices);
+router.route("/book-now").get(getAllServicesAndTherapists);
 
-router.route("/booknow/:id").get(getAvaliableSlots);
+router.route("/book-now/appointments").get(getAvaliableSlots);
 
 module.exports = router;

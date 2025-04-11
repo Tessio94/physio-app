@@ -6,7 +6,9 @@ function AppLayout() {
   return (
     <>
       <NavMenu />
-      <Outlet />
+      <section className="relative flex-1">
+        <Outlet />
+      </section>
       <Footer />
     </>
   );

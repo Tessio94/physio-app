@@ -74,6 +74,12 @@ body {
   @apply font-serif;
 }
 
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 /* ------------------------------carousel----------------------------- */
 .carousel .overflow-hidden {
   border-radius: 0.75rem;

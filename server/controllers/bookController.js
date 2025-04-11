@@ -4,27 +4,30 @@ const pool = require("../db/database");
 // sql inputs sanitization (to prevent sql injection)
 // no middleware for this one...
 // Concurrency: The two queries are independent, so you can execute them concurrently to improve performance using Promise.all.
-const getAllServices = async (req, res) => {
-  try {
-    const [resultServices, resultEmployees] = await Promise.all([
-      pool.query("SELECT name FROM services;"),
-      pool.query("SELECT name FROM employees;"),
-    ]);
+const getAllServicesAndTherapists = async (req, res) => {
+	try {
+		const [resultServices, resultTherapists] = await Promise.all([
+			pool.query("SELECT * FROM services;"),
+			pool.query("SELECT id , name, icon  FROM therapists;"),
+		]);
 
-    res
-      .status(200)
-      .send({ services: resultServices.rows, employees: resultEmployees.rows });
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    res.status(500).send({ error: "Internal Server Error" });
-  }
+		res.status(200).send({
+			services: resultServices.rows,
+			therapists: resultTherapists.rows,
+		});
+	} catch (error) {
+		console.error("Error fetching data:", error);
+		res.status(500).send({ error: "Internal Server Error" });
+	}
 };
 
 const getAvaliableSlots = async (req, res) => {
-  const params = req.params;
-  console.log(params);
+	const params = req.query;
+	console.log(params);
 
-  res.send("these are your avaliable slots...");
+	res.status(200).send({
+		slots: { 1: "10:30", 2: "11:00" },
+	});
 };
 
-module.exports = { getAllServices, getAvaliableSlots };
+module.exports = { getAllServicesAndTherapists, getAvaliableSlots };
