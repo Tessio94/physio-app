@@ -1,9 +1,12 @@
-const DropdownOption = ({ id, icon, name, fetchService }) => {
+const DropdownOption = ({ id, icon, name, fetchService, toggleBlur }) => {
   if (name === "Kineziterapija") {
     return (
       <li
         className="group flex cursor-pointer items-center gap-4 rounded-xl px-4 py-2 transition-all hover:bg-slate-600 hover:text-slate-200"
-        onClick={() => fetchService(id)}
+        onClick={() => {
+          fetchService(id);
+          toggleBlur();
+        }}
       >
         <div className="flex h-fit w-fit items-center justify-center overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45 transition-all group-hover:bg-slate-200">
           <img src={`/src/${icon}`} width={30} height={30} />
@@ -16,7 +19,10 @@ const DropdownOption = ({ id, icon, name, fetchService }) => {
   return (
     <li
       className="group flex cursor-pointer items-center gap-4 rounded-xl px-4 py-2 transition-all hover:bg-slate-600 hover:text-slate-200"
-      onClick={() => fetchService(id)}
+      onClick={() => {
+        fetchService(id);
+        toggleBlur();
+      }}
     >
       <div className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45 transition-all group-hover:bg-slate-200">
         <img src={`/src/${icon}`} width={30} height={30} />

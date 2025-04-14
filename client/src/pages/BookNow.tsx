@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import DropdownOption from "@/components/DropdownOption";
 import AvailableSlots from "@/components/AvaliableSlots";
+import { cn } from "@/lib/utils";
+import AppointmentDays from "@/components/AppointmentDays";
 
 // const fetchServicesAndTherapists = async ({ queryKey }) => {
 //   const [, { serviceId, minDate, maxDate }] = queryKey;
@@ -28,7 +30,7 @@ function BookNow() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setMinLoaderTimePassed(true);
-    }, 1000); // 1 second delay
+    }, 700); // 1 second delay
     return () => clearTimeout(timer);
   }, []);
 
@@ -79,17 +81,24 @@ function BookNow() {
         </div>
       ) : (
         <div className="relative">
-          {isBlurred && (
-            <div
-              className="fixed inset-0 z-10 backdrop-blur-sm"
-              onClick={toggleBlur}
-            ></div>
-          )}
+          <div
+            className={cn(
+              "fixed inset-0 z-0 transition-[backdrop-filter] duration-500 ease-in-out",
+              isBlurred ? "z-10 backdrop-blur-sm" : "backdrop-blur-none",
+            )}
+            onClick={toggleBlur}
+          ></div>
+
           <h3 className="relative px-36 pt-16 text-4xl text-slate-800">
             Napravi rezervaciju
           </h3>
           <form className="flex items-center justify-between px-36 py-16">
-            <div className="relative flex w-[45%] flex-col gap-10 rounded-xl border-2 p-4">
+            <div
+              className={cn(
+                "relative flex w-[45%] flex-col gap-10 rounded-xl border-2 p-4",
+                isBlurred && showService ? "z-20" : "z-0",
+              )}
+            >
               <p className="">
                 <span className="relative after:absolute after:left-0 after:top-[101%] after:h-[2px] after:w-full after:bg-slate-300">
                   Odaberi terapiju
@@ -124,6 +133,7 @@ function BookNow() {
                           name={name}
                           icon={icon}
                           fetchService={handleServiceSelect}
+                          toggleBlur={toggleBlur}
                         />
                       );
                     })
@@ -131,7 +141,12 @@ function BookNow() {
                 </ul>
               )}
             </div>
-            <div className="relative flex w-[45%] flex-col gap-10 rounded-xl border-2 p-4">
+            <div
+              className={cn(
+                "relative flex w-[45%] flex-col gap-10 rounded-xl border-2 p-4",
+                isBlurred && showTherapist ? "z-20" : "z-0",
+              )}
+            >
               <p>
                 <span className="relative after:absolute after:left-0 after:top-[107%] after:h-[2px] after:w-full after:bg-slate-300">
                   Odaberi terapeuta
@@ -168,15 +183,20 @@ function BookNow() {
               )}
             </div>
           </form>
-          <div className="mx-36 mb-36 rounded-xl border-[1px] border-slate-500 px-4 py-4">
+          <div className="relative mx-36 mb-36 rounded-xl border-[1px] border-slate-500 px-4 py-4">
             <h6 className="mb-4">Izaberi datum i vrijeme</h6>
-            {selectedService ? (
-              <AvailableSlots serviceId={selectedService} />
+            <div className="flex">
+              <AppointmentDays />
+            </div>
+            {/* {selectedService ? (
+              <div>
+                <AvailableSlots serviceId={selectedService} />
+              </div>
             ) : (
               <div className="mx-auto w-fit text-slate-500">
                 Rezultati će biti prikazani nakon odabira usluge i terapeuta
               </div>
-            )}
+            )} */}
           </div>
         </div>
       )}
