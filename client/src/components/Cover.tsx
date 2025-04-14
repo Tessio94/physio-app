@@ -18,7 +18,7 @@ function Cover() {
       id="cover"
       className="mb-[10%] flex flex-col items-center justify-center gap-14 pt-12 text-center md:mb-[470px]"
     >
-      <div className="max-w-[80%]">
+      <div className="max-w-[95%] min-[450px]:max-w-[80%]">
         <h2 className="mb-3 text-4xl font-bold text-slate-800">
           Insignia Fizioterapija
         </h2>
@@ -27,15 +27,15 @@ function Cover() {
         </p>
         <Link
           to="/book-now"
-          className="group flex items-center gap-5 rounded-lg bg-slate-800 px-4 py-2 font-semibold text-white transition-all hover:bg-slate-400 hover:text-slate-800"
+          className="group mx-auto flex w-fit items-center gap-5 rounded-lg bg-slate-800 px-4 py-2 font-semibold text-white transition-all hover:bg-slate-400 hover:text-slate-800"
         >
-          Rezervirajte termin kod odabranog fizioterapeuta
+          Rezervirajte termin
           <span className="text-xl transition-all group-hover:translate-x-2">
             <FaHandPointRight />
           </span>
         </Link>
       </div>
-      <div className="relative w-[1240px] max-w-[80%] xl:max-w-[85%]">
+      <div className="relative w-[1240px] max-w-[95%] min-[450px]:max-w-[80%] xl:max-w-[85%]">
         <Carousel opts={{ loop: true }} className="carousel">
           <CarouselContent>
             <CarouselItem>
@@ -51,12 +51,12 @@ function Cover() {
               <img src={cover4} alt="carousel image 4" className="rounded-xl" />
             </CarouselItem>
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <CarouselPrevious className="max-sm:left-[30%] max-sm:top-[120%]" />
+          <CarouselNext className="max-sm:right-[30%] max-sm:top-[120%]" />
         </Carousel>
         <div
           id="about"
-          className="z-100 mt-[10%] flex flex-col items-center justify-start gap-5 rounded-xl border-2 bg-white px-10 py-10 md:absolute md:left-[50%] md:top-[80%] md:mt-[0px] md:h-[500px] md:w-[500px] md:translate-x-[-50%]"
+          className="z-100 mt-28 flex flex-col items-center justify-start gap-5 rounded-xl border-2 bg-white px-10 py-10 max-[450px]:mt-20 sm:mt-[10%] md:absolute md:left-[50%] md:top-[80%] md:mt-[0px] md:h-[500px] md:w-[500px] md:translate-x-[-50%]"
         >
           <img alt="Company Icon" src="/logo.svg" className="h-8 w-auto" />
           <h3>Klinika koju ste tražili</h3>

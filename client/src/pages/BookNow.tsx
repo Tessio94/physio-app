@@ -84,18 +84,20 @@ function BookNow() {
           <div
             className={cn(
               "fixed inset-0 z-0 transition-[backdrop-filter] duration-500 ease-in-out",
-              isBlurred ? "z-10 backdrop-blur-sm" : "backdrop-blur-none",
+              isBlurred
+                ? "z-10 backdrop-blur-sm"
+                : "pointer-events-none backdrop-blur-none",
             )}
             onClick={toggleBlur}
           ></div>
 
-          <h3 className="relative px-36 pt-16 text-4xl text-slate-800">
+          <h3 className="relative px-2 pt-16 text-4xl text-slate-800 sm:px-12 md:px-24 xl:px-56">
             Napravi rezervaciju
           </h3>
-          <form className="flex items-center justify-between px-36 py-16">
+          <form className="flex flex-col items-center justify-between px-2 py-16 max-sm:gap-8 sm:flex-row sm:px-12 md:px-24 xl:px-56">
             <div
               className={cn(
-                "relative flex w-[45%] flex-col gap-10 rounded-xl border-2 p-4",
+                "relative flex w-full flex-col gap-10 rounded-xl border-2 p-4 sm:w-[48%] xl:w-[45%]",
                 isBlurred && showService ? "z-20" : "z-0",
               )}
             >
@@ -143,7 +145,7 @@ function BookNow() {
             </div>
             <div
               className={cn(
-                "relative flex w-[45%] flex-col gap-10 rounded-xl border-2 p-4",
+                "relative flex w-full flex-col gap-10 rounded-xl border-2 p-4 sm:w-[48%] xl:w-[45%]",
                 isBlurred && showTherapist ? "z-20" : "z-0",
               )}
             >
@@ -183,12 +185,9 @@ function BookNow() {
               )}
             </div>
           </form>
-          <div className="relative mx-36 mb-36 rounded-xl border-[1px] border-slate-500 px-4 py-4">
-            <h6 className="mb-4">Izaberi datum i vrijeme</h6>
-            <div className="flex">
-              <AppointmentDays />
-            </div>
-            {/* {selectedService ? (
+          <div className="relative mx-2 mb-36 rounded-xl border-[1px] border-slate-500 px-4 py-4 sm:mx-12 md:mx-24 xl:mx-56">
+            <h6 className="mb-4 text-xl">Izaberi datum i vrijeme</h6>
+            {selectedService ? (
               <div>
                 <AvailableSlots serviceId={selectedService} />
               </div>
@@ -196,7 +195,7 @@ function BookNow() {
               <div className="mx-auto w-fit text-slate-500">
                 Rezultati će biti prikazani nakon odabira usluge i terapeuta
               </div>
-            )} */}
+            )}
           </div>
         </div>
       )}

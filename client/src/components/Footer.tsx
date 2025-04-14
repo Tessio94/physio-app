@@ -2,7 +2,7 @@ import { CiFacebook, CiInstagram, CiMail, CiPhone } from "react-icons/ci";
 
 function Footer() {
   return (
-    <footer className="bg-white">
+    <footer className="border-t-2 bg-white">
       <div className="mx-auto flex w-fit flex-col items-center justify-center gap-14 py-20 md:w-[1200px] md:max-w-[80%] md:flex-row md:gap-0">
         <div className="flex grow flex-col md:self-stretch">
           <a href="#">

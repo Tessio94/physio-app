@@ -1,5 +1,6 @@
 import { formatDate } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+import AppointmentDays from "./AppointmentDays";
 
 // Fetch the available slots for the selected service
 async function fetchAvailableSlots(serviceId) {
@@ -28,7 +29,7 @@ const AvailableSlots = ({ serviceId }) => {
     queryFn: () => fetchAvailableSlots(serviceId),
     enabled: !!serviceId, // Only run the query if serviceId is available
   });
-  console.log(JSON.stringify(data, null, 2));
+  // console.log(JSON.stringify(data, null, 2));
 
   if (isLoading) {
     return <div>Loading available slots...</div>;
@@ -39,17 +40,11 @@ const AvailableSlots = ({ serviceId }) => {
   }
 
   return (
-    <div>
-      <h6>Available Slots:</h6>
-      <ul>
-        {data?.map((slot, i) => (
-          <li key={i} className="flex items-start gap-5">
-            <p>{slot.serviceId}</p>
-            <p>{slot.minDate}</p>
-            <p>{slot.maxDate}</p>
-          </li>
-        ))}
-      </ul>
+    <div className="overflow-x-scroll">
+      <h6 className="mb-3">Slobodni termini:</h6>
+      <div className="flex gap-1">
+        <AppointmentDays />
+      </div>
     </div>
   );
 };

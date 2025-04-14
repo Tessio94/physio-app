@@ -141,7 +141,7 @@ function NavMenu() {
               <DisclosureButton
                 key={item.name}
                 as="a"
-                href={item.href}
+                href={`/${item.href}`}
                 aria-current={item.current ? "page" : undefined}
                 className={classNames(
                   item.current
