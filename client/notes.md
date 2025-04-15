@@ -30,3 +30,7 @@ https://api.barbershop-ritual.hr/employees/first-available/availability?minDate=
 ],
 "errors": {}
 }
+
+## DATABASE
+
+1. user can make a booking for a physiotherapy service (when they book an appointment, they can specify the date, the therapist, the service, the service duration and consequently service price )

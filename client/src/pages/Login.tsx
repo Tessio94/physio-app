@@ -6,8 +6,8 @@ import { FcGoogle } from "react-icons/fc";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function Login() {
-  const [register, setRegister] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
+  const [register, setRegister] = useState<boolean>(false);
+  const [showHelp, setShowHelp] = useState<boolean>(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -45,7 +45,7 @@ function Login() {
         <div className="mt-5 px-3 pb-[80px] sm:px-10">
           <form action="" className="flex flex-col gap-5">
             {register && (
-              <div className="flex gap-7">
+              <div className="flex gap-3 sm:gap-7">
                 <input
                   type="text"
                   placeholder="Ime"
@@ -123,7 +123,7 @@ function Login() {
           </form>
         </div>
       </div>
-      <Help />
+      <Help handleHelp={handleHelp} showHelp={showHelp} />
     </>
   );
 }

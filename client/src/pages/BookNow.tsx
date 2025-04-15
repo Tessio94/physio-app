@@ -134,7 +134,7 @@ function BookNow() {
                           id={id}
                           name={name}
                           icon={icon}
-                          fetchService={handleServiceSelect}
+                          selectService={handleServiceSelect}
                           toggleBlur={toggleBlur}
                         />
                       );

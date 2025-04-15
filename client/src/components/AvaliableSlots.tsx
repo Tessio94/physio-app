@@ -6,13 +6,13 @@ import AppointmentDays from "./AppointmentDays";
 async function fetchAvailableSlots(serviceId) {
   const now = new Date();
   const today = new Date(now);
-  const threeWeeksLater = new Date(today.getTime() + 21 * 24 * 60 * 60 * 1000);
+  const threeWeeksLater = new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000);
 
   const minDate = formatDate(today);
   const maxDate = formatDate(threeWeeksLater);
 
   const response = await fetch(
-    `http://localhost:3000/api/v1/book-now/appointments?serviceId=${serviceId}&minDate=${minDate}&maxDate=${maxDate}`,
+    `http://localhost:3000/api/v1/book-now/appointments/all?serviceId=${serviceId}&minDate=${minDate}&maxDate=${maxDate}`,
   );
   const data = await response.json();
   console.log(data);
