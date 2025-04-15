@@ -4,15 +4,18 @@ import AppointmentDays from "./AppointmentDays";
 
 // Fetch the available slots for the selected service
 async function fetchAvailableSlots(serviceId) {
-  const now = new Date();
-  const today = new Date(now);
-  const threeWeeksLater = new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000);
+  // const now = new Date();
+  // const today = new Date(now);
+  // const threeWeeksLater = new Date(today.getTime() + 14 * 24 * 60 * 60 * 1000);
 
-  const minDate = formatDate(today);
-  const maxDate = formatDate(threeWeeksLater);
+  // const minDate = formatDate(today);
+  // const maxDate = formatDate(threeWeeksLater);
 
+  // const response = await fetch(
+  //   `http://localhost:3000/api/v1/book-now/appointments/all?serviceId=${serviceId}&minDate=${minDate}&maxDate=${maxDate}`,
+  // );
   const response = await fetch(
-    `http://localhost:3000/api/v1/book-now/appointments/all?serviceId=${serviceId}&minDate=${minDate}&maxDate=${maxDate}`,
+    `http://localhost:3000/api/v1/book-now/appointments/all?serviceId=${serviceId}`,
   );
   const data = await response.json();
   console.log(data);

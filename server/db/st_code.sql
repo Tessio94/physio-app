@@ -24,7 +24,7 @@ VALUES
     (1, 1, 2, '["2025-04-15 10:30:00","2025-04-15 11:00:00")');
 */
 
--- available hours
+-------------------------when we select services-----------------------------
 SELECT service_id, available
 FROM (
 	SELECT service_id,
@@ -45,3 +45,31 @@ FROM (
 				 (VALUES (1), (2), (3), (4), (5), (6)) b(service_id)) sub2
 		) sub
 WHERE upper(available) - lower(available) >= interval '30 min';
+
+
+-------------------------when we select therapist-----------------------------
+  SELECT service_id, therapist_id, available
+FROM (
+  SELECT service_id, therapist_id,
+    tsrange(
+      upper(time_range),
+      lower(lead(time_range) OVER (PARTITION BY service_id, therapist_id ORDER BY lower(time_range)))
+    ) AS available,
+    lower(time_range) as lowerTime,
+    upper(time_range) as upperTime,
+    lower(lead(time_range) OVER (PARTITION BY service_id, therapist_id ORDER BY lower(time_range))) as lowerLeadTime
+  FROM (
+    SELECT service_id, therapist_id, time_range
+    FROM bookings
+    WHERE lower(time_range)::date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '14 days'
+
+    UNION
+
+    SELECT ts.service_id, ts.therapist_id,
+           tsrange(closed + interval '20 hours', closed + interval '32 hours')
+    FROM generate_series((CURRENT_DATE - 1)::timestamp, CURRENT_DATE + INTERVAL '14 days', INTERVAL '1 day') dates(closed)
+    JOIN therapists_services ts ON TRUE
+  ) sub2
+) sub
+WHERE upper(available) - lower(available) >= interval '30 min'
+  AND therapist_id = 2;

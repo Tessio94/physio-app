@@ -22,32 +22,72 @@ const getAllServicesAndTherapists = async (req, res) => {
 };
 
 const getAvailableSlots = async (req, res) => {
-	const { id } = req.param;
-	const { serviceId, minDate, maxDate } = req.query;
-	console.log("id: ", id);
+	try {
+		const { id } = req.params;
+		const { serviceId } = req.query;
 
-	res.status(200).json([
-		{
+		let services;
+
+		if (id === "all") {
+			services = await pool.query(
+				`
+        SELECT service_id, available
+        FROM (
+          SELECT service_id,
+            tsrange(upper(time_range), lower(lead(time_range) OVER
+              (PARTITION BY service_id ORDER BY lower(time_range)))) AS available,
+            lower(time_range) as lowerTime,
+            upper(time_range) as upperTime,
+            lower(lead(time_range) OVER
+              (PARTITION BY service_id ORDER BY lower(time_range))) as lowerLeadTime
+          FROM (
+            SELECT service_id, time_range
+            FROM bookings
+            WHERE lower(time_range)::date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '14 days'
+            UNION
+            SELECT service_id,
+                  tsrange(closed + interval '20 hours', closed + interval '32 hours')
+            FROM generate_series((CURRENT_DATE - 1)::timestamp, CURRENT_DATE + INTERVAL '14 days', INTERVAL '1 day') dates(closed),
+                (VALUES (1), (2), (3), (4), (5), (6)) b(service_id)) sub2
+            ) sub
+        WHERE upper(available) - lower(available) >= interval '30 min';`
+			);
+		} else {
+			services = await pool.query(
+				`
+        SELECT service_id, available
+        FROM (
+          SELECT service_id,
+            tsrange(upper(time_range), lower(lead(time_range) OVER
+              (PARTITION BY service_id ORDER BY lower(time_range)))) AS available,
+            lower(time_range) as lowerTime,
+            upper(time_range) as upperTime,
+            lower(lead(time_range) OVER
+              (PARTITION BY service_id ORDER BY lower(time_range))) as lowerLeadTime
+          FROM (
+            SELECT service_id, time_range
+            FROM bookings
+            WHERE lower(time_range)::date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '14 days'
+            UNION
+            SELECT service_id,
+                  tsrange(closed + interval '20 hours', closed + interval '32 hours')
+            FROM generate_series((CURRENT_DATE - 1)::timestamp, CURRENT_DATE + INTERVAL '14 days', INTERVAL '1 day') dates(closed),
+                (VALUES (1), (2), (3), (4), (5), (6)) b(service_id)) sub2
+            ) sub
+        WHERE upper(available) - lower(available) >= interval '30 min' and service_id=$1;`,
+				[serviceId]
+			);
+		}
+
+		res.status(200).json({
+			id,
 			serviceId,
-			minDate,
-			maxDate,
-		},
-		{
-			serviceId,
-			minDate,
-			maxDate,
-		},
-		{
-			serviceId,
-			minDate,
-			maxDate,
-		},
-		{
-			serviceId,
-			minDate,
-			maxDate,
-		},
-	]);
+			avaliableSlots: services.rows,
+		});
+	} catch (error) {
+		console.error("Error fetching available slots:", error);
+		res.status(500).send({ error: "Internal Server Error" });
+	}
 };
 
 module.exports = { getAllServicesAndTherapists, getAvailableSlots };
