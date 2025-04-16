@@ -8,6 +8,6 @@ const router = express.Router();
 
 router.route("/book-now").get(getAllServicesAndTherapists);
 
-router.route("/book-now/appointments/:id").get(getAvailableSlots);
+router.route("/book-now/appointments/:therapistId").get(getAvailableSlots);
 
 module.exports = router;

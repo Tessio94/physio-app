@@ -11,7 +11,6 @@ import { useQuery } from "@tanstack/react-query";
 import DropdownOption from "@/components/DropdownOption";
 import AvailableSlots from "@/components/AvaliableSlots";
 import { cn } from "@/lib/utils";
-import AppointmentDays from "@/components/AppointmentDays";
 
 // const fetchServicesAndTherapists = async ({ queryKey }) => {
 //   const [, { serviceId, minDate, maxDate }] = queryKey;
@@ -23,6 +22,7 @@ import AppointmentDays from "@/components/AppointmentDays";
 function BookNow() {
   const [selectedService, setSelectedService] = useState(null);
   const [isBlurred, setIsBlurred] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
   const [showService, setShowService] = useState(false);
   const [showTherapist, setShowTherapist] = useState(false);
   const [minLoaderTimePassed, setMinLoaderTimePassed] = useState(false);
@@ -33,6 +33,14 @@ function BookNow() {
     }, 700); // 1 second delay
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (showService || showTherapist) {
+      setIsExiting(true);
+    } else {
+      setIsExiting(false);
+    }
+  }, [showService, showTherapist]);
 
   const { isPending, error, data } = useQuery({
     queryKey: ["serviceData"],
@@ -83,9 +91,9 @@ function BookNow() {
         <div className="relative">
           <div
             className={cn(
-              "fixed inset-0 z-0 transition-[backdrop-filter] duration-500 ease-in-out",
+              "fixed inset-0 z-10 transition-all duration-500 ease-in-out",
               isBlurred
-                ? "z-10 backdrop-blur-sm"
+                ? "backdrop-blur-sm"
                 : "pointer-events-none backdrop-blur-none",
             )}
             onClick={toggleBlur}
@@ -94,11 +102,13 @@ function BookNow() {
           <h3 className="relative px-2 pt-16 text-4xl text-slate-800 sm:px-12 md:px-24 xl:px-56">
             Napravi rezervaciju
           </h3>
-          <form className="flex flex-col items-center justify-between px-2 py-16 max-sm:gap-8 sm:flex-row sm:px-12 md:px-24 xl:px-56">
+
+          <div className="flex flex-col items-center justify-between px-2 py-16 max-sm:gap-8 sm:flex-row sm:px-12 md:px-24 xl:px-56">
             <div
               className={cn(
-                "relative flex w-full flex-col gap-10 rounded-xl border-2 p-4 sm:w-[48%] xl:w-[45%]",
+                "relative flex w-full flex-col gap-10 rounded-xl border-2 p-4 transition-all sm:w-[48%] xl:w-[45%]",
                 isBlurred && showService ? "z-20" : "z-0",
+                isExiting ? "delay-500" : "delay-0",
               )}
             >
               <p className="">
@@ -118,35 +128,36 @@ function BookNow() {
                 </div>
                 <FaAngleDown />
               </div>
-              {isBlurred && showService && (
-                <ul className="absolute left-[16px] top-[calc(100%-16px)] z-20 w-[calc(100%-32px)] rounded-xl bg-white p-4 shadow-lg">
-                  {isPending ? (
-                    <li className="py-2 text-center text-slate-500">
-                      Učitavanje...
-                    </li>
-                  ) : (
-                    services?.map((service) => {
-                      const { id, name, icon } = service;
 
-                      return (
-                        <DropdownOption
-                          key={id}
-                          id={id}
-                          name={name}
-                          icon={icon}
-                          selectService={handleServiceSelect}
-                          toggleBlur={toggleBlur}
-                        />
-                      );
-                    })
-                  )}
-                </ul>
-              )}
+              <ul
+                className={cn(
+                  "absolute left-[16px] top-[calc(100%-16px)] w-[calc(100%-32px)] overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-500",
+                  isBlurred && showService
+                    ? "max-h-96 opacity-100"
+                    : "max-h-0 opacity-0",
+                )}
+              >
+                {services?.map((service) => {
+                  const { id, name, icon } = service;
+
+                  return (
+                    <DropdownOption
+                      key={id}
+                      id={id}
+                      name={name}
+                      icon={icon}
+                      selectService={handleServiceSelect}
+                      toggleBlur={toggleBlur}
+                    />
+                  );
+                })}
+              </ul>
             </div>
             <div
               className={cn(
-                "relative flex w-full flex-col gap-10 rounded-xl border-2 p-4 sm:w-[48%] xl:w-[45%]",
+                "relative flex w-full flex-col gap-10 rounded-xl border-2 p-4 transition-all sm:w-[48%] xl:w-[45%]",
                 isBlurred && showTherapist ? "z-20" : "z-0",
+                isExiting ? "delay-500" : "delay-0",
               )}
             >
               <p>
@@ -166,25 +177,24 @@ function BookNow() {
                 </div>
                 <FaAngleDown />
               </div>
-              {isBlurred && showTherapist && (
-                <ul className="absolute left-[16px] top-[calc(100%-16px)] z-20 w-[calc(100%-32px)] rounded-xl bg-white p-4 shadow-lg">
-                  {isPending ? (
-                    <li className="py-2 text-center text-slate-500">
-                      Učitavanje...
-                    </li>
-                  ) : (
-                    therapists?.map((therapist) => {
-                      const { id, name, icon } = therapist;
+              <ul
+                className={cn(
+                  "absolute left-[16px] top-[calc(100%-16px)] w-[calc(100%-32px)] overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-500",
+                  isBlurred && showTherapist
+                    ? "max-h-96 opacity-100"
+                    : "max-h-0 opacity-0",
+                )}
+              >
+                {therapists?.map((therapist) => {
+                  const { id, name, icon } = therapist;
 
-                      return (
-                        <DropdownOption key={id} name={name} icon={icon} />
-                      );
-                    })
-                  )}
-                </ul>
-              )}
+                  return (
+                    <DropdownOption key={id} id={id} name={name} icon={icon} />
+                  );
+                })}
+              </ul>
             </div>
-          </form>
+          </div>
           <div className="relative mx-2 mb-36 rounded-xl border-[1px] border-slate-500 px-4 py-4 sm:mx-12 md:mx-24 xl:mx-56">
             <h6 className="mb-4 text-xl">Izaberi datum i vrijeme</h6>
             {selectedService ? (
