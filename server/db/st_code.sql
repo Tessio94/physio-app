@@ -114,3 +114,35 @@ FROM (
 WHERE upper(available) - lower(available) >= interval '30 minutes'
   AND EXTRACT(DOW FROM lower(available)) NOT IN (0, 6)
   AND service_id = 2;
+
+  --------------------------------------------------promijeni booking tablicu doma-------------
+  CREATE TABLE IF NOT EXISTS public.bookings
+(
+    id integer NOT NULL DEFAULT nextval('bookings_id_seq'::regclass),
+    user_id integer NOT NULL,
+    service_id integer NOT NULL,
+    therapist_id integer NOT NULL,
+    time_range tsrange NOT NULL,
+    CONSTRAINT bookings_pkey PRIMARY KEY (id),
+    CONSTRAINT bookings_service_id_fkey FOREIGN KEY (service_id)
+        REFERENCES public.services (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT bookings_therapist_id_fkey FOREIGN KEY (therapist_id)
+        REFERENCES public.therapists (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT bookings_user_id_fkey FOREIGN KEY (user_id)
+        REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT bookings_therapist_id_time_range_excl EXCLUDE USING gist (
+        therapist_id WITH =,
+        time_range WITH &&)
+
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.bookings
+    OWNER to postgres;

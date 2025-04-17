@@ -3,7 +3,7 @@ const {
 	getAvailableSlotsQuery,
 } = require("../db/queries/services");
 const { getTherapists } = require("../db/queries/therapists");
-const { generateAppointmentsByDay } = require("../utils/utils");
+const { generateAvailabilityMap } = require("../utils/utils");
 
 // sql inputs sanitization (to prevent sql injection)
 // Concurrency: The two queries are independent, so you can execute them concurrently to improve performance using Promise.all.
@@ -28,16 +28,16 @@ const getAvailableSlots = async (req, res) => {
 	try {
 		const { therapistId } = req.params;
 		const { serviceId } = req.query;
-
+		console.log(therapistId);
 		const services = await getAvailableSlotsQuery(therapistId, serviceId);
-		console.log(services);
-		const appointmentsServices = generateAppointmentsByDay(services.rows);
-		// console.log("new code :", appointmentsServices);
+		// console.log(services);
+		const availability = generateAvailabilityMap(services.rows);
+		// console.log("new code :", availability);
 
 		const appointments = res.status(200).json({
 			therapistId,
 			serviceId,
-			appointmentsServices,
+			availability,
 		});
 	} catch (error) {
 		console.error("Error fetching available slots:", error);

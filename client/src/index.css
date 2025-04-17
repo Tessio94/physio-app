@@ -125,6 +125,9 @@ body {
   animation-play-state: paused;
 }
 
+.scroller img {
+  will-change: transform, filter;
+}
 /*---------------------------------company perosnel grid flip--------------------------------------------- */
 .card {
   perspective: 1000px; /* Adds 3D effect */

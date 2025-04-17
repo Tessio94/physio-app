@@ -20,7 +20,8 @@ import { cn } from "@/lib/utils";
 // };
 
 function BookNow() {
-  const [selectedService, setSelectedService] = useState(null);
+  const [selectedServiceId, setSelectedServiceId] = useState(null);
+  const [selectedTherapistId, setSelectedTherapistId] = useState(null);
   const [isBlurred, setIsBlurred] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [showService, setShowService] = useState(false);
@@ -70,8 +71,19 @@ function BookNow() {
   const loading = isPending || !minLoaderTimePassed;
 
   const handleServiceSelect = (serviceId) => {
-    setSelectedService(serviceId);
+    setSelectedServiceId(serviceId);
   };
+
+  const handleTherapistSelect = (therapistId) => {
+    setSelectedTherapistId(therapistId);
+  };
+
+  const selectedService = services.find(
+    (service) => service.id === selectedServiceId,
+  );
+  const selectedTherapist = therapists.find(
+    (therapist) => therapist.id === selectedTherapistId,
+  );
 
   return (
     <>
@@ -120,12 +132,25 @@ function BookNow() {
                 className="flex cursor-pointer items-center justify-between gap-5 rounded-xl border-[1px] px-4 py-2 transition-all hover:border-slate-400 hover:bg-slate-200"
                 onClick={toggleService}
               >
-                <div className="flex items-center gap-4">
-                  <div className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45">
-                    <img src={usluge} width={30} height={30} />
+                {selectedServiceId ? (
+                  <div className="flex items-center gap-4">
+                    <div className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45">
+                      <img
+                        src={`src${selectedService.icon}`}
+                        width={30}
+                        height={30}
+                      />
+                    </div>
+                    {selectedService.name}
                   </div>
-                  Usluga
-                </div>
+                ) : (
+                  <div className="flex items-center gap-4">
+                    <div className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45">
+                      <img src={usluge} width={30} height={30} />
+                    </div>
+                    Usluga
+                  </div>
+                )}
                 <FaAngleDown />
               </div>
 
@@ -148,6 +173,7 @@ function BookNow() {
                       icon={icon}
                       selectService={handleServiceSelect}
                       toggleBlur={toggleBlur}
+                      type="service"
                     />
                   );
                 })}
@@ -169,12 +195,25 @@ function BookNow() {
                 className="group flex cursor-pointer items-center justify-between gap-5 rounded-xl border-[1px] px-4 py-2 transition-all hover:border-slate-400 hover:bg-slate-200"
                 onClick={toggleTherapist}
               >
-                <div className="flex items-center gap-4">
-                  <div className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45">
-                    <img src={person} width={30} height={30} />
+                {selectedTherapistId ? (
+                  <div className="flex items-center gap-4">
+                    <div className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45">
+                      <img
+                        src={`src${selectedTherapist.icon}`}
+                        width={30}
+                        height={30}
+                      />
+                    </div>
+                    {selectedTherapist.name}
                   </div>
-                  Prvi dostupan
-                </div>
+                ) : (
+                  <div className="flex items-center gap-4">
+                    <div className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45">
+                      <img src={person} width={30} height={30} />
+                    </div>
+                    Prvi dostupan
+                  </div>
+                )}
                 <FaAngleDown />
               </div>
               <ul
@@ -189,7 +228,15 @@ function BookNow() {
                   const { id, name, icon } = therapist;
 
                   return (
-                    <DropdownOption key={id} id={id} name={name} icon={icon} />
+                    <DropdownOption
+                      key={id}
+                      id={id}
+                      name={name}
+                      icon={icon}
+                      selectTherapist={handleTherapistSelect}
+                      toggleBlur={toggleBlur}
+                      type="therapist"
+                    />
                   );
                 })}
               </ul>
@@ -197,9 +244,12 @@ function BookNow() {
           </div>
           <div className="relative mx-2 mb-36 rounded-xl border-[1px] border-slate-500 px-4 py-4 sm:mx-12 md:mx-24 xl:mx-56">
             <h6 className="mb-4 text-xl">Izaberi datum i vrijeme</h6>
-            {selectedService ? (
+            {selectedServiceId ? (
               <div>
-                <AvailableSlots serviceId={selectedService} />
+                <AvailableSlots
+                  serviceId={selectedServiceId}
+                  therapistId={selectedTherapistId}
+                />
               </div>
             ) : (
               <div className="mx-auto w-fit text-slate-500">

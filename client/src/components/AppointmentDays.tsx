@@ -1,54 +1,39 @@
-import person from "@/assets/grid/person.svg";
 import { formatSlotDate } from "@/lib/utils";
+import { useState } from "react";
+import Popup from "./Popup";
+import Reservation from "./Reservation";
 
-// const data = [
-//   {
-//     availableTimes: {
-//       "2025-04-14": ["08:00", "08:30", "09:00", "09:30", "10:00", "12:30"],
-//       "2025-04-15": ["08:00", "08:30", "09:00", "09:30", "12:30"],
-//       "2025-04-16": ["08:00", "10:30", "11:30", "12:30"],
-//       "2025-04-17": [
-//         "08:00",
-//         "12:30",
-//         "13:00",
-//         "14:00",
-//         "14:30",
-//         "15:00",
-//         "16:00",
-//       ],
-//       "2025-04-18": ["08:00", "12:30"],
-//       "2025-04-19": [
-//         "08:00",
-//         "08:30",
-//         "09:00",
-//         "09:30",
-//         "10:00",
-//         "12:30",
-//         "14:30",
-//         "16:30",
-//         "17:30",
-//         "18:00",
-//         "18:30",
-//         "19:00",
-//         "19:30",
-//       ],
-//       "2025-04-21": ["08:00", "12:30", "14:30", "16:30"],
-//       "2025-04-22": ["08:00", "12:30", "14:30", "16:30"],
-//       "2025-04-23": ["08:00", "12:30", "14:30", "16:30"],
-//       "2025-04-24": ["08:00", "12:30", "14:30", "16:30"],
-//     },
-//   },
-// ];
+const icons = {
+  1: "src/assets/grid/Nikola.jpg",
+  2: "src/assets/grid/Marija.jpg",
+  3: "src/assets/grid/Ana.jpg",
+  4: "src/assets/grid/Luka.jpg",
+  5: "src/assets/grid/Ema.jpg",
+  6: "src/assets/grid/Dina.jpg",
+};
 
-// const slots = Object.entries(data[0].availableTimes);
+const AppointmentDays = ({ appointments }) => {
+  const [popupData, setPopupData] = useState(null);
+  const [selectedReservation, setSelectedReservation] = useState(null);
 
-const AppointmentDays = ({ appointmentsServices }) => {
-  console.log(Object.entries(appointmentsServices));
-  const slots = Object.entries(appointmentsServices);
+  const slots = Object.entries(appointments);
+  // console.log(slots);
 
   const dates = slots.map((slot) => {
     return formatSlotDate(new Date(slot[0]));
   });
+
+  const handleTherapistSelect = (e, therapists, time, date) => {
+    e.stopPropagation();
+
+    if (therapists.length > 1) {
+      setPopupData({ therapists, time, date });
+    } else {
+      console.log("Selected therapist ID:", therapists[0]);
+      setSelectedReservation({ therapistId: therapists[0], time, date });
+      // Trigger appointment logic here...
+    }
+  };
 
   return (
     <>
@@ -59,22 +44,35 @@ const AppointmentDays = ({ appointmentsServices }) => {
               <p className="text-base italic">{dates[i].dayName}</p>
               <p className="text-sm italic">{dates[i].dateString}</p>
             </div>
-            {slot[1].map((slotTimes, i) => {
+            {Object.entries(slot[1]).map(([time, therapistIds], i) => {
               return (
                 <div
                   className="group flex cursor-pointer items-center justify-between gap-8 rounded-lg border-2 border-slate-200 p-2 transition-all duration-500 hover:bg-slate-500"
                   key={i}
+                  onClick={(e) =>
+                    handleTherapistSelect(e, therapistIds, time, slot[0])
+                  }
                 >
                   <span className="text-slate-900 transition-all duration-500 group-hover:text-slate-100">
-                    {slotTimes}
+                    {time}
                   </span>
-                  <div className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45 transition-all duration-500 group-hover:border-slate-100">
-                    <img
-                      src={person}
-                      width={30}
-                      height={30}
-                      className="transition-all duration-500 group-hover:bg-slate-100"
-                    />
+                  <div className="flex space-x-[-10px]">
+                    {therapistIds.map((iconId, i) => {
+                      return (
+                        <div
+                          className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45 transition-all duration-500 group-hover:border-slate-100"
+                          key={i}
+                        >
+                          <img
+                            src={icons[iconId]}
+                            width={30}
+                            height={30}
+                            className="transition-all duration-500 group-hover:bg-slate-100"
+                            alt={`Terapeut ${iconId} insignia`}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               );
@@ -82,6 +80,21 @@ const AppointmentDays = ({ appointmentsServices }) => {
           </div>
         );
       })}
+
+      {/* Popup for selecting therapist */}
+      <Popup
+        popupData={popupData}
+        setPopupData={setPopupData}
+        icons={icons}
+        setSelectedReservation={setSelectedReservation}
+      />
+
+      {/* Final reservation overlay */}
+      <Reservation
+        selectedReservation={selectedReservation}
+        setSelectedReservation={setSelectedReservation}
+        icons={icons}
+      />
     </>
   );
 };
