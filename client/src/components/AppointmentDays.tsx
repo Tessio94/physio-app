@@ -3,16 +3,7 @@ import { useState } from "react";
 import Popup from "./Popup";
 import Reservation from "./Reservation";
 
-const icons = {
-  1: "src/assets/grid/Nikola.jpg",
-  2: "src/assets/grid/Marija.jpg",
-  3: "src/assets/grid/Ana.jpg",
-  4: "src/assets/grid/Luka.jpg",
-  5: "src/assets/grid/Ema.jpg",
-  6: "src/assets/grid/Dina.jpg",
-};
-
-const AppointmentDays = ({ appointments }) => {
+const AppointmentDays = ({ appointments, details, serviceId }) => {
   const [popupData, setPopupData] = useState(null);
   const [selectedReservation, setSelectedReservation] = useState(null);
 
@@ -58,13 +49,18 @@ const AppointmentDays = ({ appointments }) => {
                   </span>
                   <div className="flex space-x-[-10px]">
                     {therapistIds.map((iconId, i) => {
+                      // console.log(iconId);
                       return (
                         <div
                           className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45 transition-all duration-500 group-hover:border-slate-100"
                           key={i}
                         >
                           <img
-                            src={icons[iconId]}
+                            src={`src${
+                              details.therapists.find(
+                                (therapist) => therapist.therapistId === iconId,
+                              ).therapistIcon
+                            }`}
                             width={30}
                             height={30}
                             className="transition-all duration-500 group-hover:bg-slate-100"
@@ -85,7 +81,7 @@ const AppointmentDays = ({ appointments }) => {
       <Popup
         popupData={popupData}
         setPopupData={setPopupData}
-        icons={icons}
+        detailsTherapists={details.therapists}
         setSelectedReservation={setSelectedReservation}
       />
 
@@ -93,7 +89,8 @@ const AppointmentDays = ({ appointments }) => {
       <Reservation
         selectedReservation={selectedReservation}
         setSelectedReservation={setSelectedReservation}
-        icons={icons}
+        details={details}
+        serviceId={serviceId}
       />
     </>
   );

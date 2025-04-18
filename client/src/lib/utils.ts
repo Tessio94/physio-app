@@ -54,3 +54,17 @@ export const formatTime12Hour = (time24) => {
   // const hour12 = hour % 12 === 0 ? 12 : hour % 12;
   return `${hour}:${minute.toString().padStart(2, "0")} ${period}`;
 };
+
+export const formatTimeRange = (date) => {
+  const [month, day, year] = date.toLocaleDateString().split("/");
+
+  const dateString = [
+    year.padStart(4, "0"),
+    month.padStart(2, "0"),
+    day.padStart(2, "0"),
+  ].join("-");
+
+  const timeString = date.toLocaleTimeString().slice(0, -3);
+
+  return `${dateString} ${timeString}`;
+};

@@ -1,4 +1,3 @@
-import { formatDate } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import AppointmentDays from "./AppointmentDays";
 
@@ -36,7 +35,7 @@ const AvailableSlots = ({
   serviceId: number;
   therapistId: number | null;
 }) => {
-  console.log(serviceId, therapistId);
+  // console.log(serviceId, therapistId);
   const { data, isLoading, isError } = useQuery({
     queryKey: ["availableSlots", serviceId, therapistId],
     queryFn: () => fetchAvailableSlots(serviceId, therapistId),
@@ -51,14 +50,20 @@ const AvailableSlots = ({
     return <div>Failed to fetch available slots.</div>;
   }
   let appointments;
+  let details;
   if (data) {
     appointments = data["availability"];
+    details = data["serviceDetails"];
   }
   return (
     <div className="overflow-x-scroll">
       <h6 className="mb-3">Slobodni termini:</h6>
       <div className="flex gap-1">
-        <AppointmentDays appointments={appointments} />
+        <AppointmentDays
+          appointments={appointments}
+          details={details}
+          serviceId={serviceId}
+        />
       </div>
     </div>
   );

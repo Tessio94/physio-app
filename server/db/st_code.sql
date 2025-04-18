@@ -146,3 +146,109 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.bookings
     OWNER to postgres;
+
+------------------------------------------kod koji radi-------------------------------
+ SELECT therapist_id, service_id, available
+     FROM (
+       SELECT therapist_id, service_id,
+         tsrange(upper(time_range), lower(lead(time_range) OVER
+           (PARTITION BY therapist_id, service_id ORDER BY lower(time_range)))) AS available
+       FROM (
+         -- ✅ Booked slots - only valid therapist/service pairs
+         SELECT b.therapist_id, b.service_id, b.time_range
+         FROM bookings b
+         JOIN therapists_services ts ON ts.therapist_id = b.therapist_id AND ts.service_id = b.service_id
+         WHERE lower(time_range)::date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '14 days'
+ 
+         UNION
+ 
+         -- ✅ Working hours for all valid therapist/service pairs
+         SELECT ts.therapist_id,  ts.service_id,
+           tsrange(dates.closed + interval '20 hours', dates.closed + interval '32 hours') AS time_range
+         FROM generate_series((CURRENT_DATE - 1)::timestamp, CURRENT_DATE + INTERVAL '14 days', INTERVAL '1 day') dates(closed)
+         JOIN therapists_services ts ON TRUE
+       ) sub2
+     ) sub
+     WHERE upper(available) - lower(available) >= interval '30 minutes'
+       AND EXTRACT(DOW FROM lower(available)) NOT IN (0, 6)
+       AND service_id = $1;`;
+       ---kad se odabere therapist samo nadodajemo na kraj  AND therapist_id = $2;`;
+
+/*-------------------ovaj dobro ništi da jedan therapist ne moze radit u dva ista vremena----*/
+WITH all_therapist_slots AS (
+    SELECT therapist_id, time_range
+    FROM bookings
+    WHERE therapist_id = 1
+    AND lower(time_range)::date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '14 days'
+    
+    UNION
+    
+    -- Working hours (8:00-20:00 each day)
+    SELECT 1 as therapist_id,
+           tsrange(dates.dt + interval '8 hours', dates.dt + interval '20 hours') AS time_range
+    FROM generate_series(CURRENT_DATE, CURRENT_DATE + INTERVAL '14 days', INTERVAL '1 day') dates(dt)
+),
+ordered_slots AS (
+    SELECT therapist_id, time_range,
+           lower(time_range) as slot_start,
+           upper(time_range) as slot_end,
+           lead(lower(time_range)) OVER (PARTITION BY therapist_id ORDER BY lower(time_range)) as next_slot_start
+    FROM all_therapist_slots
+    ORDER BY therapist_id, lower(time_range)
+),
+available_slots AS (
+    SELECT therapist_id,
+           tsrange(slot_end, next_slot_start) as available
+    FROM ordered_slots
+    WHERE next_slot_start IS NOT NULL
+    AND slot_end < next_slot_start
+    AND upper(tsrange(slot_end, next_slot_start)) - lower(tsrange(slot_end, next_slot_start)) >= interval '30 minutes'
+    AND EXTRACT(DOW FROM lower(tsrange(slot_end, next_slot_start))) NOT IN (0, 6)
+)
+SELECT ts.therapist_id, ts.service_id, 
+       t.name as therapist_name, t.icon therapist_icon, 
+       s.name as service_name, s.icon as service_icon,
+       a.available
+FROM therapists_services ts
+JOIN therapists t ON ts.therapist_id = t.id
+JOIN services s ON ts.service_id = s.id
+JOIN available_slots a ON a.therapist_id = ts.therapist_id
+WHERE ts.therapist_id = 1
+ORDER BY ts.service_id, a.available;
+
+/*----------------------------we made it brotha------------------------------------*/
+SELECT ajde.*, tss.service_id, s.name, s.icon FROM
+ (SELECT tr.*, t.name as therapist_name, t.lastname as therapist_lastname, t.icon as therapist_icon
+    FROM
+    (SELECT therapist_id, available
+        FROM (
+          SELECT therapist_id,
+            tsrange(upper(time_range), lower(lead(time_range) OVER
+              (PARTITION BY therapist_id ORDER BY lower(time_range)))) AS available
+          FROM (
+            -- ✅ Booked slots - only valid therapist/service pairs
+            SELECT b.therapist_id, b.time_range
+            FROM bookings b
+            JOIN therapists ts ON ts.id = b.therapist_id
+            WHERE lower(time_range)::date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '14 days'
+    
+            UNION
+    
+            -- ✅ Working hours for all valid therapist/service pairs
+            SELECT ts.id AS therapist_id,  
+              tsrange(dates.closed + interval '20 hours', dates.closed + interval '32 hours') AS time_range
+            FROM generate_series((CURRENT_DATE - 1)::timestamp, CURRENT_DATE + INTERVAL '14 days', INTERVAL '1 day') dates(closed)
+            INNER JOIN therapists ts ON TRUE
+          ) sub2
+        ) sub
+        WHERE upper(available) - lower(available) >= interval '30 minutes'
+          AND EXTRACT(DOW FROM lower(available)) NOT IN (0, 6)
+          AND therapist_id = 1) tr
+        INNER JOIN therapists t ON tr.therapist_id = t.id) ajde
+		LEFT JOIN therapists_services tss ON ajde.therapist_id = tss.therapist_id
+		LEFT JOIN services s ON tss.service_id = s.id
+		;
+
+    /*dodati dva polja na bookings table*/
+    --    napomena text COLLATE pg_catalog."default",
+    -- created_at timestamp without time zone DEFAULT now(),

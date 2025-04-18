@@ -34,6 +34,49 @@ function generateAvailabilityMap(slots) {
 	return result;
 }
 
+function generateDetails(slots) {
+	const result = {
+		services: [],
+		therapists: [],
+	};
+
+	const seenTherapistIds = new Set();
+	const seenServiceIds = new Set();
+
+	slots.forEach(
+		({
+			therapist_id,
+			therapist_name,
+			therapist_lastname,
+			therapist_icon,
+			service_id,
+			service_name,
+			service_icon,
+		}) => {
+			if (!seenTherapistIds.has(therapist_id)) {
+				seenTherapistIds.add(therapist_id);
+				result.therapists.push({
+					therapistId: therapist_id,
+					therapistName: therapist_name,
+					therapistLastname: therapist_lastname,
+					therapistIcon: therapist_icon,
+				});
+			}
+
+			if (!seenServiceIds.has(service_id)) {
+				seenServiceIds.add(service_id);
+				result.services.push({
+					serviceId: service_id,
+					serviceName: service_name,
+					serviceIcon: service_icon,
+				});
+			}
+		}
+	);
+
+	return result;
+}
 module.exports = {
 	generateAvailabilityMap,
+	generateDetails,
 };

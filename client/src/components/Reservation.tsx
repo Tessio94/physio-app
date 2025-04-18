@@ -1,15 +1,84 @@
-import { formatSlotDate, formatTime12Hour } from "@/lib/utils";
+import { formatSlotDate, formatTime12Hour, formatTimeRange } from "@/lib/utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRef } from "react";
 import { IoMdTime } from "react-icons/io";
 import { IoCalendarNumberOutline } from "react-icons/io5";
-import { TbMassage } from "react-icons/tb";
+
+async function makeReservation(data) {
+  const response = await fetch(
+    "http://localhost:3000/api/v1/book-now/reservations",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to make reservation");
+  }
+
+  return response.json();
+}
 
 const Reservation = ({
   selectedReservation,
   setSelectedReservation,
-  icons,
+  details,
+  serviceId,
 }) => {
+  const noteRef = useRef();
+
   const closeReservation = () => setSelectedReservation(null);
-  console.log(selectedReservation);
+  // console.log(selectedReservation);
+  // console.log(details);
+  // console.log(serviceId);
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: makeReservation,
+    onSuccess: () => {
+      alert("Rezervacija uspješna!");
+      queryClient.invalidateQueries({
+        queryKey: ["availableSlots", serviceId],
+      });
+      closeReservation();
+    },
+    onError: (err) => {
+      alert("Greška pri rezervaciji");
+      console.error(err);
+    },
+  });
+
+  const handleReservation = () => {
+    const { date, time, therapistId } = selectedReservation;
+
+    const startTime = new Date(`${date}T${time}`);
+    const endTime = new Date(startTime.getTime() + 30 * 60 * 1000); // +30min
+
+    const startTimeTransformed = formatTimeRange(startTime);
+    const endTimeTransformed = formatTimeRange(endTime);
+
+    const timeRange = `[${startTimeTransformed}, ${endTimeTransformed})`;
+    const napomena = noteRef.current?.value;
+
+    const payload = {
+      user_id: 1,
+      service_id: serviceId,
+      therapist_id: therapistId,
+      time_range: timeRange,
+      napomena,
+    };
+
+    mutation.mutate(payload);
+    /*mutation.mutate(payload);
+      Sends the payload to your API via makeReservation(),
+      Tracks its status (loading, success, error),
+      Calls the appropriate callbacks (onSuccess, etc.). */
+  };
+
   return (
     <>
       {selectedReservation && (
@@ -20,7 +89,7 @@ const Reservation = ({
             </h2>
             <div className="flex flex-col gap-5 px-6">
               <div className="flex text-xl">
-                <div className="flex min-w-[70%] items-center gap-2">
+                <div className="flex min-w-[55%] items-center gap-2">
                   <IoCalendarNumberOutline className="text-2xl" />
                   <div className="flex flex-col">
                     <span className="font-semibold text-slate-600">Datum:</span>{" "}
@@ -41,9 +110,15 @@ const Reservation = ({
                 </div>
               </div>
               <div className="flex text-xl">
-                <div className="flex min-w-[70%] items-center gap-2">
+                <div className="flex min-w-[55%] items-center gap-2">
                   <img
-                    src={icons[selectedReservation.therapistId]}
+                    src={`src${
+                      details.therapists.find(
+                        (therapist) =>
+                          therapist.therapistId ===
+                          selectedReservation.therapistId,
+                      ).therapistIcon
+                    }`}
                     width={24}
                     height={24}
                     className="rounded-full"
@@ -53,16 +128,34 @@ const Reservation = ({
                     <span className="font-semibold text-slate-600">
                       Terapeut:
                     </span>{" "}
-                    Nikola Lukić
+                    {`${
+                      details.therapists.find(
+                        (therapist) =>
+                          therapist.therapistId ===
+                          selectedReservation.therapistId,
+                      ).therapistName
+                    } ${
+                      details.therapists.find(
+                        (therapist) =>
+                          therapist.therapistId ===
+                          selectedReservation.therapistId,
+                      ).therapistLastname
+                    }`}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <TbMassage className="text-2xl" />
+                  <img
+                    src={`src${details.services[0].serviceIcon}`}
+                    width={24}
+                    height={24}
+                    className="rounded-full"
+                    alt="Selected therapist"
+                  />
                   <div className="flex flex-col">
                     <span className="font-semibold text-slate-600">
                       Usluga:
                     </span>{" "}
-                    Masaža
+                    {details.services[0].serviceName}
                   </div>
                 </div>
               </div>
@@ -72,6 +165,7 @@ const Reservation = ({
                 </div>
                 <div>
                   <textarea
+                    ref={noteRef}
                     name=""
                     id=""
                     rows="5"
@@ -84,11 +178,7 @@ const Reservation = ({
             <div className="rounded-b-xl bg-slate-100 px-6 pb-6">
               <button
                 className="mt-10 w-full rounded-lg bg-slate-600 py-2 text-lg text-white transition hover:bg-slate-800"
-                onClick={() => {
-                  console.log("Making reservation:", selectedReservation);
-                  // Trigger actual reservation logic here
-                  closeReservation();
-                }}
+                onClick={handleReservation}
               >
                 Rezerviraj
               </button>
