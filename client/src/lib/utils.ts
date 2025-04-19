@@ -56,13 +56,12 @@ export const formatTime12Hour = (time24) => {
 };
 
 export const formatTimeRange = (date) => {
-  const [month, day, year] = date.toLocaleDateString().split("/");
-
-  const dateString = [
-    year.padStart(4, "0"),
-    month.padStart(2, "0"),
-    day.padStart(2, "0"),
-  ].join("-");
+  const dateString = date
+    .toLocaleDateString()
+    .split(" ")
+    .map((dateItem) => dateItem.slice(0, -1))
+    .reverse()
+    .join("-");
 
   const timeString = date.toLocaleTimeString().slice(0, -3);
 

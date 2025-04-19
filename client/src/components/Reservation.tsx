@@ -30,7 +30,7 @@ const Reservation = ({
   serviceId,
 }) => {
   const noteRef = useRef();
-
+  console.log(details);
   const closeReservation = () => setSelectedReservation(null);
   // console.log(selectedReservation);
   // console.log(details);

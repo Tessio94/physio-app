@@ -4,7 +4,9 @@ import Homepage from "./pages/Homepage";
 import AppLayout from "./layout/AppLayout";
 import Login from "./pages/Login";
 import BookNow from "./pages/BookNow";
+import AdminLogin from "./pages/AdminLogin";
 import ScrollToTop from "./components/ScrollToTop";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +24,10 @@ function App() {
             <Route path="registracija" element={<Login />} />
             <Route path="book-now" element={<BookNow />} />
           </Route>
+
+          <Route path="/admin/log-in" element={<AdminLogin />} />
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </QueryClientProvider>
