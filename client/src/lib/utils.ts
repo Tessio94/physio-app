@@ -55,15 +55,30 @@ export const formatTime12Hour = (time24) => {
   return `${hour}:${minute.toString().padStart(2, "0")} ${period}`;
 };
 
-export const formatTimeRange = (date) => {
-  const dateString = date
-    .toLocaleDateString()
-    .split(" ")
-    .map((dateItem) => dateItem.slice(0, -1))
-    .reverse()
-    .join("-");
+// export const formatTimeRange = (date) => {
+//   console.log(date);
+//   const dateString = date
+//     .toLocaleDateString()
+//     .split(" ")
+//     .map((dateItem) => dateItem.slice(0, -1))
+//     .reverse()
+//     .join("-");
+//   console.log(dateString);
+//   const timeString = date.toLocaleTimeString().slice(0, -3);
+//   console.log(timeString);
+//   return `${dateString} ${timeString}`;
+// };
 
-  const timeString = date.toLocaleTimeString().slice(0, -3);
+export const formatTimeRange = (date) => {
+  console.log(date);
+  const [month, day, year] = date.toLocaleDateString().split("/");
+
+  const dateString = `${year.padStart(4, "0")}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  const timeString = date.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
 
   return `${dateString} ${timeString}`;
 };

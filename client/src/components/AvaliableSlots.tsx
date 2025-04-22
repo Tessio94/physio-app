@@ -51,6 +51,7 @@ const AvailableSlots = ({
   }
   let appointments;
   let details;
+  console.log(data);
   if (data) {
     appointments = data["availability"];
     details = data["serviceDetails"];
