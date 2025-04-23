@@ -4,7 +4,7 @@ const AdminPopup = ({ bookingDetails, setShowPopup }) => {
   return (
     <>
       <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="flex max-w-96 flex-col content-center gap-3 rounded-xl bg-white shadow-xl shadow-slate-900">
+        <div className="flex w-96 flex-col content-center gap-3 rounded-xl bg-white shadow-xl shadow-slate-900">
           <h5 className="relative w-full rounded-t-xl bg-slate-600 p-6 text-center text-xl font-bold text-white">
             Informacije o rezervaciji
             {/* <FaRegWindowClose

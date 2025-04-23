@@ -138,7 +138,7 @@ function generateBookingDetails(appointments) {
 			formatted[date] = {};
 		}
 
-		formatted[date][timeFormatted] = entry.id;
+		formatted[date][timeFormatted] = entry.user_id;
 	});
 
 	return formatted;

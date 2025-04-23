@@ -90,6 +90,31 @@ GROUP BY therapist_name
 ORDER BY session_count DESC;`);
 };
 
+const getUserCount = (therapistId) => {
+	const sql = `SELECT COUNT(DISTINCT user_id) FROM bookings WHERE therapist_id = $1`;
+	return pool.query(sql, [therapistId]);
+};
+
+const getBookingsCount = (therapistId) => {
+	const sql = `SELECT COUNT(*) FROM bookings WHERE therapist_id = $1`;
+	return pool.query(sql, [therapistId]);
+};
+
+const getTopService = (therapistId) => {
+	const sql = `SELECT b.service_id, b.total_bookings, s.name
+FROM
+(SELECT service_id, COUNT(*) AS total_bookings
+FROM bookings
+WHERE therapist_id = $1
+GROUP BY service_id
+ORDER BY total_bookings DESC
+LIMIT 1) b
+LEFT JOIN services s ON b.service_id = s.id;`;
+	return pool.query(sql, [therapistId]);
+};
+const getTopClient = () => {};
+const getBestMonth = () => {};
+
 module.exports = {
 	getUsers,
 	getAdminSchedule,

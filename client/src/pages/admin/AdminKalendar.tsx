@@ -42,7 +42,7 @@ const AdminKalendar = () => {
     queryFn: () => fetchAdminSchedule(therapistId),
     enabled: !!therapistId,
   });
-
+  console.log(data);
   let appointments;
   let details;
   let bookedSlots;

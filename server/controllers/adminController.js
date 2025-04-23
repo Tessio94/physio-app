@@ -57,7 +57,7 @@ const getAppointmentDetails = async (req, res) => {
 	console.log("userid :", userId);
 	console.log("timestamp :", timestamp);
 	const booking = await getBookingDetails(userId, timestamp);
-
+	console.log(booking);
 	const {
 		created_at,
 		email,
@@ -97,9 +97,24 @@ const getAllDashboardData = async (req, res) => {
 	});
 };
 
+const getAllAdminDashboardData = async (req, res) => {
+	const userCount = await getUserCount(therapistId);
+	const bookingCount = await getBookingCount();
+	const serviceCount = await getTopService();
+	const clientCount = await getTopClient();
+	const bestMonth = await getBestMonth();
+
+	res.status(200).json({
+		monthlyUsers: monthlyUsers.rows,
+		serviceUsage: serviceUsage.rows,
+		therapistUsage: therapistUsage.rows,
+	});
+};
+
 module.exports = {
 	getAllUsers,
 	getAdminAppointments,
 	getAppointmentDetails,
 	getAllDashboardData,
+	getAllAdminDashboardData,
 };
