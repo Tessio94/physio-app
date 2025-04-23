@@ -6,6 +6,8 @@ const {
 const {
 	getAllUsers,
 	getAdminAppointments,
+	getAppointmentDetails,
+	getAllDashboardData,
 } = require("../controllers/adminController");
 
 const express = require("express");
@@ -17,8 +19,14 @@ router.route("/book-now/appointments/:therapistId").get(getAvailableSlots);
 
 router.route("/book-now/reservations").post(createReservation);
 
-router.route("/admin/korisnici").get(getAllUsers);
+router.route("/admin/dashboard/data").get(getAllDashboardData);
 
 router.route("/admin/schedule/:therapistId").get(getAdminAppointments);
+
+router
+	.route("/admin/schedule/appointment-details/:userId")
+	.get(getAppointmentDetails);
+
+router.route("/admin/korisnici").get(getAllUsers);
 
 module.exports = router;

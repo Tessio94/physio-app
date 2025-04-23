@@ -123,13 +123,13 @@ function generateDetails(slots) {
 }
 
 function generateBookingDetails(appointments) {
-	console.log(appointments);
+	// console.log(appointments);
 
 	const formatted = {};
 
 	appointments.forEach((entry) => {
 		const [rawStart, rawEnd] = JSON.parse(entry.time_range.replace(")", "]")); // e.g. "2025-04-23 08:00:00"
-		console.log("rawStart :", rawStart);
+		// console.log("rawStart :", rawStart);
 
 		const [date, time] = rawStart.split(" ");
 		const timeFormatted = time.slice(0, 5); // "08:00"
@@ -152,9 +152,27 @@ function formatUserDate(date) {
 	return `${year}-${month}-${day}`;
 }
 
+function formatDateTime(date) {
+	const d = new Date(date);
+
+	const year = d.getFullYear();
+	const month = String(d.getMonth() + 1).padStart(2, "0");
+	const day = String(d.getDate()).padStart(2, "0");
+
+	let hours = d.getHours();
+	const minutes = String(d.getMinutes()).padStart(2, "0");
+	const ampm = hours >= 12 ? "PM" : "AM";
+
+	hours = hours % 12 || 12; // Convert to 12-hour format, 0 becomes 12
+	const formattedTime = `${String(hours).padStart(2, "0")}:${minutes} ${ampm}`;
+
+	return `${year}-${month}-${day} ${formattedTime}`;
+}
+
 module.exports = {
 	generateAvailabilityMap,
 	generateDetails,
 	formatUserDate,
+	formatDateTime,
 	generateBookingDetails,
 };

@@ -44,12 +44,58 @@ SELECT ajde.*, tss.service_id, s.name AS service_name, s.icon AS service_icon, b
 	return pool.query(sql, [therapistId]);
 };
 
-const getBookings = () => {
-	return pool.query("SELECT * FROM bookings;");
+const getBookings = (therapistId) => {
+	const sql = `SELECT * FROM bookings WHERE therapist_id = $1`;
+	return pool.query(sql, [therapistId]);
+};
+
+const getBookingDetails = (userId, timestamp) => {
+	const sql = `SELECT b.created_at, b.napomena, u.name || ' ' || u.lastname AS        user_full_name, u.email, u.phone, u.registration_date, s.name AS service_name, t.name || ' ' || t.lastname AS therapist_full_name
+  FROM
+  (SELECT * FROM bookings  
+  WHERE user_id = $1 AND lower(time_range) = $2::timestamp) B
+  LEFT JOIN users u ON b.user_id = u.id
+  LEFT JOIN services s ON b.service_id = s.id
+  LEFT JOIN therapists t ON b.therapist_id = t.id`;
+
+	return pool.query(sql, [userId, timestamp]);
+};
+
+const getUsersByMonth = () => {
+	return pool.query(`SELECT
+  TO_CHAR(registration_date, 'YYYY-MM') AS month,
+  COUNT(*) AS user_count
+FROM users
+GROUP BY month
+ORDER BY month;`);
+};
+
+const getServicesUsage = () => {
+	return pool.query(`SELECT
+    s.name AS service_name,
+    COUNT(*) AS usage_count
+  FROM bookings b
+  JOIN services s ON s.id = b.service_id
+  GROUP BY s.name
+  ORDER BY usage_count DESC;`);
+};
+
+const getTherapistsUsage = () => {
+	return pool.query(`SELECT
+  t.name || ' ' || t.lastname AS therapist_name,
+  COUNT(*) AS session_count
+FROM bookings b
+JOIN therapists t ON t.id = b.therapist_id
+GROUP BY therapist_name
+ORDER BY session_count DESC;`);
 };
 
 module.exports = {
 	getUsers,
 	getAdminSchedule,
 	getBookings,
+	getBookingDetails,
+	getUsersByMonth,
+	getServicesUsage,
+	getTherapistsUsage,
 };

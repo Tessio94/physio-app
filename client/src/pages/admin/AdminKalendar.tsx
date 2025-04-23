@@ -1,3 +1,4 @@
+import AdminPopup from "@/components/AdminPopup";
 import { cn, formatSlotDate } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -15,9 +16,26 @@ async function fetchAdminSchedule(therapistId) {
   return data;
 }
 
+async function fetchAppointmentDetails(selectedAppointment) {
+  // console.log("selectedAppointment :", selectedAppointment);
+  const { userId, time, date } = selectedAppointment;
+  const timestamp = `${date} ${time}:00`;
+  const response = await fetch(
+    `http://localhost:3000/api/v1/admin/schedule/appointment-details/${userId}?timestamp=${encodeURIComponent(timestamp)}`,
+  );
+  const data = await response.json();
+  // console.log(data);
+  if (!response.ok) {
+    throw new Error("Failed to fetch available slots");
+  }
+
+  return data;
+}
+
 const AdminKalendar = () => {
   const [therapistId, setTherapistId] = useState(1);
-  const [appointmentDetails, setAppointmentDetails] = useState();
+  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["schedule", therapistId],
@@ -29,13 +47,13 @@ const AdminKalendar = () => {
   let details;
   let bookedSlots;
 
-  console.log(data);
+  // console.log(data);
   if (data) {
     appointments = Object.entries(data["availability"]);
     details = data["appointmentDetails"];
     bookedSlots = data["bookedSlots"];
   }
-  console.log(appointments);
+  // console.log(appointments);
 
   const dates = appointments?.map((slot) => {
     return formatSlotDate(new Date(slot[0]));
@@ -68,18 +86,34 @@ const AdminKalendar = () => {
     "19:30",
   ];
 
-  const handleSlotSelect = (e, user, time, date) => {
-    e.stopPropagation();
-
-    setAppointmentDetails({ time, date });
+  const handleSlotSelect = (e, userId, time, date) => {
+    if (showPopup === false) {
+      e.stopPropagation();
+      console.log(userId, time, date);
+      // setAppointmentDetails({ time, date });
+      setSelectedSlot({ userId, time, date });
+      setShowPopup(true);
+    } else {
+      return;
+    }
   };
+
+  const {
+    data: bookingDetails,
+    isLoading: isBookingLoading,
+    isError: isBookingError,
+  } = useQuery({
+    queryKey: ["bookingDetails", selectedSlot],
+    queryFn: () => fetchAppointmentDetails(selectedSlot),
+    enabled: !!selectedSlot,
+  });
 
   return (
     <>
       <h4 className="ml-5 text-2xl text-slate-600">
         Raspored zakazanih termina
       </h4>
-      <div className="mx-5 pt-2">
+      <div className="mx-5 pt-6">
         <div className="flex gap-1">
           {data
             ? appointments.map((slot, i) => {
@@ -91,7 +125,7 @@ const AdminKalendar = () => {
                     </div>
 
                     {timeSlots.map((timeSlot, i) => {
-                      const date = slot[0]; // e.g. "2025-04-22"
+                      const date = slot[0]; // e.g. "2025-04-22" - today
                       const isBooked =
                         bookedSlots &&
                         bookedSlots[date] &&
@@ -105,9 +139,10 @@ const AdminKalendar = () => {
                         <div
                           className="group flex cursor-pointer items-center justify-center gap-8 rounded-lg border-2 border-slate-200 bg-red-300 p-2 font-bold transition-all duration-500 hover:bg-red-500"
                           key={i}
-                          onClick={(e) =>
+                          onMouseEnter={(e) =>
                             handleSlotSelect(e, userId, timeSlot, date)
                           }
+                          onMouseLeave={() => setShowPopup(false)}
                         >
                           <span className="text-slate-900 transition-all duration-500 group-hover:text-slate-100">
                             {timeSlot}
@@ -130,6 +165,12 @@ const AdminKalendar = () => {
             : "Loadanje podataka"}
         </div>
       </div>
+      {bookingDetails && showPopup && (
+        <AdminPopup
+          bookingDetails={bookingDetails}
+          setShowPopup={setShowPopup}
+        />
+      )}
     </>
   );
 };
