@@ -1,7 +1,8 @@
-import { Payment, columns } from "@/components/ui/shadcn/payments/columns";
+import { columns } from "@/components/ui/shadcn/payments/columns";
 import { DataTable } from "@/components/ui/shadcn/payments/data-table";
-import { formatUserDate } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+
+const showSuperadminInTable = false;
 
 export default function AdminKorisnici() {
   // const [data, setData] = useState([]);
@@ -28,7 +29,10 @@ export default function AdminKorisnici() {
         Lista registriranih korisnika
       </h4>
       <div className="mx-5 pt-2">
-        <DataTable columns={columns} data={field ?? []} />
+        <DataTable
+          columns={columns(showSuperadminInTable)}
+          data={field ?? []}
+        />
       </div>
     </>
   );

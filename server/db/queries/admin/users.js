@@ -127,13 +127,21 @@ LEFT JOIN users u ON b.user_id = u.id;`;
 };
 
 const getBestMonth = (therapistId) => {
-	const sql = `SELECT TO_CHAR(created_at, 'YYYY-MM') AS booking_month, COUNT(*) AS total_bookings
+	const sql = `SELECT TO_CHAR(created_at, 'YYYY-MM-DD') AS booking_month, COUNT(*) AS total_bookings
 FROM bookings
 WHERE therapist_id = $1
 GROUP BY booking_month
 ORDER BY total_bookings DESC
 LIMIT 1;`;
 	return pool.query(sql, [therapistId]);
+};
+
+const getAdminList = () => {
+	return pool.query(`SELECT t.name, t.lastname, t.email, t.phone,
+     a.created_at AS registration_date, a.is_superadmin
+FROM admins a 
+LEFT JOIN therapists t
+ON a.therapist_id = t.id;`);
 };
 
 module.exports = {
@@ -149,4 +157,5 @@ module.exports = {
 	getTopService,
 	getTopClient,
 	getBestMonth,
+	getAdminList,
 };

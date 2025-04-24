@@ -9,6 +9,7 @@ const {
 	getAppointmentDetails,
 	getAllDashboardData,
 	getAllAdminDashboardData,
+	getAdminSettings,
 } = require("../controllers/adminController");
 
 const express = require("express");
@@ -33,5 +34,7 @@ router
 	.get(getAppointmentDetails);
 
 router.route("/admin/korisnici").get(getAllUsers);
+
+router.route("/admin/postavke").get(getAdminSettings);
 
 module.exports = router;

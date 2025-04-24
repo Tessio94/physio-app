@@ -11,6 +11,7 @@ const {
 	getTopService,
 	getTopClient,
 	getBestMonth,
+	getAdminList,
 } = require("../db/queries/admin/users");
 const {
 	formatUserDate,
@@ -120,10 +121,24 @@ const getAllAdminDashboardData = async (req, res) => {
 	});
 };
 
+const getAdminSettings = async (req, res) => {
+	const adminList = await getAdminList();
+	const formattedAdminList = adminList.rows.map((admin) => {
+		let { name, lastname, email, phone, is_superadmin, registration_date } =
+			admin;
+		let date = formatUserDate(registration_date);
+
+		return { name, lastname, email, phone, is_superadmin, date };
+	});
+
+	res.status(200).json(formattedAdminList);
+};
+
 module.exports = {
 	getAllUsers,
 	getAdminAppointments,
 	getAppointmentDetails,
 	getAllDashboardData,
 	getAllAdminDashboardData,
+	getAdminSettings,
 };
