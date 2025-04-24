@@ -6,6 +6,11 @@ const {
 	getUsersByMonth,
 	getServicesUsage,
 	getTherapistsUsage,
+	getUserCount,
+	getBookingsCount,
+	getTopService,
+	getTopClient,
+	getBestMonth,
 } = require("../db/queries/admin/users");
 const {
 	formatUserDate,
@@ -98,16 +103,20 @@ const getAllDashboardData = async (req, res) => {
 };
 
 const getAllAdminDashboardData = async (req, res) => {
+	const { therapistId } = req.params;
+
 	const userCount = await getUserCount(therapistId);
-	const bookingCount = await getBookingCount();
-	const serviceCount = await getTopService();
-	const clientCount = await getTopClient();
-	const bestMonth = await getBestMonth();
+	const bookingCount = await getBookingsCount(therapistId);
+	const serviceCount = await getTopService(therapistId);
+	const clientCount = await getTopClient(therapistId);
+	const bestMonth = await getBestMonth(therapistId);
 
 	res.status(200).json({
-		monthlyUsers: monthlyUsers.rows,
-		serviceUsage: serviceUsage.rows,
-		therapistUsage: therapistUsage.rows,
+		userCount: userCount.rows[0]?.count || 0,
+		bookingCount: bookingCount.rows[0]?.count || 0,
+		serviceCount: serviceCount.rows[0] || {},
+		clientCount: clientCount.rows[0] || {},
+		bestMonth: bestMonth.rows[0] || {},
 	});
 };
 

@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import {
   XAxis,
   YAxis,
@@ -53,14 +54,29 @@ const fetchDashboardData = async () => {
   return res.json();
 };
 
+const fetchAdminDashboardData = async (therapistId) => {
+  const res = await fetch(
+    `http://localhost:3000/api/v1/admin/dashboard/data/${therapistId}`,
+  );
+  return res.json();
+};
+
 const AdminDashboard = () => {
+  const [therapistId, setTherapistId] = useState(1);
+
   const { data, isLoading } = useQuery({
     queryKey: ["monthly-users"],
     queryFn: fetchDashboardData,
   });
 
-  if (isLoading) return <div className="">isloading</div>;
-  console.log(data);
+  // console.log("data: ", data);
+
+  const { data: adminData, isLoading: adminIsLoading } = useQuery({
+    queryKey: ["admin-info", therapistId],
+    queryFn: () => fetchAdminDashboardData(therapistId),
+  });
+
+  if (isLoading || adminIsLoading) return <div className="">isloading</div>;
 
   const transformedServiceUsage = data.serviceUsage.map((item) => ({
     ...item,
@@ -72,8 +88,10 @@ const AdminDashboard = () => {
     session_count: Number(item.session_count),
   }));
 
+  console.log("Admin data: ", adminData);
+
   return (
-    <div>
+    <div className="mb-5">
       {" "}
       <h4 className="ml-5 flex items-end gap-3 text-2xl text-slate-600">
         Admin korisnik:
@@ -81,17 +99,62 @@ const AdminDashboard = () => {
       </h4>
       <div className="flex max-w-[90%] flex-wrap justify-between gap-28 gap-y-10">
         <div className="mx-5 pt-6">
-          <h5 className="text-md mb-2 text-center">Vaša statistika:</h5>
-          <div className="height-[350px] flex w-[600px] flex-col gap-5">
-            <p>Broj ukupnih korisnika:</p>
-            <p>Broj zakazanih termina:</p>
-            <p>Najčešća usluga:</p>
-            <p>Najčešći klijent:</p>
-            <p>Najbolji mjesec:</p>
+          <h5 className="text-md mb-2 text-center text-xl font-semibold">
+            Vaša statistika:
+          </h5>
+          <div className="ml-[80px] flex h-[350px] w-[600px] flex-col justify-between pb-3">
+            <p className="flex w-[100%] justify-between border-[1px] border-slate-700 bg-slate-200 pl-3 text-lg">
+              Broj ukupnih korisnika:{" "}
+              <span className="w-[40%] border-l-[1px] border-slate-700 text-center">
+                {adminData.userCount}
+              </span>
+            </p>
+            <p className="flex w-[100%] justify-between border-[1px] border-slate-700 bg-slate-200 pl-3 text-lg">
+              Broj zakazanih termina:{" "}
+              <span className="w-[40%] border-l-[1px] border-slate-700 text-center">
+                {adminData.bookingCount}
+              </span>
+            </p>
+            <p className="flex w-[100%] justify-between border-[1px] border-slate-700 bg-slate-200 pl-3 text-lg">
+              Najčešća usluga:{" "}
+              <span className="w-[40%] border-l-[1px] border-slate-700 text-center">
+                {adminData.serviceCount.name}
+              </span>
+            </p>
+            <p className="flex w-[100%] justify-between border-[1px] border-slate-700 bg-slate-200 pl-3 text-lg">
+              Najčešća usluga - broj rezervacija:{" "}
+              <span className="w-[40%] border-l-[1px] border-slate-700 text-center">
+                {adminData.serviceCount.total_bookings}
+              </span>
+            </p>
+            <p className="flex w-[100%] justify-between border-[1px] border-slate-700 bg-slate-200 pl-3 text-lg">
+              Najčešći klijent:{" "}
+              <span className="w-[40%] border-l-[1px] border-slate-700 text-center">
+                {adminData.clientCount.user_name}
+              </span>
+            </p>
+            <p className="flex w-[100%] justify-between border-[1px] border-slate-700 bg-slate-200 pl-3 text-lg">
+              Najčešći klijent - broj rezervacija:{" "}
+              <span className="w-[40%] border-l-[1px] border-slate-700 text-center">
+                {adminData.clientCount.total_bookings}
+              </span>
+            </p>
+            <p className="flex w-[100%] justify-between border-[1px] border-slate-700 bg-slate-200 pl-3 text-lg">
+              Najbolji mjesec:{" "}
+              <span className="w-[40%] border-l-[1px] border-slate-700 text-center">
+                {adminData.bestMonth.booking_month}
+              </span>
+            </p>
+            <p className="flex w-[100%] justify-between border-[1px] border-slate-700 bg-slate-200 pl-3 text-lg">
+              Najbolji mjesec - broj rezervacija:{" "}
+              <span className="w-[40%] border-l-[1px] border-slate-700 text-center">
+                {adminData.bestMonth.total_bookings}
+              </span>
+            </p>
           </div>
         </div>
         <div className="mx-5 pt-6">
-          <h5 className="text-md mb-2 text-center">
+          <h5 className="text-md mb-2 text-center text-xl font-semibold">
             Mjesečne registracije korisnika
           </h5>
           <BarChart width={600} height={350} data={data.monthlyUsers}>
@@ -104,7 +167,7 @@ const AdminDashboard = () => {
         </div>
 
         <div className="mx-5 pt-6">
-          <h5 className="text-md mb-2 text-center">
+          <h5 className="text-md mb-2 text-center text-xl font-semibold">
             Najčešće korištene usluge
           </h5>
           <PieChart width={600} height={400}>
@@ -131,7 +194,9 @@ const AdminDashboard = () => {
           </PieChart>
         </div>
         <div className="mx-5 pt-6">
-          <h5 className="text-md mb-2 text-center">Najaktivniji terapeuti</h5>
+          <h5 className="text-md mb-2 text-center text-xl font-semibold">
+            Najaktivniji terapeuti
+          </h5>
           <PieChart width={600} height={400}>
             <Pie
               data={transformedTherapistUsage}

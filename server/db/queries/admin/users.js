@@ -112,8 +112,29 @@ LIMIT 1) b
 LEFT JOIN services s ON b.service_id = s.id;`;
 	return pool.query(sql, [therapistId]);
 };
-const getTopClient = () => {};
-const getBestMonth = () => {};
+
+const getTopClient = (therapistId) => {
+	const sql = `SELECT b.user_id, b.total_bookings, u.name || ' ' || u.lastname AS user_name
+FROM
+(SELECT user_id, COUNT(*) AS total_bookings
+FROM bookings
+WHERE therapist_id = $1
+GROUP BY user_id
+ORDER BY total_bookings DESC
+LIMIT 1) b
+LEFT JOIN users u ON b.user_id = u.id;`;
+	return pool.query(sql, [therapistId]);
+};
+
+const getBestMonth = (therapistId) => {
+	const sql = `SELECT TO_CHAR(created_at, 'YYYY-MM') AS booking_month, COUNT(*) AS total_bookings
+FROM bookings
+WHERE therapist_id = $1
+GROUP BY booking_month
+ORDER BY total_bookings DESC
+LIMIT 1;`;
+	return pool.query(sql, [therapistId]);
+};
 
 module.exports = {
 	getUsers,
@@ -123,4 +144,9 @@ module.exports = {
 	getUsersByMonth,
 	getServicesUsage,
 	getTherapistsUsage,
+	getUserCount,
+	getBookingsCount,
+	getTopService,
+	getTopClient,
+	getBestMonth,
 };

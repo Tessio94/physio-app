@@ -46,6 +46,10 @@ const AdminPopup = ({ bookingDetails, setShowPopup }) => {
               <p>{bookingDetails.dateOfBooking}</p>
             </div>
             <div className="flex w-full flex-col justify-between">
+              <p className="font-semibold text-slate-700">Usluga:</p>
+              <p>{bookingDetails.service_name}</p>
+            </div>
+            <div className="flex w-full flex-col justify-between">
               <p className="font-semibold text-slate-700">Napomena:</p>
               <p>{bookingDetails.napomena}</p>
             </div>

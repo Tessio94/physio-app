@@ -20,9 +20,10 @@ router.route("/book-now/appointments/:therapistId").get(getAvailableSlots);
 
 router.route("/book-now/reservations").post(createReservation);
 
+router.route("/admin/dashboard/data").get(getAllDashboardData);
+
 router
-	.route("/admin/dashboard/data")
-	.get(getAllDashboardData)
+	.route("/admin/dashboard/data/:therapistId")
 	.get(getAllAdminDashboardData);
 
 router.route("/admin/schedule/:therapistId").get(getAdminAppointments);
