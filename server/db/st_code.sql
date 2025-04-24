@@ -325,3 +325,21 @@ SELECT ajde.*, tss.service_id, s.name, s.icon FROM
     /*dodati dva polja na bookings table*/
     --    napomena text COLLATE pg_catalog."default",
     -- created_at timestamp without time zone DEFAULT now(),
+
+    
+CREATE TABLE admins (
+	id SERIAL PRIMARY KEY,
+	therapist_id INTEGER NOT NULL UNIQUE REFERENCES therapists(id) ON DELETE CASCADE,
+	is_superadmin BOOLEAN DEFAULT FALSE,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO admins (therapist_id, is_superadmin)
+VALUES (1, TRUE);
+
+INSERT INTO admins (therapist_id, is_superadmin)
+VALUES (2, TRUE);
+
+INSERT INTO admins (therapist_id)
+VALUES (3), (4), (5), (6);
