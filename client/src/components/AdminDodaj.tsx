@@ -1,5 +1,5 @@
 import { Button } from "./ui/shadcn/Button";
-import { DateTimePicker24hForm } from "./ui/dateTime.tsx";
+import DateInput from "./DateInput";
 
 const AdminDodaj = ({ variant }) => {
   if (variant === "terapeut") {
@@ -50,7 +50,7 @@ const AdminDodaj = ({ variant }) => {
             className="rounded-lg border-[1px] border-slate-200 px-3 py-2 outline-none"
           />
         </div>
-        <Button className="self-end" type="submit">
+        <Button className="h-[38px] self-end" type="submit">
           Dodaj
         </Button>
       </form>
@@ -75,7 +75,7 @@ const AdminDodaj = ({ variant }) => {
             className="rounded-lg border-[1px] border-slate-200 px-3 py-2 outline-none"
           />
         </div>
-        <Button className="self-end" type="submit">
+        <Button className="h-[38px] self-end" type="submit">
           Dodaj
         </Button>
       </form>
@@ -101,7 +101,7 @@ const AdminDodaj = ({ variant }) => {
             className="rounded-lg border-[1px] border-slate-200 px-3 py-2 outline-none"
           />
         </div>
-        <Button className="self-end" type="submit">
+        <Button className="h-[38px] self-end" type="submit">
           Dodaj
         </Button>
       </form>
@@ -121,13 +121,13 @@ const AdminDodaj = ({ variant }) => {
         </div>
         <div className="flex flex-col items-start gap-1 px-3">
           <label htmlFor="">Nedostupan od</label>
-          {/* <DateTimePicker24hForm /> */}
+          <DateInput />
         </div>
         <div className="flex flex-col items-start gap-1 px-3">
           <label htmlFor="">Nedostupan do</label>
-          {/* <DateTimePicker24hForm /> */}
+          <DateInput />
         </div>
-        <Button className="self-end" type="submit">
+        <Button className="h-[38px] self-end" type="submit">
           Dodaj
         </Button>
       </form>

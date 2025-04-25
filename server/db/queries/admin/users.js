@@ -137,7 +137,7 @@ LIMIT 1;`;
 };
 
 const getAdminList = () => {
-	return pool.query(`SELECT t.name, t.lastname, t.email, t.phone,
+	return pool.query(`SELECT t.id, t.name, t.lastname, t.email, t.phone,
      a.created_at AS registration_date, a.is_superadmin
 FROM admins a 
 LEFT JOIN therapists t

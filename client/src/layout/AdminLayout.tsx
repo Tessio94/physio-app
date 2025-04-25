@@ -4,9 +4,9 @@ import { AppSidebar } from "@/components/AppSidebar";
 
 const AdminLayout = () => {
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SidebarProvider defaultOpen={true} className="max-w-[100vw]">
       <AppSidebar />
-      <main className="w-full">
+      <main className="w-full max-w-[calc(100vw-255px)]">
         <SidebarTrigger className="mb-5 h-8 pt-2" />
         <Outlet />
       </main>

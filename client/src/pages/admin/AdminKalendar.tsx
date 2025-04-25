@@ -113,7 +113,7 @@ const AdminKalendar = () => {
       <h4 className="ml-5 text-2xl text-slate-600">
         Raspored zakazanih termina
       </h4>
-      <div className="mx-5 pt-6">
+      <div className="mx-5 pb-10 pt-6">
         <div className="flex gap-1">
           {data
             ? appointments.map((slot, i) => {

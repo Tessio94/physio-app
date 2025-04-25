@@ -13,6 +13,7 @@ const {
 	getBestMonth,
 	getAdminList,
 } = require("../db/queries/admin/users");
+const { getServices } = require("../db/queries/services");
 const {
 	formatUserDate,
 	generateAvailabilityMap,
@@ -123,15 +124,16 @@ const getAllAdminDashboardData = async (req, res) => {
 
 const getAdminSettings = async (req, res) => {
 	const adminList = await getAdminList();
+	const servicesList = await getServices();
 	const formattedAdminList = adminList.rows.map((admin) => {
-		let { name, lastname, email, phone, is_superadmin, registration_date } =
+		let { id, name, lastname, email, phone, is_superadmin, registration_date } =
 			admin;
 		let date = formatUserDate(registration_date);
 
-		return { name, lastname, email, phone, is_superadmin, date };
+		return { id, name, lastname, email, phone, is_superadmin, date };
 	});
 
-	res.status(200).json(formattedAdminList);
+	res.status(200).json({ formattedAdminList, servicesList: servicesList.rows });
 };
 
 module.exports = {

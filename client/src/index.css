@@ -115,6 +115,7 @@ body {
 .scroller {
   animation: 25s slide infinite linear;
 }
+
 @keyframes slide2 {
   from {
     transform: translateX(-100%);
@@ -139,6 +140,16 @@ body {
 }
 #animation_container2:hover .scroller2 {
   animation-play-state: paused;
+}
+
+#animation_container1,
+#animation_container2 {
+  transition: all 0.3s ease; /* Smooth transition */
+}
+
+.scroller,
+.scroller2 {
+  will-change: transform;
 }
 
 .scroller img {

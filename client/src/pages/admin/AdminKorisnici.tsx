@@ -2,8 +2,6 @@ import { columns } from "@/components/ui/shadcn/payments/columns";
 import { DataTable } from "@/components/ui/shadcn/payments/data-table";
 import { useQuery } from "@tanstack/react-query";
 
-const showSuperadminInTable = false;
-
 export default function AdminKorisnici() {
   // const [data, setData] = useState([]);
 
@@ -30,7 +28,7 @@ export default function AdminKorisnici() {
       </h4>
       <div className="mx-5 pt-2">
         <DataTable
-          columns={columns(showSuperadminInTable)}
+          columns={columns(false, false)}
           data={field ?? []}
           searchShow={true}
         />

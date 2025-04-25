@@ -7,6 +7,7 @@ import { ArrowUpDown } from "lucide-react";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Payment = {
+  id?: number;
   name: string;
   lastname: string;
   email: string;
@@ -15,8 +16,32 @@ export type Payment = {
   is_superadmin?: boolean;
 };
 
-export const columns = (showSuperadmin: boolean): ColumnDef<Payment>[] => {
+export const columns = (
+  showSuperadmin: boolean,
+  showServices: boolean,
+): ColumnDef<Payment>[] => {
   const baseColumns: ColumnDef<Payment>[] = [
+    ...(showSuperadmin || showServices
+      ? [
+          {
+            accessorKey: "id",
+            header: ({ column }) => {
+              return (
+                <Button
+                  className="p-0"
+                  variant="ghost"
+                  onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                  }
+                >
+                  ID
+                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+              );
+            },
+          },
+        ]
+      : []),
     {
       accessorKey: "name",
       header: ({ column }) => {
@@ -32,29 +57,43 @@ export const columns = (showSuperadmin: boolean): ColumnDef<Payment>[] => {
         );
       },
     },
-    {
-      accessorKey: "lastname",
-      header: ({ column }) => {
-        return (
-          <Button
-            className="p-0"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Prezime
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-    },
-    {
-      accessorKey: "email",
-      header: "E-mail",
-    },
-    {
-      accessorKey: "phone",
-      header: "Mobitel",
-    },
+    ...(!showServices
+      ? [
+          {
+            accessorKey: "lastname",
+            header: ({ column }) => {
+              return (
+                <Button
+                  className="p-0"
+                  variant="ghost"
+                  onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                  }
+                >
+                  Prezime
+                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+              );
+            },
+          },
+        ]
+      : []),
+    ...(!showServices
+      ? [
+          {
+            accessorKey: "email",
+            header: "E-mail",
+          },
+        ]
+      : []),
+    ...(!showServices
+      ? [
+          {
+            accessorKey: "phone",
+            header: "Mobitel",
+          },
+        ]
+      : []),
     ...(showSuperadmin
       ? [
           {
@@ -63,21 +102,27 @@ export const columns = (showSuperadmin: boolean): ColumnDef<Payment>[] => {
           },
         ]
       : []),
-    {
-      accessorKey: "date",
-      header: ({ column }) => {
-        return (
-          <Button
-            className="p-0"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Datum registracije
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-    },
+    ...(!showServices
+      ? [
+          {
+            accessorKey: "date",
+            header: ({ column }) => {
+              return (
+                <Button
+                  className="p-0"
+                  variant="ghost"
+                  onClick={() =>
+                    column.toggleSorting(column.getIsSorted() === "asc")
+                  }
+                >
+                  Datum registracije
+                  <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+              );
+            },
+          },
+        ]
+      : []),
   ];
 
   return baseColumns;
