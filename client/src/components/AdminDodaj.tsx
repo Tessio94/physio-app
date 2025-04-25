@@ -1,4 +1,5 @@
 import { Button } from "./ui/shadcn/Button";
+import { DateTimePicker24hForm } from "./ui/dateTime.tsx";
 
 const AdminDodaj = ({ variant }) => {
   if (variant === "terapeut") {
@@ -120,17 +121,11 @@ const AdminDodaj = ({ variant }) => {
         </div>
         <div className="flex flex-col items-start gap-1 px-3">
           <label htmlFor="">Nedostupan od</label>
-          <input
-            type="text"
-            className="rounded-lg border-[1px] border-slate-200 px-3 py-2 outline-none"
-          />
+          {/* <DateTimePicker24hForm /> */}
         </div>
         <div className="flex flex-col items-start gap-1 px-3">
           <label htmlFor="">Nedostupan do</label>
-          <input
-            type="text"
-            className="rounded-lg border-[1px] border-slate-200 px-3 py-2 outline-none"
-          />
+          {/* <DateTimePicker24hForm /> */}
         </div>
         <Button className="self-end" type="submit">
           Dodaj
