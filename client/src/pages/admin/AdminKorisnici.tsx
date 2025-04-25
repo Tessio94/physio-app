@@ -32,6 +32,7 @@ export default function AdminKorisnici() {
         <DataTable
           columns={columns(showSuperadminInTable)}
           data={field ?? []}
+          searchShow={true}
         />
       </div>
     </>

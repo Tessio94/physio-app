@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/ui/shadcn/payments/data-table";
 import { columns } from "@/components/ui/shadcn/payments/columns";
 import { useLocation } from "react-router-dom";
+import AdminDodaj from "@/components/AdminDodaj";
 
 const showSuperadminInTable = true;
 
@@ -18,23 +19,54 @@ const AdminPostavke = () => {
 
   if (isLoading) return <h1>is loading...</h1>;
   console.log(data);
-  // const isAdminSettings = pathname === "/admin/postavke";
-  // const columns =
-  //   isAdminSettings &&
-  //   baseColumns.push({ accessorKey: "isSuperadmin", header: "Superadmin" });
 
   return (
     <>
       <h4 className="ml-5 text-2xl text-slate-600">Vaše postavke</h4>
-      <div className="mx-5 pt-6">
-        <h3>Vaša uloga: Admin</h3>
-        <div className="">
-          <div>Lista admina:</div>
-          <div className="mx-5 pt-2">
+      <div className="mx-5 pb-10 pt-6">
+        <h3 className="mb-3 font-semibold">
+          Vaša uloga: <span className="text-slate-600">Admin</span>
+        </h3>
+        <div className="mb-5">
+          <div className="font-semibold">Lista admina:</div>
+          <div className="pt-2">
             <DataTable
               columns={columns(showSuperadminInTable)}
               data={data ?? []}
+              searchShow={false}
             />
+          </div>
+        </div>
+        <div className="flex">
+          <div>
+            <div className="font-semibold">Dodaj novog admina:</div>
+            <div className="pt-2">
+              <AdminDodaj variant="terapeut" />
+            </div>
+          </div>
+        </div>
+        <div className="mt-5 flex">
+          <div>
+            <div className="font-semibold">Dodaj usluge za terapeuta:</div>
+            <div className="pt-2">
+              <AdminDodaj variant="terapeutUsluge" />
+            </div>
+          </div>
+        </div>
+        <div className="mt-5 flex">
+          <div>
+            <div className="font-semibold">Dodaj nove usluge:</div>
+            <div className="pt-2">
+              <AdminDodaj variant="usluge" />
+            </div>
+          </div>
+        </div>
+        <div className="mt-5 flex">
+          <div>
+            <div className="font-semibold">Makni nedostupne termine:</div>
+            <div className="pt-2">
+              <AdminDodaj variant="nedostupnost" />
+            </div>
           </div>
         </div>
       </div>
