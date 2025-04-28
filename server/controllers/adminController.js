@@ -14,6 +14,7 @@ const {
 	getAdminList,
 } = require("../db/queries/admin/users");
 const { getServices } = require("../db/queries/services");
+const { getTherIds } = require("../db/queries/therapists");
 const {
 	formatUserDate,
 	generateAvailabilityMap,
@@ -136,6 +137,33 @@ const getAdminSettings = async (req, res) => {
 	res.status(200).json({ formattedAdminList, servicesList: servicesList.rows });
 };
 
+const getTherapistIDs = async (req, res) => {
+	const therapistIds = await getTherIds();
+	const ids = therapistIds.rows;
+
+	res.status(200).json({ ids });
+};
+
+const addTherapist = async (req, res) => {
+	const { name, lastname, email, phone, password, icon } = req.body;
+	console.log(name, lastname, email, phone, password, icon);
+	try {
+		const result = await insertTherapist(
+			name,
+			lastname,
+			email,
+			phone,
+			password,
+			icon
+		);
+
+		res.json({ success: true });
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Database error" });
+	}
+};
+
 module.exports = {
 	getAllUsers,
 	getAdminAppointments,
@@ -143,4 +171,6 @@ module.exports = {
 	getAllDashboardData,
 	getAllAdminDashboardData,
 	getAdminSettings,
+	getTherapistIDs,
+	addTherapist,
 };

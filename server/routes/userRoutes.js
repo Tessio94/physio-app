@@ -10,6 +10,8 @@ const {
 	getAllDashboardData,
 	getAllAdminDashboardData,
 	getAdminSettings,
+	addTherapist,
+	getTherapistIDs,
 } = require("../controllers/adminController");
 
 const express = require("express");
@@ -36,5 +38,9 @@ router
 router.route("/admin/korisnici").get(getAllUsers);
 
 router.route("/admin/postavke").get(getAdminSettings);
+
+router.route("/admin/postavke/get-therapists").get(getTherapistIDs);
+
+router.route("/admin/postavke/add-therapist").get(addTherapist);
 
 module.exports = router;

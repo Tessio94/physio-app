@@ -144,6 +144,19 @@ LEFT JOIN therapists t
 ON a.therapist_id = t.id;`);
 };
 
+const insertTherapist = () => {
+	const sql = `
+			WITH new_therapist AS (
+			  INSERT INTO therapists (name, lastname, email, phone, password, icon)
+			  VALUES ($1, $2, $3, $4, $5, $6)
+			  RETURNING id
+			)
+			INSERT INTO admins (therapist_id, is_superadmin, created_at, updated_at)
+			SELECT id, false, NOW(), NOW()
+			FROM new_therapist;`;
+	return pool.query(sql, [name, lastname, email, phone, password, icon]);
+};
+
 module.exports = {
 	getUsers,
 	getAdminSchedule,
