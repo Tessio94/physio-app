@@ -3,14 +3,14 @@ import { DataTable } from "@/components/ui/shadcn/payments/data-table";
 import { columns } from "@/components/ui/shadcn/payments/columns";
 // import { useLocation } from "react-router-dom";
 import AdminDodaj from "@/components/AdminDodaj";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const AdminPostavke = () => {
   const queryClient = useQueryClient();
   // const { pathname } = useLocation();
   const [formData, setFormData] = useState({});
   const [serviceData, setServiceData] = useState({});
-  const [therapistId, setTherapistId] = useState<number>("");
+  const [therapistId, setTherapistId] = useState<number>(0);
 
   // initial fetch of therapists and users
   const { isLoading, error, data } = useQuery({
@@ -75,8 +75,12 @@ const AdminPostavke = () => {
       }).then((res) => res.json()),
   });
 
+  // useEffect(() => {
+  //   console.log(therapistId);
+  // }, [therapistId]);
+
   if (isLoading || isTherapistsLoading) return <h1>is loading...</h1>;
-  console.log(data);
+  // console.log(data);
 
   const handleAddUser = (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,7 +95,7 @@ const AdminPostavke = () => {
   const handleDeleteTherapist = (id: number) => {
     deleteTherapistMutation.mutate(id);
   };
-  console.log(therapists.ids);
+
   return (
     <>
       <h4 className="ml-5 text-2xl text-slate-600">Vaše postavke</h4>
@@ -128,7 +132,12 @@ const AdminPostavke = () => {
                 Dodaj novog admina:
               </div>
               <div className="pt-2">
-                <AdminDodaj variant="terapeut" handler={handleAddUser} />
+                <AdminDodaj
+                  variant="terapeut"
+                  handler={handleAddUser}
+                  stateValue={formData}
+                  stateSetter={setFormData}
+                />
               </div>
             </div>
           </div>
@@ -171,8 +180,8 @@ const AdminPostavke = () => {
                 <AdminDodaj
                   variant="ukloniTerapeuta"
                   handler={handleDeleteTherapist}
-                  value={therapistId}
-                  setter={setTherapistId}
+                  stateValue={therapistId}
+                  stateSetter={setTherapistId}
                   therapists={therapists.ids}
                 />
               </div>
