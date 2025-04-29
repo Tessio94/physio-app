@@ -8,7 +8,38 @@ const getTherIds = () => {
 	return pool.query("SELECT id  FROM therapists ORDER BY  id ASC;");
 };
 
+const insertTherapist = (
+	name,
+	lastname,
+	email,
+	phone,
+	password,
+	icon,
+	superadmin
+) => {
+	const sql = `
+			WITH new_therapist AS (
+			  INSERT INTO therapists (name, lastname, email, phone, password, icon)
+			  VALUES ($1, $2, $3, $4, $5, $6)
+			  RETURNING id
+			)
+			INSERT INTO admins (therapist_id, is_superadmin, created_at, updated_at)
+			SELECT id, $7, NOW(), NOW()
+			FROM new_therapist
+			RETURNING therapist_id;`;
+	return pool.query(sql, [
+		name,
+		lastname,
+		email,
+		phone,
+		password,
+		icon,
+		superadmin,
+	]);
+};
+
 module.exports = {
 	getTherapists,
 	getTherIds,
+	insertTherapist,
 };

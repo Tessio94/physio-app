@@ -1,12 +1,28 @@
 import { Button } from "@/components/ui/shadcn/Button";
+import { cn } from "@/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+
+type AddFormProps = {
+  variant: string;
+  dropdownData?: {
+    therapists?: { id: number }[];
+    services?: { id: number }[];
+    therapistServices?: Record<number, number[]>;
+  };
+};
 
 const fieldsAddTherapist = [
   { label: "Ime", name: "therapistName", type: "text", required: true },
   { label: "Prezime", name: "lastname", type: "text", required: true },
   { label: "E-mail", name: "email", type: "text", required: true },
   { label: "Mobitel", name: "phone", type: "text", required: true },
+  {
+    label: "Superadmin",
+    name: "superadmin",
+    type: "checkbox",
+    required: false,
+  },
   { label: "Lozinka", name: "password", type: "password", required: true },
   {
     label: "Slika (url)",
@@ -27,8 +43,13 @@ const fieldsAddService = [
 ];
 
 const fieldsAddServiceForTherapist = [
-  { label: "Terapeut ID", name: "therapist_id", type: "text", required: true },
-  { label: "Service ID", name: "service_id", type: "text", required: true },
+  {
+    label: "Terapeut ID",
+    name: "therapist_id",
+    type: "number",
+    required: true,
+  },
+  { label: "Service ID", name: "service_id", type: "number", required: true },
 ];
 
 const variantFieldsMap = {
@@ -46,23 +67,11 @@ const endpointsMap = {
 
 const invalidationMap = {
   terapeut: ["usersData"],
-  usluge: ["servicesData"],
+  usluge: ["usersData"],
   terapeutUsluge: ["therapistServicesData"],
 };
 
-type AddFormProps = {
-  variant: string;
-  handler: (e: React.FormEvent) => void;
-  stateValue: any;
-  stateSetter: (value: any) => void;
-};
-
-const AddForm = ({
-  variant,
-  handler,
-  stateValue,
-  stateSetter,
-}: AddFormProps) => {
+const AddForm = ({ variant, dropdownData }: AddFormProps) => {
   const fields = variantFieldsMap[variant];
   const [formData, setFormData] = useState({});
 
@@ -83,35 +92,136 @@ const AddForm = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // add sonner later
+    const rawPhone = formData.phone?.replace(/\D/g, "");
+    if (variant === "terapeut" && rawPhone?.length !== 10) {
+      alert("Broj mobitela mora imati točno 10 znamenki.");
+      return;
+    }
+
     mutation.mutate(formData);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, type, value, checked } = e.target;
+    let newValue: any = value;
+
+    if (name === "phone") {
+      // Remove all non-digit characters
+      const digits = value.replace(/\D/g, "");
+
+      // Limit to 10 digits
+      if (digits.length > 10) return;
+
+      // Format if 10 digits
+      if (digits.length === 10) {
+        newValue = `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+      } else {
+        newValue = digits;
+      }
+    } else {
+      newValue = type === "checkbox" ? checked : value;
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.taget.value,
+      [name]: newValue,
     }));
   };
+
+  // const selectedTherapist = formData.therapist_id;
+  // const servicesForTherapist =
+  //   dropdownData.therapistServices?.[selectedTherapist] || [];
+  const selectedTherapist = false;
+  const servicesForTherapist = [];
 
   return (
     <form
       onSubmit={handleSubmit}
       className="flex flex-wrap rounded-lg border-[1px] border-slate-200 px-2 py-2 text-sm font-medium text-slate-500"
     >
-      {fields.map((field) => (
-        <div key={field.name} className="flex flex-col items-start gap-1 px-3">
-          <label htmlFor={field.name}>{field.label}</label>
-          <input
-            id={field.name}
-            name={field.name}
-            type={field.type}
-            value={formData[field.name] || ""}
-            onChange={handleChange}
-            className="rounded-lg border-[1px] border-slate-200 px-3 py-2 outline-none"
-            required={field.required}
-          />
-        </div>
-      ))}
+      {variant === "terapeutUsluge" ? (
+        <>
+          <div className="flex flex-col items-start gap-1 px-3">
+            <label>Terapeut</label>
+            <select
+              name="therapist_id"
+              onChange={handleChange}
+              className="cursor-pointer rounded-lg border px-3 py-2"
+              value={formData.therapist_id || ""}
+              required
+            >
+              <option value="" disabled hidden>
+                Odaberi terapeuta
+              </option>
+              {dropdownData.therapists?.map((t) => (
+                <option
+                  key={t.id}
+                  value={t.id}
+                  className="bg-slate-200 text-slate-950"
+                >
+                  {t.id}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col items-start gap-1 px-3">
+            <label>Usluga</label>
+            <select
+              name="service_id"
+              onChange={handleChange}
+              className={cn(
+                "rounded-lg border px-3 py-2",
+                selectedTherapist && "cursor-pointer",
+              )}
+              value={formData.service_id || ""}
+              required
+              disabled={!selectedTherapist}
+            >
+              <option value="" disabled hidden>
+                Odaberi uslugu
+              </option>
+              {servicesForTherapist.map((s) => (
+                <option
+                  key={s}
+                  value={s}
+                  className="bg-slate-200 text-slate-950"
+                >
+                  {s}
+                </option>
+              ))}
+            </select>
+          </div>
+        </>
+      ) : (
+        fields.map((field) => (
+          <div
+            key={field.name}
+            className="flex flex-col items-start gap-1 px-3"
+          >
+            <label htmlFor={field.name}>{field.label}</label>
+            <input
+              id={field.name}
+              name={field.name}
+              type={field.type}
+              value={
+                field.type !== "checkbox"
+                  ? formData[field.name] || ""
+                  : undefined
+              }
+              checked={
+                field.type === "checkbox"
+                  ? formData[field.name] || false
+                  : undefined
+              }
+              onChange={handleChange}
+              className="rounded-lg border-[1px] border-slate-200 px-3 py-2 outline-none"
+              required={field.required}
+            />
+          </div>
+        ))
+      )}
       <Button className="h-[38px] self-end" type="submit">
         {mutation.isLoading ? "Dodavanje..." : "Dodaj"}
       </Button>

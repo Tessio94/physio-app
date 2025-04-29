@@ -1,12 +1,16 @@
 const pool = require("../database");
 
 const getServices = () => {
-  return pool.query("SELECT id, name, icon FROM services;");
+	return pool.query("SELECT id, name, icon FROM services;");
+};
+
+const getTherapistsServices = () => {
+	return pool.query("SELECT * FROM therapists_services;");
 };
 
 const getAvailableSlotsQuery = (therapistId, serviceId) => {
-  if (therapistId === "all") {
-    const sql = `
+	if (therapistId === "all") {
+		const sql = `
     SELECT * FROM 
     (
     SELECT ajde.*, tss.service_id, s.name AS service_name, s.icon AS service_icon FROM
@@ -41,9 +45,9 @@ const getAvailableSlotsQuery = (therapistId, serviceId) => {
         ) WHERE service_id = $1;
     `;
 
-    return pool.query(sql, [serviceId]);
-  } else {
-    const sql = `
+		return pool.query(sql, [serviceId]);
+	} else {
+		const sql = `
     SELECT * FROM 
     (
     SELECT ajde.*, tss.service_id, s.name AS service_name, s.icon AS service_icon FROM
@@ -79,31 +83,39 @@ const getAvailableSlotsQuery = (therapistId, serviceId) => {
         ) WHERE service_id = $1;
     `;
 
-    return pool.query(sql, [serviceId, therapistId]);
-  }
+		return pool.query(sql, [serviceId, therapistId]);
+	}
 };
 
 const makeReservation = async (
-  user_id,
-  service_id,
-  therapist_id,
-  time_range,
-  napomena
+	user_id,
+	service_id,
+	therapist_id,
+	time_range,
+	napomena
 ) => {
-  const sql = `INSERT INTO bookings (user_id, service_id, therapist_id, time_range, napomena)
+	const sql = `INSERT INTO bookings (user_id, service_id, therapist_id, time_range, napomena)
 		   VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
 
-  return pool.query(sql, [
-    user_id,
-    service_id,
-    therapist_id,
-    time_range,
-    napomena,
-  ]);
+	return pool.query(sql, [
+		user_id,
+		service_id,
+		therapist_id,
+		time_range,
+		napomena,
+	]);
+};
+
+const insertService = (name, icon) => {
+	const sql = `INSERT INTO services (name, icon)
+			  VALUES ($1, $2)`;
+	return pool.query(sql, [name, icon]);
 };
 
 module.exports = {
-  getServices,
-  getAvailableSlotsQuery,
-  makeReservation,
+	getServices,
+	getTherapistsServices,
+	getAvailableSlotsQuery,
+	makeReservation,
+	insertService,
 };

@@ -1,18 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "@/components/ui/shadcn/payments/data-table";
 import { columns } from "@/components/ui/shadcn/payments/columns";
-// import { useLocation } from "react-router-dom";
 import AdminDodaj from "@/components/AdminDodaj";
-import { useEffect, useState } from "react";
 
 const AdminPostavke = () => {
-  const queryClient = useQueryClient();
-  // const { pathname } = useLocation();
-  const [formData, setFormData] = useState({});
-  const [serviceData, setServiceData] = useState({});
-  const [therapistId, setTherapistId] = useState<number>(0);
-
-  // initial fetch of therapists and users
+  // initial fetch of therapists
   const { isLoading, error, data } = useQuery({
     queryKey: ["usersData"],
     queryFn: () =>
@@ -21,80 +13,39 @@ const AdminPostavke = () => {
       ),
   });
 
-  const { data: therapists, isLoading: isTherapistsLoading } = useQuery({
-    queryKey: ["therapists"],
-    queryFn: () =>
-      fetch("http://localhost:3000/api/v1/admin/postavke/get-therapists").then(
-        (res) => res.json(),
-      ),
+  if (isLoading) return <h1>is loading...</h1>;
+  console.log(data);
+
+  const therapistIds = data.formattedAdminList.map((admin) => {
+    return { id: admin.id };
+  });
+  const serviceIds = data.servicesList.map((service) => {
+    return { id: service.id };
   });
 
-  const addUserMutation = useMutation({
-    mutationFn: (newUser: any) =>
-      fetch("http://localhost:3000/api/v1/admin/postavke/add-therapist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newUser),
-      }).then((res) => res.json()),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["usersData"]); // Refetch users list
-    },
-  });
+  const therapistsServicesMap = data.therapistsServices.reduce((acc, ts) => {
+    if (!acc[ts.therapist_id]) acc[ts.therapist_id] = [];
+    acc[ts.therapist_id].push(ts.service_id);
+    return acc;
+  }, {});
 
-  const addServiceMutation = useMutation({
-    mutationFn: (newService: any) =>
-      fetch("http://localhost:3000/api/v1/admin/postavke/add-service", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newService),
-      }).then((res) => res.json()),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["usersData"]); // separate services later so we can invalidate only get services query
-    },
-  });
+  const allServices = data.servicesList.map((service) => service.id);
 
-  const deleteTherapistMutation = useMutation({
-    mutationFn: (id: number) =>
-      fetch(
-        `http://localhost:3000/api/v1/admin/postavke/delete-therapist/${id}`,
-        {
-          method: "DELETE",
-        },
-      ).then((res) => res.json()),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["usersData"]);
-    },
-  });
+  const therapistsServicesNotProvidedMap = Object.keys(
+    therapistsServicesMap,
+  ).reduce((acc, therapistId) => {
+    const providedServices = therapistsServicesMap[therapistId];
 
-  const addServiceToTherapistMutation = useMutation({
-    mutationFn: (serviceToTherapistData) =>
-      fetch("http://localhost:3000/api/v1/admin/add-service-to-therapist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(serviceToTherapistData),
-      }).then((res) => res.json()),
-  });
+    const notProvidedServices = allServices.filter(
+      (serviceId) => !providedServices.includes(serviceId),
+    );
 
-  // useEffect(() => {
-  //   console.log(therapistId);
-  // }, [therapistId]);
+    acc[therapistId] = notProvidedServices;
+    return acc;
+  }, {});
 
-  if (isLoading || isTherapistsLoading) return <h1>is loading...</h1>;
-  // console.log(data);
-
-  const handleAddUser = (e: React.FormEvent) => {
-    e.preventDefault();
-    addUserMutation.mutate(formData);
-  };
-
-  const handleAddService = (e: React.FormEvent) => {
-    e.preventDefault();
-    addServiceMutation.mutate(serviceData);
-  };
-
-  const handleDeleteTherapist = (id: number) => {
-    deleteTherapistMutation.mutate(id);
-  };
+  // console.log(therapistsServicesNotProvidedMap);
+  // console.log(therapistIds, serviceIds, therapistsServicesMap);
 
   return (
     <>
@@ -132,12 +83,7 @@ const AdminPostavke = () => {
                 Dodaj novog admina:
               </div>
               <div className="pt-2">
-                <AdminDodaj
-                  variant="terapeut"
-                  handler={handleAddUser}
-                  stateValue={formData}
-                  stateSetter={setFormData}
-                />
+                <AdminDodaj variant="terapeut" />
               </div>
             </div>
           </div>
@@ -147,7 +93,13 @@ const AdminPostavke = () => {
                 Dodaj usluge za terapeuta:
               </div>
               <div className="pt-2">
-                <AdminDodaj variant="terapeutUsluge" />
+                <AdminDodaj
+                  variant="terapeutUsluge"
+                  dropdownData={{
+                    therapists: therapistIds,
+                    therapistServices: therapistsServicesNotProvidedMap,
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -157,7 +109,7 @@ const AdminPostavke = () => {
                 Dodaj nove usluge:
               </div>
               <div className="pt-2">
-                <AdminDodaj variant="usluge" handler={handleAddService} />
+                <AdminDodaj variant="usluge" />
               </div>
             </div>
           </div>
@@ -179,10 +131,7 @@ const AdminPostavke = () => {
               <div className="pt-2">
                 <AdminDodaj
                   variant="ukloniTerapeuta"
-                  handler={handleDeleteTherapist}
-                  stateValue={therapistId}
-                  stateSetter={setTherapistId}
-                  therapists={therapists.ids}
+                  dropdownData={{ therapists: therapistIds }}
                 />
               </div>
             </div>
@@ -193,7 +142,10 @@ const AdminPostavke = () => {
                 Ukloni uslugu:
               </div>
               <div className="pt-2">
-                <AdminDodaj variant="ukloniUslugu" />
+                <AdminDodaj
+                  variant="ukloniUslugu"
+                  dropdownData={{ services: serviceIds }}
+                />
               </div>
             </div>
           </div>
@@ -203,7 +155,13 @@ const AdminPostavke = () => {
                 Ukloni uslugu za terapeuta:
               </div>
               <div className="pt-2">
-                <AdminDodaj variant="ukloniUsluguZaTerapeuta" />
+                <AdminDodaj
+                  variant="ukloniUsluguZaTerapeuta"
+                  dropdownData={{
+                    therapists: therapistIds,
+                    therapistServices: therapistsServicesMap,
+                  }}
+                />
               </div>
             </div>
           </div>

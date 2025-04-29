@@ -13,8 +13,12 @@ const {
 	getBestMonth,
 	getAdminList,
 } = require("../db/queries/admin/users");
-const { getServices } = require("../db/queries/services");
-const { getTherIds } = require("../db/queries/therapists");
+const {
+	getServices,
+	insertService,
+	getTherapistsServices,
+} = require("../db/queries/services");
+const { getTherIds, insertTherapist } = require("../db/queries/therapists");
 const {
 	formatUserDate,
 	generateAvailabilityMap,
@@ -126,6 +130,7 @@ const getAllAdminDashboardData = async (req, res) => {
 const getAdminSettings = async (req, res) => {
 	const adminList = await getAdminList();
 	const servicesList = await getServices();
+	const therapistsServices = await getTherapistsServices();
 	const formattedAdminList = adminList.rows.map((admin) => {
 		let { id, name, lastname, email, phone, is_superadmin, registration_date } =
 			admin;
@@ -134,19 +139,25 @@ const getAdminSettings = async (req, res) => {
 		return { id, name, lastname, email, phone, is_superadmin, date };
 	});
 
-	res.status(200).json({ formattedAdminList, servicesList: servicesList.rows });
-};
-
-const getTherapistIDs = async (req, res) => {
-	const therapistIds = await getTherIds();
-	const ids = therapistIds.rows;
-
-	res.status(200).json({ ids });
+	res.status(200).json({
+		formattedAdminList,
+		servicesList: servicesList.rows,
+		therapistsServices: therapistsServices.rows,
+	});
 };
 
 const addTherapist = async (req, res) => {
-	const { name, lastname, email, phone, password, icon } = req.body;
-	console.log(name, lastname, email, phone, password, icon);
+	console.log(req.body);
+	const {
+		therapistName: name,
+		lastname,
+		email,
+		phone,
+		superadmin,
+		password,
+		therapistImageUrl: icon,
+	} = req.body;
+
 	try {
 		const result = await insertTherapist(
 			name,
@@ -154,8 +165,23 @@ const addTherapist = async (req, res) => {
 			email,
 			phone,
 			password,
-			icon
+			icon,
+			superadmin
 		);
+
+		res.json({ success: true });
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Database error" });
+	}
+};
+
+const addService = async (req, res) => {
+	console.log(req.body);
+	const { serviceName: name, serviceImageUrl: icon } = req.body;
+
+	try {
+		const result = await insertService(name, icon);
 
 		res.json({ success: true });
 	} catch (error) {
@@ -171,6 +197,6 @@ module.exports = {
 	getAllDashboardData,
 	getAllAdminDashboardData,
 	getAdminSettings,
-	getTherapistIDs,
 	addTherapist,
+	addService,
 };

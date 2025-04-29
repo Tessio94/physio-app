@@ -1,5 +1,194 @@
-const DeleteForm = () => {
-  return <div>DeleteForm</div>;
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { Button } from "@/components/ui/shadcn/Button";
+import { cn } from "@/lib/utils";
+
+type DeleteFormProps = {
+  variant: string;
+  dropdownData?: {
+    therapists?: { id: number }[];
+    services?: { id: number }[];
+    therapistServices?: Record<number, number[]>;
+  };
+};
+
+const endpointsMap = {
+  ukloniTerapeuta:
+    "http://localhost:3000/api/v1/admin/postavke/delete-therapist",
+  ukloniUslugu: "http://localhost:3000/api/v1/admin/postavke/delete-service",
+  ukloniUsluguZaTerapeuta:
+    "http://localhost:3000/api/v1/admin/postavke/delete-service-for-therapist",
+};
+
+const invalidationMap = {
+  ukloniTerapeuta: ["usersData"],
+  ukloniUslugu: ["usersData"],
+  ukloniUsluguZaTerapeuta: ["therapistServicesData"],
+};
+
+const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
+  const [formData, setFormData] = useState<any>({});
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (data: any) =>
+      fetch(endpointsMap[variant], {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }).then((res) => res.json()),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: invalidationMap[variant] });
+      setFormData({});
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutation.mutate(formData);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+
+    setFormData((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const renderFields = () => {
+    if (variant === "ukloniTerapeuta") {
+      return (
+        <div className="flex flex-col items-start gap-1 px-3">
+          <label>Terapeut</label>
+          <select
+            name="therapist_id"
+            onChange={handleChange}
+            className="cursor-pointer rounded-lg border px-3 py-2"
+            value={formData.therapist_id || ""}
+            required
+          >
+            <option value="" disabled hidden>
+              Odaberi terapeuta
+            </option>
+            {dropdownData.therapists?.map((t) => (
+              <option
+                key={t.id}
+                value={t.id}
+                className="bg-slate-200 text-slate-950"
+              >
+                {t.id}
+              </option>
+            ))}
+          </select>
+        </div>
+      );
+    }
+
+    if (variant === "ukloniUslugu") {
+      return (
+        <div className="flex flex-col items-start gap-1 px-3">
+          <label>Usluga</label>
+          <select
+            name="service_id"
+            onChange={handleChange}
+            className="cursor-pointer rounded-lg border px-3 py-2"
+            value={formData.service_id || ""}
+            required
+          >
+            <option value="" disabled hidden>
+              Odaberi uslugu
+            </option>
+            {dropdownData.services?.map((s) => (
+              <option
+                key={s.id}
+                value={s.id}
+                className="bg-slate-200 text-slate-950"
+              >
+                {s.id}
+              </option>
+            ))}
+          </select>
+        </div>
+      );
+    }
+
+    if (variant === "ukloniUsluguZaTerapeuta") {
+      const selectedTherapist = formData.therapist_id;
+      const servicesForTherapist =
+        dropdownData.therapistServices?.[selectedTherapist] || [];
+
+      return (
+        <>
+          <div className="flex flex-col items-start gap-1 px-3">
+            <label>Terapeut</label>
+            <select
+              name="therapist_id"
+              onChange={handleChange}
+              className="cursor-pointer rounded-lg border px-3 py-2"
+              value={formData.therapist_id || ""}
+              required
+            >
+              <option value="" disabled hidden>
+                Odaberi terapeuta
+              </option>
+              {dropdownData.therapists?.map((t) => (
+                <option
+                  key={t.id}
+                  value={t.id}
+                  className="bg-slate-200 text-slate-950"
+                >
+                  {t.id}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col items-start gap-1 px-3">
+            <label>Usluga</label>
+            <select
+              name="service_id"
+              onChange={handleChange}
+              className={cn(
+                "rounded-lg border px-3 py-2",
+                selectedTherapist && "cursor-pointer",
+              )}
+              value={formData.service_id || ""}
+              required
+              disabled={!selectedTherapist}
+            >
+              <option value="" disabled hidden>
+                Odaberi uslugu
+              </option>
+              {servicesForTherapist.map((s) => (
+                <option
+                  key={s}
+                  value={s}
+                  className="bg-slate-200 text-slate-950"
+                >
+                  {s}
+                </option>
+              ))}
+            </select>
+          </div>
+        </>
+      );
+    }
+
+    return null;
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-wrap rounded-lg border px-2 py-2 text-sm font-medium text-slate-500"
+    >
+      {renderFields()}
+      <Button className="h-[38px] self-end" type="submit">
+        {mutation.isLoading ? "Brisanje..." : "Ukloni"}
+      </Button>
+    </form>
+  );
 };
 
 export default DeleteForm;
