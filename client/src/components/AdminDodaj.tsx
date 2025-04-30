@@ -29,7 +29,7 @@ const AdminDodaj = ({ variant, dropdownData }: AdminDodajProps) => {
     return (
       <form
         action=""
-        className="flex rounded-lg border-[1px] border-slate-200 px-2 py-2 text-sm font-medium text-slate-500"
+        className="flex rounded-lg border-[1px] border-slate-200 bg-slate-100 px-2 py-2 text-sm font-medium text-slate-500"
       >
         <div className="flex flex-col items-start gap-1 px-3">
           <label htmlFor="">Terapeut ID</label>

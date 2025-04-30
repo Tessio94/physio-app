@@ -64,21 +64,21 @@ const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
           <label>Terapeut</label>
           <select
             name="therapist_id"
-            onChange={handleChange}
             className="cursor-pointer rounded-lg border px-3 py-2"
             value={formData.therapist_id || ""}
+            onChange={handleChange}
             required
           >
             <option value="" disabled hidden>
               Odaberi terapeuta
             </option>
-            {dropdownData.therapists?.map((t) => (
+            {dropdownData.therapists?.map((therapist) => (
               <option
-                key={t.id}
-                value={t.id}
+                key={therapist.id}
+                value={therapist.id}
                 className="bg-slate-200 text-slate-950"
               >
-                {t.id}
+                {therapist.id}
               </option>
             ))}
           </select>
@@ -100,13 +100,13 @@ const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
             <option value="" disabled hidden>
               Odaberi uslugu
             </option>
-            {dropdownData.services?.map((s) => (
+            {dropdownData.services?.map((service) => (
               <option
-                key={s.id}
-                value={s.id}
+                key={service.id}
+                value={service.id}
                 className="bg-slate-200 text-slate-950"
               >
-                {s.id}
+                {service.id}
               </option>
             ))}
           </select>
@@ -133,13 +133,13 @@ const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
               <option value="" disabled hidden>
                 Odaberi terapeuta
               </option>
-              {dropdownData.therapists?.map((t) => (
+              {dropdownData.therapists?.map((therapist) => (
                 <option
-                  key={t.id}
-                  value={t.id}
+                  key={therapist.id}
+                  value={therapist.id}
                   className="bg-slate-200 text-slate-950"
                 >
-                  {t.id}
+                  {therapist.id}
                 </option>
               ))}
             </select>
@@ -160,13 +160,13 @@ const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
               <option value="" disabled hidden>
                 Odaberi uslugu
               </option>
-              {servicesForTherapist.map((s) => (
+              {servicesForTherapist.map((service) => (
                 <option
-                  key={s}
-                  value={s}
+                  key={service}
+                  value={service}
                   className="bg-slate-200 text-slate-950"
                 >
-                  {s}
+                  {service}
                 </option>
               ))}
             </select>
@@ -181,7 +181,7 @@ const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-wrap rounded-lg border px-2 py-2 text-sm font-medium text-slate-500"
+      className="flex flex-wrap rounded-lg border bg-slate-100 px-2 py-2 text-sm font-medium text-slate-500"
     >
       {renderFields()}
       <Button className="h-[38px] self-end" type="submit">

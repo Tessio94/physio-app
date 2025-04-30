@@ -11,8 +11,11 @@ const {
 	getAllAdminDashboardData,
 	getAdminSettings,
 	addTherapist,
-	getTherapistIDs,
 	addService,
+	addServiceForTherapist,
+	removeTherapist,
+	removeService,
+	removeServiceForTherapist,
 } = require("../controllers/adminController");
 
 const express = require("express");
@@ -44,6 +47,14 @@ router.route("/admin/postavke/add-therapist").post(addTherapist);
 
 router.route("/admin/postavke/add-service").post(addService);
 
-// router.route("/admin/postavke/add-service-for-therapist").get(addTherapist);
+router
+	.route("/admin/postavke/add-service-for-therapist")
+	.post(addServiceForTherapist);
+
+router.route("/admin/postavke/delete-therapist").delete(removeTherapist);
+router.route("/admin/postavke/delete-service").delete(removeService);
+router
+	.route("/admin/postavke/delete-service-for-therapist")
+	.delete(removeServiceForTherapist);
 
 module.exports = router;

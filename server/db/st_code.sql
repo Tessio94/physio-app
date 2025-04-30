@@ -343,3 +343,16 @@ VALUES (2, TRUE);
 
 INSERT INTO admins (therapist_id)
 VALUES (3), (4), (5), (6);
+
+
+
+INSERT INTO users (id, name, lastname, email, phone, password, registration_date)
+VALUES (
+    99999, 
+    'System',
+    'Blocker',
+    'system@clinic.local',
+    '000-000-0000',
+    'DO_NOT_USE',
+    CURRENT_TIMESTAMP
+);

@@ -42,20 +42,20 @@ const fieldsAddService = [
   },
 ];
 
-const fieldsAddServiceForTherapist = [
-  {
-    label: "Terapeut ID",
-    name: "therapist_id",
-    type: "number",
-    required: true,
-  },
-  { label: "Service ID", name: "service_id", type: "number", required: true },
-];
+// const fieldsAddServiceForTherapist = [
+//   {
+//     label: "Terapeut ID",
+//     name: "therapist_id",
+//     type: "number",
+//     required: true,
+//   },
+//   { label: "Service ID", name: "service_id", type: "number", required: true },
+// ];
 
 const variantFieldsMap = {
   terapeut: fieldsAddTherapist,
   usluge: fieldsAddService,
-  terapeutUsluge: fieldsAddServiceForTherapist,
+  // terapeutUsluge: fieldsAddServiceForTherapist,
 };
 
 const endpointsMap = {
@@ -71,7 +71,7 @@ const invalidationMap = {
   terapeutUsluge: ["therapistServicesData"],
 };
 
-const AddForm = ({ variant, dropdownData }: AddFormProps) => {
+const AddForm = ({ variant, dropdownData = {} }: AddFormProps) => {
   const fields = variantFieldsMap[variant];
   const [formData, setFormData] = useState({});
 
@@ -130,38 +130,33 @@ const AddForm = ({ variant, dropdownData }: AddFormProps) => {
     }));
   };
 
-  // const selectedTherapist = formData.therapist_id;
-  // const servicesForTherapist =
-  //   dropdownData.therapistServices?.[selectedTherapist] || [];
-  const selectedTherapist = false;
-  const servicesForTherapist = [];
+  const renderFields = () => {
+    if (variant === "terapeutUsluge") {
+      const selectedTherapist = formData.therapist_id;
+      const servicesForTherapist =
+        dropdownData.therapistServices?.[selectedTherapist] || [];
 
-  return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-wrap rounded-lg border-[1px] border-slate-200 px-2 py-2 text-sm font-medium text-slate-500"
-    >
-      {variant === "terapeutUsluge" ? (
+      return (
         <>
           <div className="flex flex-col items-start gap-1 px-3">
             <label>Terapeut</label>
             <select
               name="therapist_id"
-              onChange={handleChange}
               className="cursor-pointer rounded-lg border px-3 py-2"
               value={formData.therapist_id || ""}
+              onChange={handleChange}
               required
             >
               <option value="" disabled hidden>
                 Odaberi terapeuta
               </option>
-              {dropdownData.therapists?.map((t) => (
+              {dropdownData.therapists?.map((therapist) => (
                 <option
-                  key={t.id}
-                  value={t.id}
+                  key={therapist.id}
+                  value={therapist.id}
                   className="bg-slate-200 text-slate-950"
                 >
-                  {t.id}
+                  {therapist.id}
                 </option>
               ))}
             </select>
@@ -182,46 +177,52 @@ const AddForm = ({ variant, dropdownData }: AddFormProps) => {
               <option value="" disabled hidden>
                 Odaberi uslugu
               </option>
-              {servicesForTherapist.map((s) => (
+              {servicesForTherapist.map((service) => (
                 <option
-                  key={s}
-                  value={s}
+                  key={service}
+                  value={service}
                   className="bg-slate-200 text-slate-950"
                 >
-                  {s}
+                  {service}
                 </option>
               ))}
             </select>
           </div>
         </>
-      ) : (
-        fields.map((field) => (
-          <div
-            key={field.name}
-            className="flex flex-col items-start gap-1 px-3"
-          >
-            <label htmlFor={field.name}>{field.label}</label>
-            <input
-              id={field.name}
-              name={field.name}
-              type={field.type}
-              value={
-                field.type !== "checkbox"
-                  ? formData[field.name] || ""
-                  : undefined
-              }
-              checked={
-                field.type === "checkbox"
-                  ? formData[field.name] || false
-                  : undefined
-              }
-              onChange={handleChange}
-              className="rounded-lg border-[1px] border-slate-200 px-3 py-2 outline-none"
-              required={field.required}
-            />
-          </div>
-        ))
-      )}
+      );
+    } else if (variant === "terapeut" || variant === "usluge") {
+      return fields.map((field) => (
+        <div key={field.name} className="flex flex-col items-start gap-1 px-3">
+          <label htmlFor={field.name}>{field.label}</label>
+          <input
+            id={field.name}
+            name={field.name}
+            type={field.type}
+            value={
+              field.type !== "checkbox" ? formData[field.name] || "" : undefined
+            }
+            checked={
+              field.type === "checkbox"
+                ? formData[field.name] || false
+                : undefined
+            }
+            onChange={handleChange}
+            className="rounded-lg border-[1px] border-slate-200 px-3 py-2 outline-none"
+            required={field.required}
+          />
+        </div>
+      ));
+    }
+
+    return null;
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-wrap rounded-lg border-[1px] border-slate-200 bg-slate-100 px-2 py-2 text-sm font-medium text-slate-500"
+    >
+      {renderFields()}
       <Button className="h-[38px] self-end" type="submit">
         {mutation.isLoading ? "Dodavanje..." : "Dodaj"}
       </Button>

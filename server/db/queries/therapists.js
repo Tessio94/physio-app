@@ -4,10 +4,6 @@ const getTherapists = () => {
 	return pool.query("SELECT id , name, icon FROM therapists;");
 };
 
-const getTherIds = () => {
-	return pool.query("SELECT id  FROM therapists ORDER BY  id ASC;");
-};
-
 const insertTherapist = (
 	name,
 	lastname,
@@ -38,8 +34,13 @@ const insertTherapist = (
 	]);
 };
 
+const deleteTherapist = (therapist) => {
+	const sql = "DELETE FROM therapists WHERE id = $1";
+	return pool.query(sql, [therapist]);
+};
+
 module.exports = {
 	getTherapists,
-	getTherIds,
 	insertTherapist,
+	deleteTherapist,
 };

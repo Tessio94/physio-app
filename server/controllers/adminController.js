@@ -17,8 +17,14 @@ const {
 	getServices,
 	insertService,
 	getTherapistsServices,
+	insertServiceForTherapist,
+	deleteService,
+	deleteServiceForTherapist,
 } = require("../db/queries/services");
-const { getTherIds, insertTherapist } = require("../db/queries/therapists");
+const {
+	insertTherapist,
+	deleteTherapist,
+} = require("../db/queries/therapists");
 const {
 	formatUserDate,
 	generateAvailabilityMap,
@@ -190,6 +196,56 @@ const addService = async (req, res) => {
 	}
 };
 
+const addServiceForTherapist = async (req, res) => {
+	console.log(req.body);
+	const { therapist_id, service_id } = req.body;
+
+	try {
+		const result = await insertServiceForTherapist(therapist_id, service_id);
+		res.json({ success: true });
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Database error" });
+	}
+};
+
+const removeTherapist = async (req, res) => {
+	console.log(req.body);
+	const { therapist_id } = req.body;
+	try {
+		const result = await deleteTherapist(therapist_id);
+		res.json({ success: true });
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Database error" });
+	}
+};
+
+const removeService = async (req, res) => {
+	console.log(req.body);
+	const { service_id } = req.body;
+	try {
+		const result = await deleteService(service_id);
+		res.json({ success: true });
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Database error" });
+	}
+};
+
+const removeServiceForTherapist = async (req, res) => {
+	console.log(req.body);
+	const { therapist_id, service_id } = req.body;
+
+	try {
+		const result = await deleteServiceForTherapist(therapist_id, service_id);
+		res.json({ success: true });
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Database error" });
+	}
+};
+
 module.exports = {
 	getAllUsers,
 	getAdminAppointments,
@@ -199,4 +255,8 @@ module.exports = {
 	getAdminSettings,
 	addTherapist,
 	addService,
+	addServiceForTherapist,
+	removeTherapist,
+	removeService,
+	removeServiceForTherapist,
 };

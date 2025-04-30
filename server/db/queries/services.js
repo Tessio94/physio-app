@@ -112,10 +112,30 @@ const insertService = (name, icon) => {
 	return pool.query(sql, [name, icon]);
 };
 
+const insertServiceForTherapist = (therapist, service) => {
+	const sql = `INSERT INTO therapists_services (therapist_id, service_id)
+			  VALUES ($1, $2)`;
+	return pool.query(sql, [therapist, service]);
+};
+
+const deleteService = (service) => {
+	const sql = "DELETE FROM services WHERE id = $1";
+	return pool.query(sql, [service]);
+};
+
+const deleteServiceForTherapist = (therapist, service) => {
+	const sql =
+		"DELETE FROM therapists_services WHERE therapist_id = $1 and service_id = $2";
+	return pool.query(sql, [therapist, service]);
+};
+
 module.exports = {
 	getServices,
 	getTherapistsServices,
 	getAvailableSlotsQuery,
 	makeReservation,
 	insertService,
+	insertServiceForTherapist,
+	deleteService,
+	deleteServiceForTherapist,
 };
