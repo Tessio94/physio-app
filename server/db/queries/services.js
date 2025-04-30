@@ -1,7 +1,7 @@
 const pool = require("../database");
 
 const getServices = () => {
-	return pool.query("SELECT id, name, icon FROM services;");
+	return pool.query("SELECT id, name, icon FROM services WHERE id != 99999;");
 };
 
 const getTherapistsServices = () => {
@@ -41,7 +41,7 @@ const getAvailableSlotsQuery = (therapistId, serviceId) => {
               AND EXTRACT(DOW FROM lower(available)) NOT IN (0, 6)) tr
             INNER JOIN therapists t ON tr.therapist_id = t.id) ajde
         LEFT JOIN therapists_services tss ON ajde.therapist_id = tss.therapist_id
-        LEFT JOIN services s ON tss.service_id = s.id
+        LEFT JOIN services s ON tss.service_id = s.id AND s.id != 99999
         ) WHERE service_id = $1;
     `;
 
@@ -79,7 +79,7 @@ const getAvailableSlotsQuery = (therapistId, serviceId) => {
               AND therapist_id = $2) tr
             INNER JOIN therapists t ON tr.therapist_id = t.id) ajde
         LEFT JOIN therapists_services tss ON ajde.therapist_id = tss.therapist_id
-        LEFT JOIN services s ON tss.service_id = s.id
+        LEFT JOIN services s ON tss.service_id = s.id AND s.id != 99999
         ) WHERE service_id = $1;
     `;
 

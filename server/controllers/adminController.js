@@ -12,6 +12,7 @@ const {
 	getTopClient,
 	getBestMonth,
 	getAdminList,
+	addUnavailability,
 } = require("../db/queries/admin/users");
 const {
 	getServices,
@@ -31,6 +32,7 @@ const {
 	generateDetails,
 	generateBookingDetails,
 	formatDateTime,
+	splitUnavailableSlots,
 } = require("../utils/utils");
 
 const getAllUsers = async (req, res) => {
@@ -246,6 +248,30 @@ const removeServiceForTherapist = async (req, res) => {
 	}
 };
 
+const removeBookingSlots = async (req, res) => {
+	console.log(req.body);
+	const { unavailable_from, unavailable_to, therapist_id } = req.body;
+
+	const start = new Date(unavailable_from);
+	const end = new Date(unavailable_to);
+
+	const unavailableSlots = splitUnavailableSlots(start, end);
+	console.log(unavailableSlots);
+	// Loop through the unavailable slots and insert them
+	for (let slot of unavailableSlots) {
+		await addUnavailability(therapist_id, slot);
+	}
+
+	console.log(timeRange);
+	// const result = await addUnavailability(therapist_id, timeRange);
+	res.status(200).json({ success: true });
+	try {
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Database error" });
+	}
+};
+
 module.exports = {
 	getAllUsers,
 	getAdminAppointments,
@@ -259,4 +285,5 @@ module.exports = {
 	removeTherapist,
 	removeService,
 	removeServiceForTherapist,
+	removeBookingSlots,
 };

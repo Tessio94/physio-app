@@ -36,7 +36,7 @@ SELECT ajde.*, tss.service_id, s.name AS service_name, s.icon AS service_icon, b
           AND therapist_id = $1) tr
         INNER JOIN therapists t ON tr.therapist_id = t.id) ajde
 		LEFT JOIN therapists_services tss ON ajde.therapist_id = tss.therapist_id
-		LEFT JOIN services s ON tss.service_id = s.id
+		LEFT JOIN services s ON tss.service_id = s.id AND s.id != 99999
 		LEFT JOIN bookings b on ajde.therapist_id = b.therapist_id
     LEFT JOIN users u ON b.user_id = u.id;
     `;
@@ -53,7 +53,7 @@ const getBookingDetails = (userId, timestamp) => {
 	const sql = `SELECT b.created_at, b.napomena, u.name || ' ' || u.lastname AS        user_full_name, u.email, u.phone, u.registration_date, s.name AS service_name, t.name || ' ' || t.lastname AS therapist_full_name
   FROM
   (SELECT * FROM bookings  
-  WHERE user_id = $1 AND lower(time_range) = $2::timestamp) B
+  WHERE user_id = $1 AND lower(time_range) = $2::timestamp) b
   LEFT JOIN users u ON b.user_id = u.id
   LEFT JOIN services s ON b.service_id = s.id
   LEFT JOIN therapists t ON b.therapist_id = t.id`;
@@ -66,6 +66,7 @@ const getUsersByMonth = () => {
   TO_CHAR(registration_date, 'YYYY-MM') AS month,
   COUNT(*) AS user_count
 FROM users
+WHERE id != 99999
 GROUP BY month
 ORDER BY month;`);
 };
@@ -75,7 +76,7 @@ const getServicesUsage = () => {
     s.name AS service_name,
     COUNT(*) AS usage_count
   FROM bookings b
-  JOIN services s ON s.id = b.service_id
+  JOIN services s ON s.id = b.service_id AND s.id != 99999
   GROUP BY s.name
   ORDER BY usage_count DESC;`);
 };
@@ -96,7 +97,7 @@ const getUserCount = (therapistId) => {
 };
 
 const getBookingsCount = (therapistId) => {
-	const sql = `SELECT COUNT(*) FROM bookings WHERE therapist_id = $1`;
+	const sql = `SELECT COUNT(*) FROM bookings WHERE therapist_id = $1 AND user_id != 99999;`;
 	return pool.query(sql, [therapistId]);
 };
 
@@ -106,10 +107,11 @@ FROM
 (SELECT service_id, COUNT(*) AS total_bookings
 FROM bookings
 WHERE therapist_id = $1
+AND user_id != 99999
 GROUP BY service_id
 ORDER BY total_bookings DESC
 LIMIT 1) b
-LEFT JOIN services s ON b.service_id = s.id;`;
+LEFT JOIN services s ON b.service_id = s.id AND s.id != 99999;`;
 	return pool.query(sql, [therapistId]);
 };
 
@@ -119,6 +121,7 @@ FROM
 (SELECT user_id, COUNT(*) AS total_bookings
 FROM bookings
 WHERE therapist_id = $1
+AND user_id != 99999
 GROUP BY user_id
 ORDER BY total_bookings DESC
 LIMIT 1) b
@@ -127,9 +130,10 @@ LEFT JOIN users u ON b.user_id = u.id;`;
 };
 
 const getBestMonth = (therapistId) => {
-	const sql = `SELECT TO_CHAR(created_at, 'YYYY-MM-DD') AS booking_month, COUNT(*) AS total_bookings
+	const sql = `SELECT TO_CHAR(created_at, 'YYYY-MM') AS booking_month, COUNT(*) AS total_bookings
 FROM bookings
 WHERE therapist_id = $1
+AND user_id != 99999
 GROUP BY booking_month
 ORDER BY total_bookings DESC
 LIMIT 1;`;
@@ -142,6 +146,19 @@ const getAdminList = () => {
 FROM admins a 
 LEFT JOIN therapists t
 ON a.therapist_id = t.id;`);
+};
+
+const addUnavailability = (therapist, timeRange) => {
+	const sql = `INSERT INTO bookings (user_id, service_id, therapist_id, time_range, napomena, created_at)
+                VALUES (
+                    99999, 
+                    99999, 
+                    $1, 
+                    $2::tsrange,
+                    'ADMIN BLOCK - Vacation',
+                    CURRENT_TIMESTAMP
+                );`;
+	return pool.query(sql, [therapist, timeRange]);
 };
 
 module.exports = {
@@ -158,4 +175,5 @@ module.exports = {
 	getTopClient,
 	getBestMonth,
 	getAdminList,
+	addUnavailability,
 };

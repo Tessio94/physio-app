@@ -169,10 +169,47 @@ function formatDateTime(date) {
 	return `${year}-${month}-${day} ${formattedTime}`;
 }
 
+const splitUnavailableSlots = (start, end) => {
+	const slots = [];
+
+	// First slot: from unavailable_start to end of the day (8 PM)
+	if (start < new Date(start.toDateString() + " 20:00:00")) {
+		slots.push([start, new Date(start.toDateString() + " 20:00:00")]);
+	}
+
+	// Loop through the days in between
+	let currentDate = new Date(start.toDateString());
+	while (currentDate < end) {
+		let nextDay = new Date(currentDate);
+		nextDay.setDate(nextDay.getDate() + 1);
+
+		if (nextDay <= end) {
+			slots.push([nextDay.setHours(8, 0, 0, 0), nextDay.setHours(20, 0, 0, 0)]);
+		} else {
+			// Last day: only until the unavailable end time
+			slots.push([new Date(currentDate).setHours(8, 0, 0, 0), end]);
+		}
+
+		currentDate = nextDay;
+	}
+
+	// Convert each pair of start and end to tsrange format
+	return slots.map(
+		([slotStart, slotEnd]) =>
+			`[${formatDate(slotStart)},${formatDate(slotEnd)})`
+	);
+};
+
+const formatDate = (date) => {
+	return new Date(date).toISOString().replace("T", " ").replace("Z", "");
+};
+
 module.exports = {
 	generateAvailabilityMap,
 	generateDetails,
 	formatUserDate,
 	formatDateTime,
 	generateBookingDetails,
+	splitUnavailableSlots,
+	formatDate,
 };

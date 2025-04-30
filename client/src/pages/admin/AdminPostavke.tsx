@@ -119,7 +119,10 @@ const AdminPostavke = () => {
                 Makni nedostupne termine:
               </div>
               <div className="pt-2">
-                <AdminDodaj variant="nedostupnost" />
+                <AdminDodaj
+                  variant="nedostupnost"
+                  dropdownData={{ therapists: therapistIds }}
+                />
               </div>
             </div>
           </div>
