@@ -123,22 +123,34 @@ function generateDetails(slots) {
 }
 
 function generateBookingDetails(appointments) {
-	// console.log(appointments);
-
 	const formatted = {};
 
 	appointments.forEach((entry) => {
-		const [rawStart, rawEnd] = JSON.parse(entry.time_range.replace(")", "]")); // e.g. "2025-04-23 08:00:00"
-		// console.log("rawStart :", rawStart);
+		const [rawStart, rawEnd] = JSON.parse(entry.time_range.replace(")", "]"));
+		const startDate = new Date(rawStart);
+		const endDate = new Date(rawEnd);
 
-		const [date, time] = rawStart.split(" ");
-		const timeFormatted = time.slice(0, 5); // "08:00"
+		// Increment in 30-minute intervals
+		let currentDate = startDate;
 
-		if (!formatted[date]) {
-			formatted[date] = {};
+		while (currentDate < endDate) {
+			const date = currentDate.toISOString().split("T")[0]; // "2025-05-06"
+			const timeFormatted = currentDate.toLocaleTimeString("en-GB", {
+				timeZone: "Europe/Zagreb",
+				hour: "2-digit",
+				minute: "2-digit",
+				hour12: false,
+			});
+			console.log(timeFormatted);
+			if (!formatted[date]) {
+				formatted[date] = {};
+			}
+
+			formatted[date][timeFormatted] = entry.user_id;
+
+			// Increment by 30 minutes
+			currentDate.setMinutes(currentDate.getMinutes() + 30);
 		}
-
-		formatted[date][timeFormatted] = entry.user_id;
 	});
 
 	return formatted;
@@ -179,20 +191,27 @@ const splitUnavailableSlots = (start, end) => {
 
 	// Loop through the days in between
 	let currentDate = new Date(start.toDateString());
-	while (currentDate < end) {
+	while (currentDate.getDate() < end.getDate()) {
 		let nextDay = new Date(currentDate);
 		nextDay.setDate(nextDay.getDate() + 1);
 
-		if (nextDay <= end) {
-			slots.push([nextDay.setHours(8, 0, 0, 0), nextDay.setHours(20, 0, 0, 0)]);
+		if (nextDay.getDate() < end.getDate()) {
+			const startSlot = new Date(nextDay);
+			startSlot.setHours(8, 0, 0, 0);
+			const endSlot = new Date(nextDay);
+			endSlot.setHours(20, 0, 0, 0);
+
+			slots.push([startSlot, endSlot]);
 		} else {
 			// Last day: only until the unavailable end time
-			slots.push([new Date(currentDate).setHours(8, 0, 0, 0), end]);
+			const startSlot = new Date(nextDay);
+			startSlot.setHours(8, 0, 0, 0);
+			slots.push([startSlot, end]);
 		}
 
 		currentDate = nextDay;
 	}
-
+	// console.log(slots);
 	// Convert each pair of start and end to tsrange format
 	return slots.map(
 		([slotStart, slotEnd]) =>
@@ -200,8 +219,22 @@ const splitUnavailableSlots = (start, end) => {
 	);
 };
 
+const pad = (n) => n.toString().padStart(2, "0");
+
 const formatDate = (date) => {
-	return new Date(date).toISOString().replace("T", " ").replace("Z", "");
+	// console.log("date :", date);
+	if (!(date instanceof Date)) {
+		date = new Date(date);
+	}
+	// console.log("date 2:", date);
+	const year = date.getFullYear();
+	const month = pad(date.getMonth() + 1); // Months are 0-based
+	const day = pad(date.getDate());
+	const hours = pad(date.getHours());
+	const minutes = pad(date.getMinutes());
+	const seconds = pad(date.getSeconds());
+
+	return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
 module.exports = {

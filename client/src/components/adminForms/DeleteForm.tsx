@@ -265,7 +265,6 @@ const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
                 }))
               }
               minDate={formAvailabilityData.unavailable_from || undefined}
-              minTime={formAvailabilityData.unavailable_from || undefined}
             />
           </div>
         </>

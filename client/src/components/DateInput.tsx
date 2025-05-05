@@ -9,7 +9,6 @@ type DateInputProps = {
   onChange: (date: Date | null) => void;
   type: "form" | "to";
   minDate?: Date;
-  minTime?: Date;
 };
 
 // const bookedTimes = [
@@ -31,13 +30,7 @@ async function fetchAdminSchedule(therapistId) {
   return data;
 }
 
-const DateInput = ({
-  value,
-  onChange,
-  type,
-  minDate,
-  minTime,
-}: DateInputProps) => {
+const DateInput = ({ value, onChange, type, minDate }: DateInputProps) => {
   const [therapistId, setTherapistId] = useState(1);
 
   const { data, isLoading, isError } = useQuery({
@@ -110,7 +103,7 @@ const DateInput = ({
       onChange={onChange}
       timeClassName={handleColor}
       timeIntervals={30}
-      minTime={minTime ?? defaultMinTime}
+      minTime={defaultMinTime}
       maxTime={maxTime}
       minDate={minDate ?? new Date()}
       excludeTimes={bookedTimesForSelectedDate}

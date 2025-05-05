@@ -47,7 +47,7 @@ const AdminKalendar = () => {
   let details;
   let bookedSlots;
 
-  // console.log(data);
+  console.log(data);
   if (data) {
     appointments = Object.entries(data["availability"]);
     details = data["appointmentDetails"];
@@ -107,7 +107,7 @@ const AdminKalendar = () => {
     queryFn: () => fetchAppointmentDetails(selectedSlot),
     enabled: !!selectedSlot,
   });
-  // console.log(bookingDetails);
+  console.log(bookingDetails);
   return (
     <>
       <h4 className="ml-5 text-2xl text-slate-600">
@@ -150,12 +150,10 @@ const AdminKalendar = () => {
                         </div>
                       ) : (
                         <div
-                          className="group flex cursor-pointer items-center justify-center gap-8 rounded-lg border-2 border-slate-200 p-2 transition-all duration-500 hover:bg-slate-500"
+                          className="group flex items-center justify-center gap-8 rounded-lg border-2 border-slate-200 p-2"
                           key={i}
                         >
-                          <span className="text-slate-900 transition-all duration-500 group-hover:text-slate-100">
-                            {timeSlot}
-                          </span>
+                          <span className="text-slate-900">{timeSlot}</span>
                         </div>
                       );
                     })}

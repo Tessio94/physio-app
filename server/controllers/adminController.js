@@ -61,6 +61,7 @@ const getAdminAppointments = async (req, res) => {
 	const availability = generateAvailabilityMap(schedule.rows);
 	const appointmentDetails = generateDetails(schedule.rows);
 	const bookedSlots = generateBookingDetails(bookings.rows);
+
 	// console.log(bookedSlots);
 
 	const appointments = res.status(200).json({
@@ -256,13 +257,13 @@ const removeBookingSlots = async (req, res) => {
 	const end = new Date(unavailable_to);
 
 	const unavailableSlots = splitUnavailableSlots(start, end);
-	console.log(unavailableSlots);
+	// console.log(unavailableSlots);
 	// Loop through the unavailable slots and insert them
 	for (let slot of unavailableSlots) {
 		await addUnavailability(therapist_id, slot);
 	}
 
-	console.log(timeRange);
+	// console.log(timeRange);
 	// const result = await addUnavailability(therapist_id, timeRange);
 	res.status(200).json({ success: true });
 	try {
