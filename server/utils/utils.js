@@ -237,6 +237,21 @@ const formatDate = (date) => {
 	return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
+function createState() {
+	// random 20 bytes
+	const randomValues = crypto.getRandomValues(new Uint8Array(20));
+	return encodeBase64url(randomValues);
+}
+
+function encodeBase64url(data) {
+	return encodeBase64(data).replaceAll("+", "-").replaceAll("/", "_");
+}
+
+function encodeBase64(data) {
+	let result = btoa(String.fromCharCode(...new Uint8Array(data)));
+	return result;
+}
+
 module.exports = {
 	generateAvailabilityMap,
 	generateDetails,
@@ -245,4 +260,5 @@ module.exports = {
 	generateBookingDetails,
 	splitUnavailableSlots,
 	formatDate,
+	createState,
 };
