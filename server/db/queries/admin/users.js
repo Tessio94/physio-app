@@ -161,6 +161,20 @@ const addUnavailability = (therapist, timeRange) => {
   return pool.query(sql, [therapist, timeRange]);
 };
 
+const createNewUser = ({
+  name,
+  lastname,
+  email,
+  phone = "XXX-XXX-XXXX",
+  password = "XXXXXXXX",
+}) => {
+  console.log("club tropicana", name, lastname, email);
+  const sql = `INSERT INTO users (name, lastname, email, phone, password)
+  VALUES ($1, $2, $3, $4, $5)
+  RETURNING *`;
+  return pool.query(sql, [name, lastname, email, phone, password]);
+};
+
 module.exports = {
   getUsers,
   getAdminSchedule,
@@ -176,4 +190,5 @@ module.exports = {
   getBestMonth,
   getAdminList,
   addUnavailability,
+  createNewUser,
 };
