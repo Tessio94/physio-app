@@ -356,3 +356,8 @@ VALUES (
     'DO_NOT_USE',
     CURRENT_TIMESTAMP
 );
+
+
+ALTER TABLE users ADD COLUMN last_login TIMESTAMP DEFAULT NOW();
+
+UPDATE users SET last_login = NOW() WHERE last_login IS NULL;

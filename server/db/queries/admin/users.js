@@ -175,6 +175,16 @@ const createNewUser = ({
   return pool.query(sql, [name, lastname, email, phone, password]);
 };
 
+const findUserByEmail = (email) => {
+  const sql = `SELECT * FROM users WHERE email = $1`;
+  return pool.query(sql, [email]);
+};
+
+const insertLastLogin = (email) => {
+  const sql = `UPDATE users SET last_login = NOW() WHERE email = $1 RETURNING last_login`;
+  return pool.query(sql, [email]);
+};
+
 module.exports = {
   getUsers,
   getAdminSchedule,
@@ -191,4 +201,6 @@ module.exports = {
   getAdminList,
   addUnavailability,
   createNewUser,
+  findUserByEmail,
+  insertLastLogin,
 };

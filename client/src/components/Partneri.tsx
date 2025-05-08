@@ -25,7 +25,7 @@ function Partneri() {
   ];
 
   return (
-    <div id="partners" className="">
+    <div id="partners" className="pointer-events-none">
       <div
         id="animation_container1"
         className="max-[100vw] before:content-[' '] after:content-[' '] relative overflow-hidden whitespace-nowrap from-transparent to-white before:absolute before:left-0 before:top-0 before:z-10 before:h-full before:w-[250px] before:bg-gradient-to-l after:absolute after:right-0 after:top-0 after:z-10 after:h-full after:w-[250px] after:bg-gradient-to-r"

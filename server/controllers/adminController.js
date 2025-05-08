@@ -75,10 +75,10 @@ const getAdminAppointments = async (req, res) => {
 const getAppointmentDetails = async (req, res) => {
   const { userId } = req.params;
   const { timestamp } = req.query;
-  console.log("userid :", userId);
-  console.log("timestamp :", timestamp);
+  // console.log("userid :", userId);
+  // console.log("timestamp :", timestamp);
   const booking = await getBookingDetails(userId, timestamp);
-  console.log(booking);
+  // console.log(booking);
   const {
     created_at,
     email,
@@ -156,7 +156,7 @@ const getAdminSettings = async (req, res) => {
 };
 
 const addTherapist = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const {
     therapistName: name,
     lastname,
@@ -186,7 +186,7 @@ const addTherapist = async (req, res) => {
 };
 
 const addService = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { serviceName: name, serviceImageUrl: icon } = req.body;
 
   try {
@@ -200,7 +200,7 @@ const addService = async (req, res) => {
 };
 
 const addServiceForTherapist = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { therapist_id, service_id } = req.body;
 
   try {
@@ -213,7 +213,7 @@ const addServiceForTherapist = async (req, res) => {
 };
 
 const removeTherapist = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { therapist_id } = req.body;
   try {
     const result = await deleteTherapist(therapist_id);
@@ -225,7 +225,7 @@ const removeTherapist = async (req, res) => {
 };
 
 const removeService = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { service_id } = req.body;
   try {
     const result = await deleteService(service_id);
@@ -237,7 +237,7 @@ const removeService = async (req, res) => {
 };
 
 const removeServiceForTherapist = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { therapist_id, service_id } = req.body;
 
   try {
@@ -250,7 +250,7 @@ const removeServiceForTherapist = async (req, res) => {
 };
 
 const removeBookingSlots = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { unavailable_from, unavailable_to, therapist_id } = req.body;
 
   const start = new Date(unavailable_from);

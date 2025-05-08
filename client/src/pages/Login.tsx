@@ -32,8 +32,12 @@ function Login() {
     setShowHelp((showHelp) => !showHelp);
   };
 
-  const handleLogin = () => {
+  const handleLoginGoogle = () => {
     window.location.href = "http://localhost:3000/auth/login/google";
+  };
+
+  const handleLoginFacebook = () => {
+    window.location.href = "http://localhost:3000/auth/login/facebook";
   };
 
   useEffect(() => {
@@ -161,13 +165,16 @@ function Login() {
             </Button>
           </form>
           <div className="flex flex-row gap-4 max-[480px]:flex-col sm:gap-20">
-            <Button className="flex w-full items-center justify-center gap-5 rounded-2xl bg-slate-100 px-5 py-2 text-slate-700 hover:text-slate-100">
+            <Button
+              className="flex w-full items-center justify-center gap-5 rounded-2xl bg-slate-100 px-5 py-2 text-slate-700 hover:text-slate-100"
+              onClick={handleLoginFacebook}
+            >
               <FaFacebook className="text-2xl" />
               Facebook prijava
             </Button>
             <Button
               className="flex w-full items-center justify-center gap-5 rounded-2xl bg-slate-100 px-5 py-2 text-slate-700 hover:text-slate-100 max-[480px]:pr-[40px]"
-              onClick={handleLogin}
+              onClick={handleLoginGoogle}
             >
               <FcGoogle className="text-2xl" />
               Google prijava

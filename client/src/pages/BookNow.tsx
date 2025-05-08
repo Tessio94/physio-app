@@ -29,6 +29,16 @@ function BookNow() {
   const [minLoaderTimePassed, setMinLoaderTimePassed] = useState(false);
 
   useEffect(() => {
+    if (window.location.hash === "#_=_") {
+      history.replaceState(
+        "",
+        document.title,
+        window.location.pathname + window.location.search,
+      );
+    }
+  }, []);
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       setMinLoaderTimePassed(true);
     }, 700); // 1 second delay
