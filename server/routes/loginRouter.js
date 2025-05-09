@@ -1,8 +1,11 @@
 const {
-  loginGoogle,
-  loginGoogleCallback,
-  loginFacebookCallback,
-  loginFacebook,
+	loginGoogle,
+	loginGoogleCallback,
+	loginFacebookCallback,
+	loginFacebook,
+	register,
+	login,
+	logoutUser,
 } = require("../controllers/loginController");
 
 const express = require("express");
@@ -16,5 +19,11 @@ router.route("/login/google/callback").get(loginGoogleCallback);
 router.route("/login/facebook").get(loginFacebook);
 
 router.route("/login/facebook/callback").get(loginFacebookCallback);
+
+router.route("/register", register);
+
+router.route("/login", login);
+
+router.route("/logout", logoutUser);
 
 module.exports = router;

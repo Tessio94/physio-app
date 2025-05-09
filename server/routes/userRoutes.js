@@ -19,6 +19,7 @@ const {
 	removeBookingSlots,
 } = require("../controllers/adminController");
 const { loginGoogle } = require("../controllers/loginController");
+const requireAuth = require("../middleware/requireAuth");
 
 const express = require("express");
 const router = express.Router();
@@ -28,7 +29,7 @@ router.route("/book-now").get(getAllServicesAndTherapists);
 
 router.route("/book-now/appointments/:therapistId").get(getAvailableSlots);
 
-router.route("/book-now/reservations").post(createReservation);
+router.route("/book-now/reservations").post(requireAuth, createReservation);
 
 /* login - register */
 router.route("/login/google").get(loginGoogle);
