@@ -13,7 +13,8 @@ import {
   XMarkIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import { Link, useLocation } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const navigation = [
   { name: "O nama", href: "#about", current: false },
@@ -27,8 +28,23 @@ function classNames(...classes) {
 }
 
 function NavMenu() {
+  const navigate = useNavigate();
   const location = useLocation();
   // console.log(location.pathname);
+
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch("http://localhost:3000/auth/logout", {
+        method: "POST",
+        credentials: "include", // send cookie
+      });
+      if (!res.ok) throw new Error("Logout failed");
+      return res.json();
+    },
+    onSuccess: () => {
+      navigate("/"); // Redirect after logout
+    },
+  });
 
   return (
     <header>
@@ -131,7 +147,7 @@ function NavMenu() {
                   </MenuItem>
                   <MenuItem>
                     <Link
-                      to=""
+                      onClick={() => logoutMutation.mutate()}
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                     >
                       Odjavi se
