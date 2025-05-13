@@ -14,7 +14,7 @@ import {
   XMarkIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const navigation = [
@@ -28,13 +28,19 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function NavMenu({ user }: { user: { name: string; lastname: string } }) {
+function NavMenu({
+  user,
+}: {
+  user: { name: string; lastname: string } | null;
+}) {
   // console.log("name", user.name);
   // console.log("lastname", user.lastname);
-  const initials = formatInitials(user.name, user.lastname);
+  const initials = user ? formatInitials(user.name, user.lastname) : null;
   const navigate = useNavigate();
   const location = useLocation();
   // console.log(location.pathname);
+
+  const queryClient = useQueryClient();
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
@@ -45,7 +51,8 @@ function NavMenu({ user }: { user: { name: string; lastname: string } }) {
       if (!res.ok) throw new Error("Logout failed");
       return res.json();
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["fetchCurrentUser"] });
       navigate("/"); // Redirect after logout
     },
   });
@@ -103,14 +110,16 @@ function NavMenu({ user }: { user: { name: string; lastname: string } }) {
               )}
             </div>
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-              <button
-                type="button"
-                className="relative rounded-full bg-gray-800 p-1 text-gray-300"
-              >
-                <span className="absolute -inset-1.5" />
-                <span className="sr-only">Pogledaj notifikacije</span>
-                {initials}
-              </button>
+              {user && (
+                <button
+                  type="button"
+                  className="relative aspect-square w-[32px] rounded-full bg-gray-800 p-1 text-gray-300"
+                >
+                  <span className="absolute -inset-1.5" />
+                  <span className="sr-only">Inicijali</span>
+                  {initials}
+                </button>
+              )}
 
               {/* Profile dropdown */}
               <Menu as="div" className="relative ml-3">
@@ -125,14 +134,14 @@ function NavMenu({ user }: { user: { name: string; lastname: string } }) {
                   transition
                   className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                 >
-                  <MenuItem>
+                  {/* <MenuItem>
                     <Link
                       to=""
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                     >
                       Vaš profil
                     </Link>
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem>
                     <Link
                       to="book-now"

@@ -2,6 +2,7 @@ const {
 	createNewUser,
 	findUserByEmail,
 	insertLastLogin,
+	findAdmin,
 } = require("../db/queries/admin/users");
 
 const { createState } = require("../utils/utils");
@@ -107,7 +108,7 @@ const loginGoogleCallback = async (req, res) => {
 
 		const existingUser = await findUserByEmail(email);
 
-		console.log(given_name, family_name, email);
+		// console.log(given_name, family_name, email);
 
 		let insertUser;
 
@@ -117,10 +118,10 @@ const loginGoogleCallback = async (req, res) => {
 				lastname: family_name,
 				email,
 			});
-			console.log("Created new user", insertUser);
+			// console.log("Created new user", insertUser);
 		} else {
 			const login = await insertLastLogin(email);
-			console.log("Updated last login: ", login.rows[0].last_login);
+			// console.log("Updated last login: ", login.rows[0].last_login);
 		}
 
 		const user = existingUser.rows[0] || insertUser.rows[0];
@@ -138,7 +139,7 @@ const loginGoogleCallback = async (req, res) => {
 		});
 		// console.log("Google user info:", userInfo);
 
-		return res.redirect("http://localhost:5173/book-now");
+		return res.redirect("http://localhost:5173/");
 	} catch (err) {
 		console.error("OAuth callback failed:", err);
 		return res.status(500).send("OAuth callback failed.");
@@ -164,7 +165,7 @@ const loginFacebook = (req, res) => {
 		sameSite: "lax",
 	});
 
-	console.log(authURL);
+	// console.log(authURL);
 	res.redirect(authURL.toString());
 };
 
@@ -210,10 +211,10 @@ const loginFacebookCallback = async (req, res) => {
 				lastname: last_name,
 				email,
 			});
-			console.log("Created new Facebook user", insertUser);
+			// console.log("Created new Facebook user", insertUser);
 		} else {
 			const login = await insertLastLogin(email);
-			console.log("Updated Facebook login: ", login.rows[0].last_login);
+			// console.log("Updated Facebook login: ", login.rows[0].last_login);
 		}
 
 		const user = existingUser.rows[0] || insertUser.rows[0];
@@ -231,7 +232,7 @@ const loginFacebookCallback = async (req, res) => {
 			maxAge: 7 * 24 * 60 * 60 * 1000,
 		});
 
-		return res.redirect("http://localhost:5173/book-now");
+		return res.redirect("http://localhost:5173/");
 	} catch (err) {
 		console.error("Facebook OAuth callback failed:", err);
 		return res.status(500).send("OAuth callback failed.");
@@ -239,7 +240,7 @@ const loginFacebookCallback = async (req, res) => {
 };
 
 const register = async (req, res) => {
-	console.log(req.body);
+	// console.log(req.body);
 	const { name, lastname, email, phone, password } = req.body;
 
 	if (!email || !password || !name || !lastname) {
@@ -264,7 +265,7 @@ const register = async (req, res) => {
 		});
 
 		const user = registerNewUser.rows[0];
-		console.log(registerNewUser);
+		// console.log(registerNewUser);
 
 		const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
 			expiresIn: "7d",
@@ -287,7 +288,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
 	const { email, password } = req.body;
 
-	console.log(email, password);
+	// console.log(email, password);
 	try {
 		const userResult = await findUserByEmail(email);
 
@@ -323,7 +324,7 @@ const login = async (req, res) => {
 };
 
 const logoutUser = async (req, res) => {
-	console.log("laweee");
+	// console.log("laweee");
 	res.clearCookie("auth_token");
 	res.json({ message: "Logged out." });
 };
@@ -350,6 +351,45 @@ const getCurrentUser = async (req, res) => {
 	}
 };
 
+const adminLogin = async (req, res) => {
+	const { email, password } = req.body;
+
+	if (!email || !password)
+		return res.status(400).json({ error: "Missing credentials." });
+
+	try {
+		const result = await findAdmin(email);
+		if (result.rows.length === 0)
+			return res.status(401).json({ error: "Invalid credentials." });
+
+		const admin = result.rows[0];
+
+		// const isMatch = await bcrypt.compare(password, admin.password);
+		// if (!isMatch)
+		// 	return res.status(401).json({ error: "Invalid credentials." });
+
+		const token = jwt.sign(
+			{ adminId: admin.id, email: admin.email },
+			process.env.JWT_SECRET,
+			{
+				expiresIn: "7d",
+			}
+		);
+
+		res.cookie("admin_token", token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "lax",
+			maxAge: 7 * 24 * 60 * 1000,
+		});
+
+		res.status(200).json({ message: "Admin loaded in successfully." });
+	} catch (error) {
+		console.error("Admin login error", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
 module.exports = {
 	loginGoogle,
 	loginGoogleCallback,
@@ -359,4 +399,5 @@ module.exports = {
 	login,
 	logoutUser,
 	getCurrentUser,
+	adminLogin,
 };

@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -92,6 +92,8 @@ function Login() {
   const [showHelp, setShowHelp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const queryClient = useQueryClient();
+
   const schema = register ? registerSchema : loginSchema;
 
   const {
@@ -105,7 +107,10 @@ function Login() {
 
   const loginMutation = useMutation({
     mutationFn: loginMutationFn,
-    onSuccess: () => navigate("/"),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["fetchCurrentUser"] });
+      navigate("/");
+    },
     onError: (err: Error) => alert(err.message),
   });
 

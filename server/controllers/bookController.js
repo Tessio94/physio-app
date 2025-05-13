@@ -53,7 +53,7 @@ const createReservation = async (req, res) => {
 	const user_id = req.user.userId;
 	// console.log(req.body);
 	const { service_id, therapist_id, time_range, napomena } = req.body;
-	console.log(time_range);
+	// console.log(time_range);
 	try {
 		// Perform necessary validations here
 		// Example: check if the reservation time is available, etc.
@@ -66,7 +66,7 @@ const createReservation = async (req, res) => {
 			time_range,
 			napomena
 		);
-		console.log(reservation);
+		// console.log(reservation);
 
 		// Send response back with the created reservation
 		res.status(201).json(reservation.rows[0]); // Assuming you're using PostgreSQL (or adjust accordingly)

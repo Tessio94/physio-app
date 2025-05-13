@@ -7,10 +7,11 @@ const {
 	login,
 	logoutUser,
 	getCurrentUser,
+	adminLogin,
 } = require("../controllers/loginController");
 
 const express = require("express");
-const requireAuth = require("../middleware/requireAuth");
+const { requireAuth, requireAdminAuth } = require("../middleware/requireAuth");
 const router = express.Router();
 
 /* login - register */
@@ -29,5 +30,15 @@ router.route("/login").post(login);
 router.route("/logout").post(logoutUser);
 
 router.route("/current-user").get(requireAuth, getCurrentUser);
+
+router.route("/admin/login").post(adminLogin);
+
+// router.route("/admin/dashboard").post(requireAdminAuth, adminLogin);
+
+// router.route("/admin/kalendar").post(requireAdminAuth, adminLogin);
+
+// router.route("/admin/korisnici").post(requireAdminAuth, adminLogin);
+
+// router.route("/admin/postavke").post(requireAdminAuth, adminLogin);
 
 module.exports = router;

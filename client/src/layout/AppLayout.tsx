@@ -9,8 +9,13 @@ const fetchCurrentUser = async () => {
     credentials: "include",
   });
 
+  if (res.status === 401) {
+    // Instead of throwing, return null to indicate no user
+    return null;
+  }
+
   if (!res.ok) {
-    throw new Error("Not authenticated");
+    throw new Error("Unexpected error while fetching user");
   }
 
   const data = await res.json();
@@ -18,18 +23,18 @@ const fetchCurrentUser = async () => {
 };
 
 function AppLayout() {
-  const { isLoading, data } = useQuery({
+  const { isLoading, isError, error, data } = useQuery({
     queryKey: ["fetchCurrentUser"],
     queryFn: fetchCurrentUser,
+    retry: false,
+    staleTime: 1000 * 60 * 5,
   });
 
-  if (isLoading) {
-    return <div className="p-4">Loading...</div>; // ubaciti spinner
-  }
+  const user = isError && error.message === "Not authenticated" ? null : data;
 
   return (
     <>
-      <NavMenu user={data} />
+      <NavMenu user={user} />
       <section className="relative flex-1">
         <Outlet />
       </section>

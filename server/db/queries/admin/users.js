@@ -184,6 +184,20 @@ const insertLastLogin = (email) => {
 	return pool.query(sql, [email]);
 };
 
+const findAdmin = (email) => {
+	const sql = `SELECT id, email FROM therapists WHERE email=$1;`;
+	return pool.query(sql, [email]);
+};
+
+// const findAdmin = (email) => {
+// 	const sql = `SELECT t.name, t.lastname, t.icon, a.is_superadmin FROM
+//               (SELECT * FROM therapists
+//               WHERE email=$1) t
+//               LEFT JOIN admins a
+//               ON t.id = a.therapist_id`;
+// 	return pool.query(sql, [email]);
+// };
+
 module.exports = {
 	getUsers,
 	getAdminSchedule,
@@ -202,4 +216,5 @@ module.exports = {
 	createNewUser,
 	findUserByEmail,
 	insertLastLogin,
+	findAdmin,
 };
