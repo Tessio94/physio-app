@@ -5,32 +5,128 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const loginSchema = z.object({
+  email: z.string().email({ message: "Neispravan mail" }),
+  password: z
+    .string()
+    .min(6, { message: "Lozinka mora imati najmanje 6 znakova" }),
+});
+
+const registerSchema = loginSchema
+  .extend({
+    name: z.string().min(1, { message: "Ime je obvezno" }),
+    lastname: z.string().min(1, { message: "Prezime je obavezno" }),
+    phone: z
+      .string()
+      .min(1, { message: "Broj je obavezan" })
+      .transform((val) => val.replace(/\D/g, ""))
+      .refine((val) => val.length === 10, {
+        message: "Broj mora imati 10 znamenki",
+      }),
+
+    repeatPassword: z
+      .string()
+      .min(6, { message: "Ponovljena lozinka je obavezna" }),
+    terms: z.literal(true, {
+      errorMap: () => ({ message: "Morate prihvatiti uvjete" }),
+    }),
+  })
+  .refine((data) => data.password === data.repeatPassword, {
+    message: "Lozinke se ne podudaraju",
+    path: ["repeatPassword"],
+  });
+
+const loginMutationFn = async (data: z.infer<typeof loginSchema>) => {
+  console.log(data);
+  const { email, password } = data;
+  const res = await fetch("http://localhost:3000/auth/login", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || "Login failed");
+  }
+
+  return res.json();
+};
+
+export const registerMutationFn = async (
+  data: z.infer<typeof registerSchema>,
+) => {
+  const { name, lastname, email, phone, password } = data;
+  const res = await fetch("http://localhost:3000/auth/register", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name, lastname, email, phone, password }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || "Registration failed");
+  }
+
+  return res.json();
+};
 
 function Login() {
-  const [register, setRegister] = useState<boolean>(false);
-  const [showHelp, setShowHelp] = useState<boolean>(false);
-  const [showVisibility, setShowVisibility] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const passwordInput = useRef<HTMLInputElement>(null);
-  const repeatPasswordInput = useRef<HTMLInputElement>(null);
+  const [register, setRegister] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  useEffect(() => {
-    if (location.pathname === "/registracija") {
-      setRegister(true);
-    } else {
-      setRegister(false);
-    }
-  }, [location.pathname]);
+  const schema = register ? registerSchema : loginSchema;
+
+  const {
+    register: formRegister,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+    mode: "onChange",
+  });
+
+  const loginMutation = useMutation({
+    mutationFn: loginMutationFn,
+    onSuccess: () => navigate("/"),
+    onError: (err: Error) => alert(err.message),
+  });
+
+  const registerMutation = useMutation({
+    mutationFn: registerMutationFn,
+    onSuccess: () => navigate("/"),
+    onError: (err: Error) => alert(err.message),
+  });
 
   const toggleForm = () => {
     setRegister(!register);
     navigate(register ? "/prijava" : "/registracija");
   };
 
-  const handleHelp = () => {
-    setShowHelp((showHelp) => !showHelp);
+  const onSubmit = (data: any) => {
+    register ? registerMutation.mutate(data) : loginMutation.mutate(data);
   };
+
+  useEffect(() => {
+    setRegister(location.pathname === "/registracija");
+  }, [location.pathname]);
 
   const handleLoginGoogle = () => {
     window.location.href = "http://localhost:3000/auth/login/google";
@@ -40,149 +136,136 @@ function Login() {
     window.location.href = "http://localhost:3000/auth/login/facebook";
   };
 
-  useEffect(() => {
-    const input = passwordInput.current;
-    const input2 = repeatPasswordInput?.current;
-
-    if (input) {
-      input.type = showVisibility ? "text" : "password";
-    }
-
-    if (register && input2) {
-      input2.type = showVisibility ? "text" : "password";
-    }
-  }, [showVisibility, register]);
-
   return (
     <>
       <div className="mx-auto mb-[100px] mt-[80px] w-[600px] max-w-[90%] border-t-4 border-t-slate-700 bg-slate-200 sm:mb-[150px] sm:mt-[100px]">
         <h5 className="mb-16 pt-7 text-center text-3xl">
           {register ? "Dobrodošao" : "Dobrodošao nazad"}
         </h5>
+
         <div className="flex justify-between px-3 sm:px-10">
-          <div className="flex gap-6">
-            <button onClick={toggleForm}>
-              {register ? "Prijavi se" : "Registriraj se"}
-            </button>
-          </div>
-          <button onClick={handleHelp}>Trebaš pomoć?</button>
+          <button onClick={toggleForm}>
+            {register ? "Prijavi se" : "Registriraj se"}
+          </button>
+          <button onClick={() => setShowHelp((prev) => !prev)}>
+            Trebaš pomoć?
+          </button>
         </div>
+
         <div className="mt-5 px-3 pb-[80px] sm:px-10">
-          <form action="" className="mb-6 flex flex-col gap-5">
+          <form
+            className="mb-6 flex flex-col gap-5"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             {register && (
               <div className="flex gap-3 sm:gap-7">
                 <input
-                  type="text"
                   placeholder="Ime"
-                  className="w-full rounded-2xl bg-slate-100 px-5 py-2"
-                  required
+                  className="input"
+                  {...formRegister("name")}
                 />
                 <input
-                  type="text"
                   placeholder="Prezime"
-                  className="w-full rounded-2xl bg-slate-100 px-5 py-2"
-                  required
+                  className="input"
+                  {...formRegister("lastname")}
                 />
               </div>
             )}
-            <div>
-              <input
-                type="text"
-                placeholder="Email"
-                className="w-full rounded-2xl bg-slate-100 px-5 py-2"
-                required
-              />
-            </div>
+
+            <input
+              placeholder="Email"
+              className="input"
+              {...formRegister("email")}
+            />
             {register && (
-              <div className="">
-                <input
-                  type="text"
-                  placeholder="Broj mobitela ..."
-                  className="w-full rounded-2xl bg-slate-100 px-5 py-2"
-                  required
-                />
-              </div>
+              <input
+                placeholder="Broj mobitela"
+                className="input"
+                {...formRegister("phone")}
+              />
             )}
+
             <div className="relative">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Lozinka"
-                className="w-full rounded-2xl bg-slate-100 px-5 py-2"
-                ref={passwordInput}
-                required
+                className="input"
+                {...formRegister("password")}
               />
-              {showVisibility ? (
+              {showPassword ? (
                 <MdVisibilityOff
-                  className="absolute right-5 top-[50%] h-8 w-8 translate-y-[-50%] cursor-pointer rounded-full p-1 transition-all hover:bg-slate-400/40"
-                  onClick={() => setShowVisibility((visibility) => !visibility)}
+                  className="icon"
+                  onClick={() => setShowPassword(false)}
                 />
               ) : (
                 <MdVisibility
-                  className="absolute right-5 top-[50%] h-8 w-8 translate-y-[-50%] cursor-pointer rounded-full p-1 transition-all hover:bg-slate-400/40"
-                  onClick={() => setShowVisibility((visibility) => !visibility)}
+                  className="icon"
+                  onClick={() => setShowPassword(true)}
                 />
               )}
             </div>
+
             {register && (
               <div className="relative">
                 <input
-                  type="text"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Ponovi lozinku"
-                  className="w-full rounded-2xl bg-slate-100 px-5 py-2"
-                  ref={repeatPasswordInput}
-                  required
+                  className="input"
+                  {...formRegister("repeatPassword")}
                 />
-                {showVisibility ? (
+                {showPassword ? (
                   <MdVisibilityOff
-                    className="absolute right-5 top-[50%] h-8 w-8 translate-y-[-50%] cursor-pointer rounded-full p-1 transition-all hover:bg-slate-400/40"
-                    onClick={() =>
-                      setShowVisibility((visibility) => !visibility)
-                    }
+                    className="icon"
+                    onClick={() => setShowPassword(false)}
                   />
                 ) : (
                   <MdVisibility
-                    className="absolute right-5 top-[50%] h-8 w-8 translate-y-[-50%] cursor-pointer rounded-full p-1 transition-all hover:bg-slate-400/40"
-                    onClick={() =>
-                      setShowVisibility((visibility) => !visibility)
-                    }
+                    className="icon"
+                    onClick={() => setShowPassword(true)}
                   />
                 )}
               </div>
             )}
+
             {register && (
-              <div className="flex items-center gap-10">
+              <div className="flex items-center gap-3">
                 <input
                   type="checkbox"
-                  placeholder="Repeat password"
-                  className="h-4 w-4 rounded-2xl"
-                  required
+                  {...formRegister("terms")}
+                  className="cursor-pointer"
+                  id="terms"
                 />
-                <label>Slažem se s uvjetima i odredbama.</label>
+                <label className="cursor-pointer" htmlFor="terms">
+                  Slažem se s uvjetima i odredbama
+                </label>
               </div>
             )}
+
+            {/* Display errors */}
+            {Object.values(errors).map((err, i) => (
+              <p className="text-sm text-red-600" key={i}>
+                {err.message?.toString()}
+              </p>
+            ))}
+
             <Button className="rounded-2xl bg-slate-700 px-5 py-2 text-slate-100">
               {register ? "Registriraj se" : "Prijavi se"}
             </Button>
           </form>
+
           <div className="flex flex-row gap-4 max-[480px]:flex-col sm:gap-20">
-            <Button
-              className="flex w-full items-center justify-center gap-5 rounded-2xl bg-slate-100 px-5 py-2 text-slate-700 hover:text-slate-100"
-              onClick={handleLoginFacebook}
-            >
+            <Button className="btn-social" onClick={handleLoginFacebook}>
               <FaFacebook className="text-2xl" />
               Facebook prijava
             </Button>
-            <Button
-              className="flex w-full items-center justify-center gap-5 rounded-2xl bg-slate-100 px-5 py-2 text-slate-700 hover:text-slate-100 max-[480px]:pr-[40px]"
-              onClick={handleLoginGoogle}
-            >
+            <Button className="btn-social" onClick={handleLoginGoogle}>
               <FcGoogle className="text-2xl" />
               Google prijava
             </Button>
           </div>
         </div>
       </div>
-      <Help handleHelp={handleHelp} showHelp={showHelp} />
+      <Help handleHelp={() => setShowHelp(false)} showHelp={showHelp} />
     </>
   );
 }

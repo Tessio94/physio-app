@@ -82,3 +82,8 @@ export const formatTimeRange = (date) => {
 
   return `${dateString} ${timeString}`;
 };
+
+export const formatInitials = (name, lastName) => {
+  const initials = name.charAt(0) + lastName.charAt(0);
+  return initials;
+};

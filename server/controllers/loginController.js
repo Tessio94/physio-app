@@ -239,67 +239,115 @@ const loginFacebookCallback = async (req, res) => {
 };
 
 const register = async (req, res) => {
+	console.log(req.body);
 	const { name, lastname, email, phone, password } = req.body;
 
 	if (!email || !password || !name || !lastname) {
 		return res.status(400).json({ error: "Missing required fields." });
 	}
 
-	const existingUser = await findUserByEmail(email);
+	try {
+		const existingUser = await findUserByEmail(email);
 
-	if (existingUser.rows.length > 0) {
-		return res.status(409).json({ error: "User already exists." });
+		if (existingUser.rows.length > 0) {
+			return res.status(409).json({ error: "User already exists." });
+		}
+
+		const hashedPassword = await bcrypt.hash(password, 10);
+
+		const registerNewUser = await createNewUser({
+			name,
+			lastname,
+			email,
+			phone,
+			password: hashedPassword,
+		});
+
+		const user = registerNewUser.rows[0];
+		console.log(registerNewUser);
+
+		const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
+			expiresIn: "7d",
+		});
+
+		res.cookie("auth_token", token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "lax",
+			maxAge: 7 * 24 * 60 * 1000,
+		});
+
+		return res.status(201).json({ message: "User registered successfully." });
+	} catch (error) {
+		console.error("Registration error:", error);
+		return res.status(500).json({ error: "Internal server error." });
 	}
-
-	const hashedPassword = await bcrypt.hash(password, 10);
-
-	const registerNewUser = await createNewUser({
-		name,
-		lastname,
-		email,
-		phone,
-		password: hashedPassword,
-	});
-
-	return res.status(201).json({ message: "User registered successfully." });
 };
 
 const login = async (req, res) => {
 	const { email, password } = req.body;
 
-	const userResult = await findUserByEmail(email);
+	console.log(email, password);
+	try {
+		const userResult = await findUserByEmail(email);
 
-	if (userResult.rows.length === 0) {
-		return res.status(401).json({ error: "Invalid credentials." });
+		if (userResult.rows.length === 0) {
+			return res.status(401).json({ error: "Invalid credentials." });
+		}
+
+		const user = userResult.rows[0];
+		const passwordMatch = await bcrypt.compare(password, user.password);
+
+		if (!passwordMatch) {
+			return res.status(401).json({ error: "Invalid credentials" });
+		}
+
+		await insertLastLogin(email);
+
+		const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
+			expiresIn: "7d",
+		});
+
+		res.cookie("auth_token", token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			sameSite: "lax",
+			maxAge: 7 * 24 * 60 * 60 * 1000,
+		});
+
+		res.json({ message: "Login successful." });
+	} catch (error) {
+		console.error("Login error:", error);
+		return res.status(500).json({ error: "Internal server error." });
 	}
-
-	const user = userResult.rows[0];
-	const passwordMatch = await bcrypt.compare(password, user.password);
-
-	if (!passwordMatch) {
-		return res.status(401).json({ error: "Invalid credentials" });
-	}
-
-	await insertLastLogin(email);
-
-	const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
-		expiresIn: "7d",
-	});
-
-	res.cookie("auth_token", token, {
-		httpOnly: true,
-		secure: process.env.NODE_ENV === "production",
-		sameSite: "lax",
-		maxAge: 7 * 24 * 60 * 60 * 1000,
-	});
-
-	res.json({ message: "Login successful." });
 };
 
 const logoutUser = async (req, res) => {
 	console.log("laweee");
 	res.clearCookie("auth_token");
 	res.json({ message: "Logged out." });
+};
+
+const getCurrentUser = async (req, res) => {
+	try {
+		if (!req.user || !req.user.email) {
+			return res.status(400).json({ error: "User email not provided" });
+		}
+
+		const user = await findUserByEmail(req.user.email);
+
+		if (user.rows.length === 0) {
+			return res.status(404).json({ error: "User not found" });
+		}
+
+		res.status(200).json({
+			name: user.rows[0].name,
+			lastname: user.rows[0].lastname,
+		});
+	} catch (error) {
+		console.error("Error fetching user:", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
 };
 
 module.exports = {
@@ -310,4 +358,5 @@ module.exports = {
 	register,
 	login,
 	logoutUser,
+	getCurrentUser,
 };

@@ -49,9 +49,10 @@ const getAvailableSlots = async (req, res) => {
 };
 
 const createReservation = async (req, res) => {
-	console.log(req.body);
-
-	const { user_id, service_id, therapist_id, time_range, napomena } = req.body;
+	// console.log(req.user);
+	const user_id = req.user.userId;
+	// console.log(req.body);
+	const { service_id, therapist_id, time_range, napomena } = req.body;
 	console.log(time_range);
 	try {
 		// Perform necessary validations here

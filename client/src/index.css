@@ -72,6 +72,7 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
+
 @layer base {
   * {
     @apply border-border;
@@ -94,6 +95,16 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+.input {
+  @apply w-full rounded-2xl bg-slate-100 px-5 py-2;
+}
+.icon {
+  @apply absolute right-5 top-[50%] h-8 w-8 translate-y-[-50%] cursor-pointer rounded-full p-1 transition-all hover:bg-slate-400/40;
+}
+.btn-social {
+  @apply flex w-full items-center justify-center gap-5 rounded-2xl bg-slate-100 px-5 py-2 text-slate-700 hover:text-slate-100;
 }
 
 /* ------------------------------carousel----------------------------- */
@@ -155,7 +166,7 @@ body {
 .scroller img {
   will-change: transform, filter;
 }
-/*---------------------------------company perosnel grid flip--------------------------------------------- */
+/*---------------------------------company personnel grid flip--------------------------------------------- */
 .card {
   perspective: 1000px; /* Adds 3D effect */
 }

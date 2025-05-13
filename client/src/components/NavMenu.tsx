@@ -1,3 +1,4 @@
+import { formatInitials } from "@/lib/utils";
 import {
   Disclosure,
   DisclosureButton,
@@ -27,7 +28,10 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-function NavMenu() {
+function NavMenu({ user }: { user: { name: string; lastname: string } }) {
+  // console.log("name", user.name);
+  // console.log("lastname", user.lastname);
+  const initials = formatInitials(user.name, user.lastname);
   const navigate = useNavigate();
   const location = useLocation();
   // console.log(location.pathname);
@@ -101,11 +105,11 @@ function NavMenu() {
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
               <button
                 type="button"
-                className="relative rounded-full bg-gray-800 p-1 text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 focus:ring-offset-white"
+                className="relative rounded-full bg-gray-800 p-1 text-gray-300"
               >
                 <span className="absolute -inset-1.5" />
                 <span className="sr-only">Pogledaj notifikacije</span>
-                <BellIcon aria-hidden="true" className="size-6" />
+                {initials}
               </button>
 
               {/* Profile dropdown */}
@@ -137,22 +141,26 @@ function NavMenu() {
                       Rezervacija
                     </Link>
                   </MenuItem>
-                  <MenuItem>
-                    <Link
-                      to="prijava"
-                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                    >
-                      Prijavi se
-                    </Link>
-                  </MenuItem>
-                  <MenuItem>
-                    <Link
-                      onClick={() => logoutMutation.mutate()}
-                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                    >
-                      Odjavi se
-                    </Link>
-                  </MenuItem>
+
+                  {!user ? (
+                    <MenuItem>
+                      <Link
+                        to="prijava"
+                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                      >
+                        Prijavi se
+                      </Link>
+                    </MenuItem>
+                  ) : (
+                    <MenuItem>
+                      <Link
+                        onClick={() => logoutMutation.mutate()}
+                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                      >
+                        Odjavi se
+                      </Link>
+                    </MenuItem>
+                  )}
                 </MenuItems>
               </Menu>
             </div>

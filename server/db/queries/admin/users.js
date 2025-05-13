@@ -1,11 +1,11 @@
 const pool = require("../../database");
 
 const getUsers = () => {
-  return pool.query("SELECT * FROM users;");
+	return pool.query("SELECT * FROM users;");
 };
 
 const getAdminSchedule = (therapistId) => {
-  const sql = `
+	const sql = `
 SELECT ajde.*, tss.service_id, s.name AS service_name, s.icon AS service_icon, b.user_id as user_id, u.name AS user_name, u.lastname AS user_lastname, u.phone AS user_phone, u.email AS user_email, b.napomena as napomena, b.created_at as created_at FROM
  (SELECT tr.*, t.name as therapist_name, t.lastname as therapist_lastname, t.icon as therapist_icon
     FROM
@@ -41,16 +41,16 @@ SELECT ajde.*, tss.service_id, s.name AS service_name, s.icon AS service_icon, b
     LEFT JOIN users u ON b.user_id = u.id;
     `;
 
-  return pool.query(sql, [therapistId]);
+	return pool.query(sql, [therapistId]);
 };
 
 const getBookings = (therapistId) => {
-  const sql = `SELECT * FROM bookings WHERE therapist_id = $1`;
-  return pool.query(sql, [therapistId]);
+	const sql = `SELECT * FROM bookings WHERE therapist_id = $1`;
+	return pool.query(sql, [therapistId]);
 };
 
 const getBookingDetails = (userId, timestamp) => {
-  const sql = `SELECT b.created_at, b.napomena, u.name || ' ' || u.lastname AS        user_full_name, u.email, u.phone, u.registration_date, s.name AS service_name, t.name || ' ' || t.lastname AS therapist_full_name
+	const sql = `SELECT b.created_at, b.napomena, u.name || ' ' || u.lastname AS        user_full_name, u.email, u.phone, u.registration_date, s.name AS service_name, t.name || ' ' || t.lastname AS therapist_full_name
   FROM
   (SELECT * FROM bookings  
   WHERE user_id = $1 AND time_range @> $2::timestamp) b
@@ -58,11 +58,11 @@ const getBookingDetails = (userId, timestamp) => {
   LEFT JOIN services s ON b.service_id = s.id
   LEFT JOIN therapists t ON b.therapist_id = t.id`;
 
-  return pool.query(sql, [userId, timestamp]);
+	return pool.query(sql, [userId, timestamp]);
 };
 
 const getUsersByMonth = () => {
-  return pool.query(`SELECT
+	return pool.query(`SELECT
   TO_CHAR(registration_date, 'YYYY-MM') AS month,
   COUNT(*) AS user_count
 FROM users
@@ -72,7 +72,7 @@ ORDER BY month;`);
 };
 
 const getServicesUsage = () => {
-  return pool.query(`SELECT
+	return pool.query(`SELECT
     s.name AS service_name,
     COUNT(*) AS usage_count
   FROM bookings b
@@ -82,7 +82,7 @@ const getServicesUsage = () => {
 };
 
 const getTherapistsUsage = () => {
-  return pool.query(`SELECT
+	return pool.query(`SELECT
   t.name || ' ' || t.lastname AS therapist_name,
   COUNT(*) AS session_count
 FROM bookings b
@@ -92,17 +92,17 @@ ORDER BY session_count DESC;`);
 };
 
 const getUserCount = (therapistId) => {
-  const sql = `SELECT COUNT(DISTINCT user_id) FROM bookings WHERE therapist_id = $1`;
-  return pool.query(sql, [therapistId]);
+	const sql = `SELECT COUNT(DISTINCT user_id) FROM bookings WHERE therapist_id = $1`;
+	return pool.query(sql, [therapistId]);
 };
 
 const getBookingsCount = (therapistId) => {
-  const sql = `SELECT COUNT(*) FROM bookings WHERE therapist_id = $1 AND user_id != 99999;`;
-  return pool.query(sql, [therapistId]);
+	const sql = `SELECT COUNT(*) FROM bookings WHERE therapist_id = $1 AND user_id != 99999;`;
+	return pool.query(sql, [therapistId]);
 };
 
 const getTopService = (therapistId) => {
-  const sql = `SELECT b.service_id, b.total_bookings, s.name
+	const sql = `SELECT b.service_id, b.total_bookings, s.name
 FROM
 (SELECT service_id, COUNT(*) AS total_bookings
 FROM bookings
@@ -112,11 +112,11 @@ GROUP BY service_id
 ORDER BY total_bookings DESC
 LIMIT 1) b
 LEFT JOIN services s ON b.service_id = s.id AND s.id != 99999;`;
-  return pool.query(sql, [therapistId]);
+	return pool.query(sql, [therapistId]);
 };
 
 const getTopClient = (therapistId) => {
-  const sql = `SELECT b.user_id, b.total_bookings, u.name || ' ' || u.lastname AS user_name
+	const sql = `SELECT b.user_id, b.total_bookings, u.name || ' ' || u.lastname AS user_name
 FROM
 (SELECT user_id, COUNT(*) AS total_bookings
 FROM bookings
@@ -126,22 +126,22 @@ GROUP BY user_id
 ORDER BY total_bookings DESC
 LIMIT 1) b
 LEFT JOIN users u ON b.user_id = u.id;`;
-  return pool.query(sql, [therapistId]);
+	return pool.query(sql, [therapistId]);
 };
 
 const getBestMonth = (therapistId) => {
-  const sql = `SELECT TO_CHAR(created_at, 'YYYY-MM') AS booking_month, COUNT(*) AS total_bookings
+	const sql = `SELECT TO_CHAR(created_at, 'YYYY-MM') AS booking_month, COUNT(*) AS total_bookings
 FROM bookings
 WHERE therapist_id = $1
 AND user_id != 99999
 GROUP BY booking_month
 ORDER BY total_bookings DESC
 LIMIT 1;`;
-  return pool.query(sql, [therapistId]);
+	return pool.query(sql, [therapistId]);
 };
 
 const getAdminList = () => {
-  return pool.query(`SELECT t.id, t.name, t.lastname, t.email, t.phone,
+	return pool.query(`SELECT t.id, t.name, t.lastname, t.email, t.phone,
      a.created_at AS registration_date, a.is_superadmin
 FROM admins a 
 LEFT JOIN therapists t
@@ -149,7 +149,7 @@ ON a.therapist_id = t.id;`);
 };
 
 const addUnavailability = (therapist, timeRange) => {
-  const sql = `INSERT INTO bookings (user_id, service_id, therapist_id, time_range, napomena, created_at)
+	const sql = `INSERT INTO bookings (user_id, service_id, therapist_id, time_range, napomena, created_at)
                 VALUES (
                     99999, 
                     99999, 
@@ -158,49 +158,48 @@ const addUnavailability = (therapist, timeRange) => {
                     'ADMIN BLOCK - Vacation',
                     CURRENT_TIMESTAMP
                 );`;
-  return pool.query(sql, [therapist, timeRange]);
+	return pool.query(sql, [therapist, timeRange]);
 };
 
 const createNewUser = ({
-  name,
-  lastname,
-  email,
-  phone = "XXX-XXX-XXXX",
-  password = "XXXXXXXX",
+	name,
+	lastname,
+	email,
+	phone = "XXX-XXX-XXXX",
+	password = "XXXXXXXX",
 }) => {
-  console.log("club tropicana", name, lastname, email);
-  const sql = `INSERT INTO users (name, lastname, email, phone, password)
+	const sql = `INSERT INTO users (name, lastname, email, phone, password)
   VALUES ($1, $2, $3, $4, $5)
   RETURNING *`;
-  return pool.query(sql, [name, lastname, email, phone, password]);
+	return pool.query(sql, [name, lastname, email, phone, password]);
 };
 
 const findUserByEmail = (email) => {
-  const sql = `SELECT * FROM users WHERE email = $1`;
-  return pool.query(sql, [email]);
+	const sql = `SELECT * FROM users WHERE email = $1`;
+	return pool.query(sql, [email]);
 };
 
 const insertLastLogin = (email) => {
-  const sql = `UPDATE users SET last_login = NOW() WHERE email = $1 RETURNING last_login`;
-  return pool.query(sql, [email]);
+	const sql = `UPDATE users SET last_login = NOW() WHERE email = $1 RETURNING last_login`;
+	return pool.query(sql, [email]);
 };
 
 module.exports = {
-  getUsers,
-  getAdminSchedule,
-  getBookings,
-  getBookingDetails,
-  getUsersByMonth,
-  getServicesUsage,
-  getTherapistsUsage,
-  getUserCount,
-  getBookingsCount,
-  getTopService,
-  getTopClient,
-  getBestMonth,
-  getAdminList,
-  addUnavailability,
-  createNewUser,
-  findUserByEmail,
-  insertLastLogin,
+	getUsers,
+	getAdminSchedule,
+	getBookings,
+	getBookingDetails,
+	getUsersByMonth,
+	getServicesUsage,
+	getTherapistsUsage,
+	getUserCount,
+	getBookingsCount,
+	getTopService,
+	getTopClient,
+	getBestMonth,
+	getAdminList,
+	addUnavailability,
+	createNewUser,
+	findUserByEmail,
+	insertLastLogin,
 };
