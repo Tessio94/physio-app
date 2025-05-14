@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import {
   XAxis,
   YAxis,
@@ -12,6 +13,14 @@ import {
   BarChart,
   Bar,
 } from "recharts";
+
+type Admin = {
+  adminId: number;
+  name: string;
+  lastname: string;
+  icon: string;
+  superadmin: boolean;
+};
 
 const COLORS = [
   "#94A3B8",
@@ -54,15 +63,16 @@ const fetchDashboardData = async () => {
   return res.json();
 };
 
-const fetchAdminDashboardData = async (therapistId) => {
+const fetchAdminDashboardData = async (adminId) => {
   const res = await fetch(
-    `http://localhost:3000/api/v1/admin/dashboard/data/${therapistId}`,
+    `http://localhost:3000/api/v1/admin/dashboard/data/${adminId}`,
   );
   return res.json();
 };
 
 const AdminDashboard = () => {
-  const [therapistId, setTherapistId] = useState(1);
+  const admin = useOutletContext<Admin>();
+  const { adminId, name, lastname, icon, superadmin } = admin;
 
   const { data, isLoading } = useQuery({
     queryKey: ["monthly-users"],
@@ -72,8 +82,8 @@ const AdminDashboard = () => {
   // console.log("data: ", data);
 
   const { data: adminData, isLoading: adminIsLoading } = useQuery({
-    queryKey: ["admin-info", therapistId],
-    queryFn: () => fetchAdminDashboardData(therapistId),
+    queryKey: ["admin-info", adminId],
+    queryFn: () => fetchAdminDashboardData(adminId),
   });
 
   if (isLoading || adminIsLoading) return <div className="">isloading</div>;
@@ -88,15 +98,23 @@ const AdminDashboard = () => {
     session_count: Number(item.session_count),
   }));
 
-  console.log("Admin data: ", adminData);
+  // console.log("Admin data: ", adminData);
 
   return (
     <div className="mb-5">
       {" "}
-      <h4 className="ml-5 flex items-end gap-3 text-2xl text-slate-600">
-        Admin korisnik:
-        <span className="text-lg underline">Nikola Horvat</span>
-      </h4>
+      <div className="flex items-center gap-10">
+        <h4 className="ml-5 flex items-end gap-3 text-2xl text-slate-600">
+          Admin korisnik:
+          <span className="text-lg underline">{`${name} ${lastname}`}</span>
+        </h4>
+        <h4 className="ml-5 flex items-end gap-3 text-2xl text-slate-600">
+          Admin uloga:
+          <span className="text-lg underline">
+            {superadmin ? "superadmin" : "admin"}
+          </span>
+        </h4>
+      </div>
       <div className="flex max-w-[90%] flex-wrap justify-between gap-28 gap-y-10">
         <div className="mx-5 pt-6">
           <h5 className="text-md mb-2 text-center text-xl font-semibold">

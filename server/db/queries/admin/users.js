@@ -28,7 +28,7 @@ SELECT ajde.*, tss.service_id, s.name AS service_name, s.icon AS service_icon, b
               tsrange(dates.closed + interval '20 hours', dates.closed + interval '32 hours') AS time_range
             FROM generate_series((CURRENT_DATE - 1)::timestamp, CURRENT_DATE + INTERVAL '14 days', INTERVAL '1 day') dates(closed)
             INNER JOIN therapists ts ON TRUE
-			WHERE ts.id = 1 ORDER BY time_range ASC
+			WHERE ts.id = $1 ORDER BY time_range ASC
           ) sub2
         ) sub
         WHERE upper(available) - lower(available) >= interval '30 minutes'
@@ -189,14 +189,14 @@ const findAdmin = (email) => {
 	return pool.query(sql, [email]);
 };
 
-// const findAdmin = (email) => {
-// 	const sql = `SELECT t.name, t.lastname, t.icon, a.is_superadmin FROM
-//               (SELECT * FROM therapists
-//               WHERE email=$1) t
-//               LEFT JOIN admins a
-//               ON t.id = a.therapist_id`;
-// 	return pool.query(sql, [email]);
-// };
+const findAdminInfo = (email) => {
+	const sql = `SELECT t.id, t.name, t.lastname, t.icon, a.is_superadmin FROM
+              (SELECT * FROM therapists
+              WHERE email=$1) t
+              LEFT JOIN admins a
+              ON t.id = a.therapist_id`;
+	return pool.query(sql, [email]);
+};
 
 module.exports = {
 	getUsers,
@@ -217,4 +217,5 @@ module.exports = {
 	findUserByEmail,
 	insertLastLogin,
 	findAdmin,
+	findAdminInfo,
 };

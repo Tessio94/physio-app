@@ -2,10 +2,11 @@ import AdminPopup from "@/components/AdminPopup";
 import { cn, formatSlotDate } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 
-async function fetchAdminSchedule(therapistId) {
+async function fetchAdminSchedule(adminId) {
   const response = await fetch(
-    `http://localhost:3000/api/v1/admin/schedule/${therapistId}`,
+    `http://localhost:3000/api/v1/admin/schedule/${adminId}`,
   );
   const data = await response.json();
   // console.log(data);
@@ -33,14 +34,16 @@ async function fetchAppointmentDetails(selectedAppointment) {
 }
 
 const AdminKalendar = () => {
-  const [therapistId, setTherapistId] = useState(1);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
 
+  const admin = useOutletContext<Admin>();
+  const { adminId, name, lastname, icon, superadmin } = admin;
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["schedule", therapistId],
-    queryFn: () => fetchAdminSchedule(therapistId),
-    enabled: !!therapistId,
+    queryKey: ["schedule", adminId],
+    queryFn: () => fetchAdminSchedule(adminId),
+    enabled: !!adminId,
   });
 
   let appointments;

@@ -3,6 +3,7 @@ const {
 	findUserByEmail,
 	insertLastLogin,
 	findAdmin,
+	findAdminInfo,
 } = require("../db/queries/admin/users");
 
 const { createState } = require("../utils/utils");
@@ -390,6 +391,31 @@ const adminLogin = async (req, res) => {
 	}
 };
 
+const getAdminInfo = async (req, res) => {
+	try {
+		if (!req.admin || !req.admin.email) {
+			return res.status(400).json({ error: "User email not provided" });
+		}
+
+		const user = await findAdminInfo(req.admin.email);
+
+		if (user.rows.length === 0) {
+			return res.status(404).json({ error: "User not found" });
+		}
+
+		res.status(200).json({
+			adminId: user.rows[0].id,
+			name: user.rows[0].name,
+			lastname: user.rows[0].lastname,
+			icon: user.rows[0].icon,
+			superadmin: user.rows[0].is_superadmin,
+		});
+	} catch (error) {
+		console.error("Error fetching user:", error);
+		res.status(500).json({ error: "Internal server error" });
+	}
+};
+
 module.exports = {
 	loginGoogle,
 	loginGoogleCallback,
@@ -400,4 +426,5 @@ module.exports = {
 	logoutUser,
 	getCurrentUser,
 	adminLogin,
+	getAdminInfo,
 };

@@ -8,6 +8,7 @@ const {
 	logoutUser,
 	getCurrentUser,
 	adminLogin,
+	getAdminInfo,
 } = require("../controllers/loginController");
 
 const express = require("express");
@@ -33,12 +34,6 @@ router.route("/current-user").get(requireAuth, getCurrentUser);
 
 router.route("/admin/login").post(adminLogin);
 
-// router.route("/admin/dashboard").post(requireAdminAuth, adminLogin);
-
-// router.route("/admin/kalendar").post(requireAdminAuth, adminLogin);
-
-// router.route("/admin/korisnici").post(requireAdminAuth, adminLogin);
-
-// router.route("/admin/postavke").post(requireAdminAuth, adminLogin);
+router.route("/admin/current").get(requireAdminAuth, getAdminInfo);
 
 module.exports = router;
