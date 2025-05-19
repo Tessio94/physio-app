@@ -71,8 +71,8 @@ export const formatTime12Hour = (time24) => {
 
 export const formatTimeRange = (date) => {
   console.log(date);
-  const [month, day, year] = date.toLocaleDateString().split("/");
-
+  const [month, day, year] = date.toLocaleDateString("en-US").split("/");
+  console.log(month, day, year);
   const dateString = `${year.padStart(4, "0")}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
   const timeString = date.toLocaleTimeString([], {
     hour: "2-digit",
