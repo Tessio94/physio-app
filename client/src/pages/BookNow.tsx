@@ -19,9 +19,25 @@ import { cn } from "@/lib/utils";
 //   return data.payload;
 // };
 
+interface Service {
+  id: string;
+  name: string;
+  icon: string;
+}
+
+interface Therapist {
+  id: string;
+  name: string;
+  icon: string;
+}
+
 function BookNow() {
-  const [selectedServiceId, setSelectedServiceId] = useState(null);
-  const [selectedTherapistId, setSelectedTherapistId] = useState(null);
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(
+    null,
+  );
+  const [selectedTherapistId, setSelectedTherapistId] = useState<string | null>(
+    null,
+  );
   const [isBlurred, setIsBlurred] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [showService, setShowService] = useState(false);
@@ -53,7 +69,7 @@ function BookNow() {
     }
   }, [showService, showTherapist]);
 
-  const { isPending, error, data } = useQuery({
+  const { isPending, data } = useQuery({
     queryKey: ["serviceData"],
     queryFn: () =>
       fetch(
@@ -82,19 +98,19 @@ function BookNow() {
 
   const loading = isPending || !minLoaderTimePassed;
 
-  const handleServiceSelect = (serviceId) => {
+  const handleServiceSelect = (serviceId: string) => {
     setSelectedServiceId(serviceId);
   };
 
-  const handleTherapistSelect = (therapistId) => {
+  const handleTherapistSelect = (therapistId: string) => {
     setSelectedTherapistId(therapistId);
   };
 
   const selectedService = services.find(
-    (service) => service.id === selectedServiceId,
+    (service: Service) => service.id === selectedServiceId,
   );
   const selectedTherapist = therapists.find(
-    (therapist) => therapist.id === selectedTherapistId,
+    (therapist: Therapist) => therapist.id === selectedTherapistId,
   );
 
   return (
@@ -104,11 +120,10 @@ function BookNow() {
           <Audio
             height="80"
             width="80"
-            radius="9"
             color="bg-slate-500"
             ariaLabel="loading"
-            wrapperStyle
-            wrapperClass
+            wrapperStyle={{}}
+            wrapperClass=""
           />
         </div>
       ) : (
@@ -174,7 +189,7 @@ function BookNow() {
                     : "max-h-0 opacity-0",
                 )}
               >
-                {services?.map((service) => {
+                {services?.map((service: Service) => {
                   const { id, name, icon } = service;
 
                   return (
@@ -184,6 +199,7 @@ function BookNow() {
                       name={name}
                       icon={icon}
                       selectService={handleServiceSelect}
+                      selectTherapist={undefined}
                       toggleBlur={toggleBlur}
                       type="service"
                     />
@@ -236,7 +252,7 @@ function BookNow() {
                     : "max-h-0 opacity-0",
                 )}
               >
-                {therapists?.map((therapist) => {
+                {therapists?.map((therapist: Therapist) => {
                   const { id, name, icon } = therapist;
 
                   return (
@@ -245,6 +261,7 @@ function BookNow() {
                       id={id}
                       name={name}
                       icon={icon}
+                      selectService={undefined}
                       selectTherapist={handleTherapistSelect}
                       toggleBlur={toggleBlur}
                       type="therapist"
@@ -259,8 +276,10 @@ function BookNow() {
             {selectedServiceId ? (
               <div>
                 <AvailableSlots
-                  serviceId={selectedServiceId}
-                  therapistId={selectedTherapistId}
+                  serviceId={+selectedServiceId}
+                  therapistId={
+                    selectedTherapistId ? +selectedTherapistId : null
+                  }
                 />
               </div>
             ) : (

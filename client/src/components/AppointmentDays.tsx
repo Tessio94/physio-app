@@ -2,10 +2,24 @@ import { formatSlotDate } from "@/lib/utils";
 import { useState } from "react";
 import Popup from "./Popup";
 import Reservation from "./Reservation";
+import { PopupData, ReservationData, ServiceDetails } from "types/types";
 
-const AppointmentDays = ({ appointments, details, serviceId }) => {
-  const [popupData, setPopupData] = useState(null);
-  const [selectedReservation, setSelectedReservation] = useState(null);
+type Appointments = {
+  [date: string]: {
+    [time: string]: number[];
+  };
+};
+
+type Props = {
+  appointments: Appointments;
+  details: ServiceDetails;
+  serviceId: number;
+};
+
+const AppointmentDays = ({ appointments, details, serviceId }: Props) => {
+  const [popupData, setPopupData] = useState<PopupData | null>(null);
+  const [selectedReservation, setSelectedReservation] =
+    useState<ReservationData | null>(null);
 
   const slots = Object.entries(appointments);
   // console.log(slots);
@@ -14,7 +28,12 @@ const AppointmentDays = ({ appointments, details, serviceId }) => {
     return formatSlotDate(new Date(slot[0]));
   });
 
-  const handleTherapistSelect = (e, therapists, time, date) => {
+  const handleTherapistSelect = (
+    e: React.MouseEvent<HTMLDivElement>,
+    therapists: number[],
+    time: string,
+    date: string,
+  ) => {
     e.stopPropagation();
 
     if (therapists.length > 1) {
@@ -59,7 +78,7 @@ const AppointmentDays = ({ appointments, details, serviceId }) => {
                             src={`src${
                               details.therapists.find(
                                 (therapist) => therapist.therapistId === iconId,
-                              ).therapistIcon
+                              )?.therapistIcon ?? ""
                             }`}
                             width={30}
                             height={30}

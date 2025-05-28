@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import {
   XAxis,
@@ -12,6 +11,7 @@ import {
   Legend,
   BarChart,
   Bar,
+  PieLabelRenderProps,
 } from "recharts";
 
 type Admin = {
@@ -20,6 +20,16 @@ type Admin = {
   lastname: string;
   icon: string;
   superadmin: boolean;
+};
+
+type ServiceUsageItem = {
+  service_name: string;
+  usage_count: number | string;
+};
+
+type TherapistUsageItem = {
+  therapist_name: string;
+  session_count: number | string;
 };
 
 const COLORS = [
@@ -33,24 +43,24 @@ const COLORS = [
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  index,
-}) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  cx = 0,
+  cy = 0,
+  midAngle = 0,
+  innerRadius = 0,
+  outerRadius = 0,
+  percent = 0,
+}: PieLabelRenderProps) => {
+  const radius =
+    Number(innerRadius) + (Number(outerRadius) - Number(innerRadius)) * 0.5;
+  const x = Number(cx) + radius * Math.cos(-midAngle * RADIAN);
+  const y = Number(cy) + radius * Math.sin(-midAngle * RADIAN);
 
   return (
     <text
       x={x}
       y={y}
       fill="white"
-      textAnchor={x > cx ? "start" : "end"}
+      textAnchor={x > Number(cx) ? "start" : "end"}
       dominantBaseline="central"
     >
       {`${(percent * 100).toFixed(0)}%`}
@@ -65,7 +75,7 @@ const fetchDashboardData = async () => {
   return res.json();
 };
 
-const fetchAdminDashboardData = async (adminId) => {
+const fetchAdminDashboardData = async (adminId: number) => {
   const res = await fetch(
     `https://physio-app-backend-wng0.onrender.com/api/v1/admin/dashboard/data/${adminId}`,
   );
@@ -74,7 +84,7 @@ const fetchAdminDashboardData = async (adminId) => {
 
 const AdminDashboard = () => {
   const admin = useOutletContext<Admin>();
-  const { adminId, name, lastname, icon, superadmin } = admin;
+  const { adminId, name, lastname, superadmin } = admin;
 
   const { data, isLoading } = useQuery({
     queryKey: ["monthly-users"],
@@ -90,15 +100,19 @@ const AdminDashboard = () => {
 
   if (isLoading || adminIsLoading) return <div className="">isloading</div>;
 
-  const transformedServiceUsage = data.serviceUsage.map((item) => ({
-    ...item,
-    usage_count: Number(item.usage_count),
-  }));
+  const transformedServiceUsage = data.serviceUsage.map(
+    (item: ServiceUsageItem) => ({
+      ...item,
+      usage_count: Number(item.usage_count),
+    }),
+  );
 
-  const transformedTherapistUsage = data.therapistUsage.map((item) => ({
-    ...item,
-    session_count: Number(item.session_count),
-  }));
+  const transformedTherapistUsage = data.therapistUsage.map(
+    (item: TherapistUsageItem) => ({
+      ...item,
+      session_count: Number(item.session_count),
+    }),
+  );
 
   // console.log("Admin data: ", adminData);
 
@@ -202,7 +216,7 @@ const AdminDashboard = () => {
               label={renderCustomizedLabel}
               labelLine={false}
             >
-              {transformedServiceUsage.map((entry, index) => (
+              {transformedServiceUsage.map((_, index: number) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}
@@ -229,7 +243,7 @@ const AdminDashboard = () => {
               label={renderCustomizedLabel}
               labelLine={false}
             >
-              {transformedTherapistUsage.map((entry, index) => (
+              {transformedTherapistUsage.map((_, index: number) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}

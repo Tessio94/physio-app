@@ -1,3 +1,13 @@
+interface DropdownOptionProps {
+  id: string;
+  icon: string;
+  name: string;
+  selectService?: (id: string) => void;
+  selectTherapist?: (id: string) => void;
+  toggleBlur: () => void;
+  type: "service" | "therapist";
+}
+
 const DropdownOption = ({
   id,
   icon,
@@ -6,14 +16,14 @@ const DropdownOption = ({
   selectTherapist,
   toggleBlur,
   type,
-}) => {
+}: DropdownOptionProps) => {
   if (type === "service") {
     if (name === "Kineziterapija") {
       return (
         <li
           className="group flex cursor-pointer items-center gap-4 rounded-xl px-4 py-2 transition-all hover:bg-slate-600 hover:text-slate-200"
           onClick={() => {
-            selectService(id);
+            selectService?.(id);
             toggleBlur();
           }}
         >
@@ -29,7 +39,7 @@ const DropdownOption = ({
       <li
         className="group flex cursor-pointer items-center gap-4 rounded-xl px-4 py-2 transition-all hover:bg-slate-600 hover:text-slate-200"
         onClick={() => {
-          selectService(id);
+          selectService?.(id);
           toggleBlur();
         }}
       >
@@ -45,7 +55,7 @@ const DropdownOption = ({
     <li
       className="group flex cursor-pointer items-center gap-4 rounded-xl px-4 py-2 transition-all hover:bg-slate-600 hover:text-slate-200"
       onClick={() => {
-        selectTherapist(id);
+        selectTherapist?.(id);
         toggleBlur();
       }}
     >

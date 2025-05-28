@@ -3,8 +3,26 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import { IoMdTime } from "react-icons/io";
 import { IoCalendarNumberOutline } from "react-icons/io5";
+import type { ReservationData, ServiceDetails } from "types/types";
 
-async function makeReservation(data) {
+type ReservationPayload = {
+  user_id: number;
+  service_id: number;
+  therapist_id: number;
+  time_range: string;
+  napomena?: string;
+};
+
+interface ReservationProps {
+  selectedReservation: ReservationData | null;
+  setSelectedReservation: React.Dispatch<
+    React.SetStateAction<ReservationData | null>
+  >;
+  details: ServiceDetails;
+  serviceId: number;
+}
+
+async function makeReservation(data: ReservationPayload) {
   const response = await fetch(
     "https://physio-app-backend-wng0.onrender.com/api/v1/book-now/reservations",
     {
@@ -29,8 +47,8 @@ const Reservation = ({
   setSelectedReservation,
   details,
   serviceId,
-}) => {
-  const noteRef = useRef();
+}: ReservationProps) => {
+  const noteRef = useRef<HTMLTextAreaElement>(null);
   // console.log(details);
   const closeReservation = () => setSelectedReservation(null);
   // console.log(selectedReservation);
@@ -54,6 +72,7 @@ const Reservation = ({
   });
 
   const handleReservation = () => {
+    if (!selectedReservation) return;
     const { date, time, therapistId } = selectedReservation;
 
     const startTime = new Date(`${date}T${time}`);
@@ -118,7 +137,7 @@ const Reservation = ({
                         (therapist) =>
                           therapist.therapistId ===
                           selectedReservation.therapistId,
-                      ).therapistIcon
+                      )?.therapistIcon
                     }`}
                     width={24}
                     height={24}
@@ -134,13 +153,13 @@ const Reservation = ({
                         (therapist) =>
                           therapist.therapistId ===
                           selectedReservation.therapistId,
-                      ).therapistName
+                      )?.therapistName
                     } ${
                       details.therapists.find(
                         (therapist) =>
                           therapist.therapistId ===
                           selectedReservation.therapistId,
-                      ).therapistLastname
+                      )?.therapistLastname
                     }`}
                   </div>
                 </div>
@@ -169,7 +188,7 @@ const Reservation = ({
                     ref={noteRef}
                     name=""
                     id=""
-                    rows="5"
+                    rows={5}
                     className="w-full rounded-lg border-2 border-slate-300 p-3 text-sm"
                     placeholder="Vaša poruka..."
                   ></textarea>

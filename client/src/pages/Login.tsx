@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/shadcn/Button";
 import Help from "@/components/Help";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";

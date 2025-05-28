@@ -1,11 +1,21 @@
 import { formatSlotDate, formatTime12Hour } from "@/lib/utils";
+import { Therapist, PopupData, ReservationData } from "types/types";
+
+type PopupProps = {
+  popupData: PopupData | null;
+  setPopupData: React.Dispatch<React.SetStateAction<PopupData | null>>;
+  detailsTherapists: Therapist[];
+  setSelectedReservation: React.Dispatch<
+    React.SetStateAction<ReservationData | null>
+  >;
+};
 
 const Popup = ({
   popupData,
   setPopupData,
   detailsTherapists,
   setSelectedReservation,
-}) => {
+}: PopupProps) => {
   const closePopup = () => {
     setPopupData(null);
   };
@@ -39,7 +49,7 @@ const Popup = ({
                     src={`src${
                       detailsTherapists.find(
                         (therapist) => therapist.therapistId === id,
-                      ).therapistIcon
+                      )?.therapistIcon ?? ""
                     }`}
                     width={50}
                     height={50}
@@ -52,7 +62,7 @@ const Popup = ({
                     );
                     return (
                       <p className="absolute bottom-[110%] left-[50%] translate-x-[-50%] text-nowrap rounded-xl bg-slate-200 px-3 py-2 opacity-0 transition group-hover:opacity-100">
-                        {`${therapist.therapistName} ${therapist.therapistLastname}`}
+                        {`${therapist?.therapistName} ${therapist?.therapistLastname}`}
                       </p>
                     );
                   })()}

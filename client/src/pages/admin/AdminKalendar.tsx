@@ -1,10 +1,30 @@
 import AdminPopup from "@/components/AdminPopup";
-import { cn, formatSlotDate } from "@/lib/utils";
+import { formatSlotDate } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 
-async function fetchAdminSchedule(adminId) {
+type Admin = {
+  adminId: string;
+  name: string;
+  lastname: string;
+  icon?: string;
+  superadmin?: boolean;
+};
+
+type SelectedSlot = {
+  userId: string;
+  time: string;
+  date: string;
+} | null;
+
+type ScheduleResponse = {
+  availability: Record<string, string[]>;
+  appointmentDetails: any; // optional: use correct shape later
+  bookedSlots: Record<string, Record<string, string>>;
+};
+
+async function fetchAdminSchedule(adminId: string) {
   const response = await fetch(
     `https://physio-app-backend-wng0.onrender.com/api/v1/admin/schedule/${adminId}`,
   );
@@ -17,7 +37,11 @@ async function fetchAdminSchedule(adminId) {
   return data;
 }
 
-async function fetchAppointmentDetails(selectedAppointment) {
+async function fetchAppointmentDetails(selectedAppointment: {
+  userId: string;
+  time: string;
+  date: string;
+}) {
   // console.log("selectedAppointment :", selectedAppointment);
   const { userId, time, date } = selectedAppointment;
   const timestamp = `${date} ${time}:00`;
@@ -34,26 +58,26 @@ async function fetchAppointmentDetails(selectedAppointment) {
 }
 
 const AdminKalendar = () => {
-  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState<SelectedSlot>(null);
   const [showPopup, setShowPopup] = useState(false);
 
   const admin = useOutletContext<Admin>();
-  const { adminId, name, lastname, icon, superadmin } = admin;
+  const { adminId } = admin;
 
-  const { data, isLoading, isError } = useQuery({
+  const { data } = useQuery<ScheduleResponse>({
     queryKey: ["schedule", adminId],
     queryFn: () => fetchAdminSchedule(adminId),
     enabled: !!adminId,
   });
 
-  let appointments;
-  let details;
-  let bookedSlots;
+  // let details;
+  let appointments: [string, string[]][] = [];
+  let bookedSlots: Record<string, Record<string, string>> = {};
 
-  console.log(data);
+  // console.log(data);
   if (data) {
     appointments = Object.entries(data["availability"]);
-    details = data["appointmentDetails"];
+    // details = data["appointmentDetails"];
     bookedSlots = data["bookedSlots"];
   }
   // console.log(appointments);
@@ -89,7 +113,12 @@ const AdminKalendar = () => {
     "19:30",
   ];
 
-  const handleSlotSelect = (e, userId, time, date) => {
+  const handleSlotSelect = (
+    e: React.MouseEvent<HTMLDivElement>,
+    userId: string,
+    time: string,
+    date: string,
+  ) => {
     if (showPopup === false) {
       e.stopPropagation();
       console.log(userId, time, date);
@@ -101,16 +130,13 @@ const AdminKalendar = () => {
     }
   };
 
-  const {
-    data: bookingDetails,
-    isLoading: isBookingLoading,
-    isError: isBookingError,
-  } = useQuery({
+  const { data: bookingDetails } = useQuery({
     queryKey: ["bookingDetails", selectedSlot],
-    queryFn: () => fetchAppointmentDetails(selectedSlot),
+    queryFn: () =>
+      fetchAppointmentDetails(selectedSlot as Exclude<SelectedSlot, null>),
     enabled: !!selectedSlot,
   });
-  console.log(bookingDetails);
+  // console.log(bookingDetails);
   return (
     <>
       <h4 className="ml-5 text-2xl text-slate-600">
@@ -118,7 +144,7 @@ const AdminKalendar = () => {
       </h4>
       <div className="mx-5 pb-10 pt-6">
         <div className="flex gap-1">
-          {data
+          {appointments && dates
             ? appointments.map((slot, i) => {
                 return (
                   <div className="flex min-w-24 flex-col gap-1" key={i}>
@@ -138,7 +164,7 @@ const AdminKalendar = () => {
                         ? bookedSlots[date][timeSlot]
                         : null;
 
-                      return isBooked ? (
+                      return isBooked && userId ? (
                         <div
                           className="group flex cursor-pointer items-center justify-center gap-8 rounded-lg border-2 border-slate-200 bg-red-300 p-2 font-bold transition-all duration-500 hover:bg-red-500"
                           key={i}

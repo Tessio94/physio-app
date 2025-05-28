@@ -1,6 +1,19 @@
 // import { FaRegWindowClose } from "react-icons/fa";
 
-const AdminPopup = ({ bookingDetails, setShowPopup }) => {
+type AdminPopupProps = {
+  bookingDetails: {
+    user_full_name: string;
+    email: string;
+    phone: string;
+    dateOfRegistration: string;
+    dateOfBooking: string;
+    service_name: string;
+    napomena: string;
+  };
+  setShowPopup?: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const AdminPopup = ({ bookingDetails }: AdminPopupProps) => {
   return (
     <>
       <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

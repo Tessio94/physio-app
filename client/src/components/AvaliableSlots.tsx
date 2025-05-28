@@ -2,7 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import AppointmentDays from "./AppointmentDays";
 
 // Fetch the available slots for the selected service
-async function fetchAvailableSlots(serviceId, therapistId) {
+async function fetchAvailableSlots(
+  serviceId: number,
+  therapistId: number | null,
+) {
   if (therapistId === null) {
     const response = await fetch(
       `https://physio-app-backend-wng0.onrender.com/api/v1/book-now/appointments/all?serviceId=${serviceId}`,
