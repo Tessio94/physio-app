@@ -44,10 +44,13 @@ function NavMenu({
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch("http://localhost:3000/auth/logout", {
-        method: "POST",
-        credentials: "include", // send cookie
-      });
+      const res = await fetch(
+        "https://physio-app-backend-wng0.onrender.com/auth/logout",
+        {
+          method: "POST",
+          credentials: "include", // send cookie
+        },
+      );
       if (!res.ok) throw new Error("Logout failed");
       return res.json();
     },

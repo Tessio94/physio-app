@@ -5,7 +5,7 @@ import AppointmentDays from "./AppointmentDays";
 async function fetchAvailableSlots(serviceId, therapistId) {
   if (therapistId === null) {
     const response = await fetch(
-      `http://localhost:3000/api/v1/book-now/appointments/all?serviceId=${serviceId}`,
+      `https://physio-app-backend-wng0.onrender.com/api/v1/book-now/appointments/all?serviceId=${serviceId}`,
     );
     const data = await response.json();
     // console.log(data);
@@ -16,7 +16,7 @@ async function fetchAvailableSlots(serviceId, therapistId) {
     return data;
   } else {
     const response = await fetch(
-      `http://localhost:3000/api/v1/book-now/appointments/${therapistId}?serviceId=${serviceId}`,
+      `https://physio-app-backend-wng0.onrender.com/api/v1/book-now/appointments/${therapistId}?serviceId=${serviceId}`,
     );
     const data = await response.json();
     // console.log(data);

@@ -8,9 +8,9 @@ export default function AdminKorisnici() {
   const { isPending, error, data } = useQuery({
     queryKey: ["usersData"],
     queryFn: () =>
-      fetch("http://localhost:3000/api/v1/admin/korisnici").then((res) =>
-        res.json(),
-      ),
+      fetch(
+        "https://physio-app-backend-wng0.onrender.com/api/v1/admin/korisnici",
+      ).then((res) => res.json()),
   });
 
   console.log("data :", data);

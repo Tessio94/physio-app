@@ -6,7 +6,7 @@ import { IoCalendarNumberOutline } from "react-icons/io5";
 
 async function makeReservation(data) {
   const response = await fetch(
-    "http://localhost:3000/api/v1/book-now/reservations",
+    "https://physio-app-backend-wng0.onrender.com/api/v1/book-now/reservations",
     {
       method: "POST",
       headers: {

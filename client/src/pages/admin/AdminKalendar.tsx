@@ -6,7 +6,7 @@ import { useOutletContext } from "react-router-dom";
 
 async function fetchAdminSchedule(adminId) {
   const response = await fetch(
-    `http://localhost:3000/api/v1/admin/schedule/${adminId}`,
+    `https://physio-app-backend-wng0.onrender.com/api/v1/admin/schedule/${adminId}`,
   );
   const data = await response.json();
   // console.log(data);
@@ -22,7 +22,7 @@ async function fetchAppointmentDetails(selectedAppointment) {
   const { userId, time, date } = selectedAppointment;
   const timestamp = `${date} ${time}:00`;
   const response = await fetch(
-    `http://localhost:3000/api/v1/admin/schedule/appointment-details/${userId}?timestamp=${encodeURIComponent(timestamp)}`,
+    `https://physio-app-backend-wng0.onrender.com/api/v1/admin/schedule/appointment-details/${userId}?timestamp=${encodeURIComponent(timestamp)}`,
   );
   const data = await response.json();
   // console.log(data);

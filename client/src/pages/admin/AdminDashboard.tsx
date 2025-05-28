@@ -59,13 +59,15 @@ const renderCustomizedLabel = ({
 };
 
 const fetchDashboardData = async () => {
-  const res = await fetch("http://localhost:3000/api/v1/admin/dashboard/data");
+  const res = await fetch(
+    "https://physio-app-backend-wng0.onrender.com/api/v1/admin/dashboard/data",
+  );
   return res.json();
 };
 
 const fetchAdminDashboardData = async (adminId) => {
   const res = await fetch(
-    `http://localhost:3000/api/v1/admin/dashboard/data/${adminId}`,
+    `https://physio-app-backend-wng0.onrender.com/api/v1/admin/dashboard/data/${adminId}`,
   );
   return res.json();
 };

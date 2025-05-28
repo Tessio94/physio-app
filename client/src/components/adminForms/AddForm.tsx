@@ -59,10 +59,12 @@ const variantFieldsMap = {
 };
 
 const endpointsMap = {
-  terapeut: "http://localhost:3000/api/v1/admin/postavke/add-therapist",
-  usluge: "http://localhost:3000/api/v1/admin/postavke/add-service",
+  terapeut:
+    "https://physio-app-backend-wng0.onrender.com/api/v1/admin/postavke/add-therapist",
+  usluge:
+    "https://physio-app-backend-wng0.onrender.com/api/v1/admin/postavke/add-service",
   terapeutUsluge:
-    "http://localhost:3000/api/v1/admin/postavke/add-service-for-therapist",
+    "https://physio-app-backend-wng0.onrender.com/api/v1/admin/postavke/add-service-for-therapist",
 };
 
 const invalidationMap = {

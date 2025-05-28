@@ -17,17 +17,20 @@ const loginSchema = z.object({
 const loginMutationFn = async (data: z.infer<typeof loginSchema>) => {
   console.log(data);
   const { email, password } = data;
-  const res = await fetch("http://localhost:3000/auth/admin/login", {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
+  const res = await fetch(
+    "https://physio-app-backend-wng0.onrender.com/auth/admin/login",
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
     },
-    body: JSON.stringify({
-      email,
-      password,
-    }),
-  });
+  );
 
   if (!res.ok) {
     const err = await res.json();
