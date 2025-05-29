@@ -22,15 +22,12 @@ const profileSchema = z
 type ProfileForm = z.infer<typeof profileSchema>;
 
 const updateProfile = async (data: ProfileForm) => {
-  const res = await fetch(
-    "https://physio-app-backend-wng0.onrender.com/users/me",
-    {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(data),
-    },
-  );
+  const res = await fetch("http://localhost:3000/users/me", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(data),
+  });
   if (!res.ok) throw new Error("Neuspješno ažuriranje profila");
   return res.json();
 };

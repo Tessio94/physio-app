@@ -19,7 +19,7 @@ type DateInputProps = {
 
 async function fetchAdminSchedule(therapistId) {
   const response = await fetch(
-    `https://physio-app-backend-wng0.onrender.com/api/v1/admin/schedule/${therapistId}`,
+    `http://localhost:3000/api/v1/admin/schedule/${therapistId}`,
   );
   const data = await response.json();
   // console.log(data);

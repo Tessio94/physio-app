@@ -13,14 +13,7 @@ import {
   Bar,
   PieLabelRenderProps,
 } from "recharts";
-
-type Admin = {
-  adminId: number;
-  name: string;
-  lastname: string;
-  icon: string;
-  superadmin: boolean;
-};
+import { Admin } from "types/admin";
 
 type ServiceUsageItem = {
   service_name: string;
@@ -69,15 +62,13 @@ const renderCustomizedLabel = ({
 };
 
 const fetchDashboardData = async () => {
-  const res = await fetch(
-    "https://physio-app-backend-wng0.onrender.com/api/v1/admin/dashboard/data",
-  );
+  const res = await fetch("http://localhost:3000/api/v1/admin/dashboard/data");
   return res.json();
 };
 
 const fetchAdminDashboardData = async (adminId: number) => {
   const res = await fetch(
-    `https://physio-app-backend-wng0.onrender.com/api/v1/admin/dashboard/data/${adminId}`,
+    `http://localhost:3000/api/v1/admin/dashboard/data/${adminId}`,
   );
   return res.json();
 };

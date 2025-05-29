@@ -44,20 +44,17 @@ const registerSchema = loginSchema
 const loginMutationFn = async (data: z.infer<typeof loginSchema>) => {
   console.log(data);
   const { email, password } = data;
-  const res = await fetch(
-    "https://physio-app-backend-wng0.onrender.com/auth/login",
-    {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
+  const res = await fetch("http://localhost:3000/auth/login", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+  });
 
   if (!res.ok) {
     const err = await res.json();
@@ -71,17 +68,14 @@ export const registerMutationFn = async (
   data: z.infer<typeof registerSchema>,
 ) => {
   const { name, lastname, email, phone, password } = data;
-  const res = await fetch(
-    "https://physio-app-backend-wng0.onrender.com/auth/register",
-    {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, lastname, email, phone, password }),
+  const res = await fetch("http://localhost:3000/auth/register", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify({ name, lastname, email, phone, password }),
+  });
 
   if (!res.ok) {
     const err = await res.json();
@@ -140,13 +134,11 @@ function Login() {
   }, [location.pathname]);
 
   const handleLoginGoogle = () => {
-    window.location.href =
-      "https://physio-app-backend-wng0.onrender.com/auth/login/google";
+    window.location.href = "http://localhost:3000/auth/login/google";
   };
 
   const handleLoginFacebook = () => {
-    window.location.href =
-      "https://physio-app-backend-wng0.onrender.com/auth/login/facebook";
+    window.location.href = "http://localhost:3000/auth/login/facebook";
   };
 
   return (

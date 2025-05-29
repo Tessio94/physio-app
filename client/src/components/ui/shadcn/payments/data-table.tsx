@@ -11,6 +11,7 @@ import {
   getSortedRowModel,
   useReactTable,
   getPaginationRowModel,
+  SortingState,
 } from "@tanstack/react-table";
 
 import {
@@ -98,30 +99,33 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={cn(
-                        cell.column.id === "is_superadmin" && {
-                          "bg-green-100 text-center":
-                            row.original.is_superadmin,
-                          "bg-red-100 text-center": !row.original.is_superadmin,
-                        },
-                      )}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+              table.getRowModel().rows.map((row) => {
+                const typedRow = row.original as { is_superadmin?: boolean };
+
+                return (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className={cn(
+                          cell.column.id === "is_superadmin" && {
+                            "bg-green-100 text-center": typedRow.is_superadmin,
+                            "bg-red-100 text-center": !typedRow.is_superadmin,
+                          },
+                        )}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })
             ) : (
               <TableRow>
                 <TableCell

@@ -5,12 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 export default function AdminKorisnici() {
   // const [data, setData] = useState([]);
 
-  const { isPending, error, data } = useQuery({
+  const { data } = useQuery({
     queryKey: ["usersData"],
     queryFn: () =>
-      fetch(
-        "https://physio-app-backend-wng0.onrender.com/api/v1/admin/korisnici",
-      ).then((res) => res.json()),
+      fetch("http://localhost:3000/api/v1/admin/korisnici").then((res) =>
+        res.json(),
+      ),
   });
 
   console.log("data :", data);

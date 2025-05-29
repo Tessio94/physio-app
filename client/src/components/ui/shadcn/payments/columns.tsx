@@ -1,31 +1,31 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Column } from "@tanstack/react-table";
 import { Button } from "../Button";
 import { ArrowUpDown } from "lucide-react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Payment = {
-  id?: number;
-  name: string;
-  lastname: string;
-  email: string;
-  phone: string;
-  registration_date: string;
-  is_superadmin?: boolean;
-};
+// export type Payment = {
+//   id?: number;
+//   name: string;
+//   lastname: string;
+//   email: string;
+//   phone: string;
+//   registration_date: string;
+//   is_superadmin?: boolean;
+// };
 
-export const columns = (
+export const columns = <TData extends object>(
   showSuperadmin: boolean,
   showServices: boolean,
-): ColumnDef<Payment>[] => {
-  const baseColumns: ColumnDef<Payment>[] = [
+): ColumnDef<TData>[] => {
+  const baseColumns: ColumnDef<TData>[] = [
     ...(showSuperadmin || showServices
       ? [
           {
             accessorKey: "id",
-            header: ({ column }) => {
+            header: ({ column }: { column: Column<TData, unknown> }) => {
               return (
                 <Button
                   className="p-0"
@@ -61,7 +61,7 @@ export const columns = (
       ? [
           {
             accessorKey: "lastname",
-            header: ({ column }) => {
+            header: ({ column }: { column: Column<TData, unknown> }) => {
               return (
                 <Button
                   className="p-0"
@@ -106,7 +106,7 @@ export const columns = (
       ? [
           {
             accessorKey: "date",
-            header: ({ column }) => {
+            header: ({ column }: { column: Column<TData, unknown> }) => {
               return (
                 <Button
                   className="p-0"

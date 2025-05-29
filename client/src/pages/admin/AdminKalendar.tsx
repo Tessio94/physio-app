@@ -3,30 +3,23 @@ import { formatSlotDate } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
-
-type Admin = {
-  adminId: string;
-  name: string;
-  lastname: string;
-  icon?: string;
-  superadmin?: boolean;
-};
+import { Admin } from "types/admin";
 
 type SelectedSlot = {
-  userId: string;
+  userId: number;
   time: string;
   date: string;
 } | null;
 
 type ScheduleResponse = {
   availability: Record<string, string[]>;
-  appointmentDetails: any; // optional: use correct shape later
-  bookedSlots: Record<string, Record<string, string>>;
+  // appointmentDetails: any; // optional: use correct shape later
+  bookedSlots: Record<string, Record<string, number>>;
 };
 
-async function fetchAdminSchedule(adminId: string) {
+async function fetchAdminSchedule(adminId: number) {
   const response = await fetch(
-    `https://physio-app-backend-wng0.onrender.com/api/v1/admin/schedule/${adminId}`,
+    `http://localhost:3000/api/v1/admin/schedule/${adminId}`,
   );
   const data = await response.json();
   // console.log(data);
@@ -38,7 +31,7 @@ async function fetchAdminSchedule(adminId: string) {
 }
 
 async function fetchAppointmentDetails(selectedAppointment: {
-  userId: string;
+  userId: number;
   time: string;
   date: string;
 }) {
@@ -46,7 +39,7 @@ async function fetchAppointmentDetails(selectedAppointment: {
   const { userId, time, date } = selectedAppointment;
   const timestamp = `${date} ${time}:00`;
   const response = await fetch(
-    `https://physio-app-backend-wng0.onrender.com/api/v1/admin/schedule/appointment-details/${userId}?timestamp=${encodeURIComponent(timestamp)}`,
+    `http://localhost:3000/api/v1/admin/schedule/appointment-details/${userId}?timestamp=${encodeURIComponent(timestamp)}`,
   );
   const data = await response.json();
   // console.log(data);
@@ -72,7 +65,7 @@ const AdminKalendar = () => {
 
   // let details;
   let appointments: [string, string[]][] = [];
-  let bookedSlots: Record<string, Record<string, string>> = {};
+  let bookedSlots: Record<string, Record<string, number>> = {};
 
   // console.log(data);
   if (data) {
@@ -81,7 +74,9 @@ const AdminKalendar = () => {
     bookedSlots = data["bookedSlots"];
   }
   // console.log(appointments);
-
+  // if (data) {
+  //   console.log(typeof data["bookedSlots"]["2025-04-24"]["08:00"]);
+  // }
   const dates = appointments?.map((slot) => {
     return formatSlotDate(new Date(slot[0]));
   });
@@ -115,7 +110,7 @@ const AdminKalendar = () => {
 
   const handleSlotSelect = (
     e: React.MouseEvent<HTMLDivElement>,
-    userId: string,
+    userId: number,
     time: string,
     date: string,
   ) => {

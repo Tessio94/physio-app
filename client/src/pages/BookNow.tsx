@@ -72,9 +72,7 @@ function BookNow() {
   const { isPending, data } = useQuery({
     queryKey: ["serviceData"],
     queryFn: () =>
-      fetch(
-        "https://physio-app-backend-wng0.onrender.com/api/v1/book-now",
-      ).then((res) => res.json()),
+      fetch("http://localhost:3000/api/v1/book-now").then((res) => res.json()),
   });
 
   const services = data?.services ?? [];

@@ -8,7 +8,7 @@ async function fetchAvailableSlots(
 ) {
   if (therapistId === null) {
     const response = await fetch(
-      `https://physio-app-backend-wng0.onrender.com/api/v1/book-now/appointments/all?serviceId=${serviceId}`,
+      `http://localhost:3000/api/v1/book-now/appointments/all?serviceId=${serviceId}`,
     );
     const data = await response.json();
     // console.log(data);
@@ -19,7 +19,7 @@ async function fetchAvailableSlots(
     return data;
   } else {
     const response = await fetch(
-      `https://physio-app-backend-wng0.onrender.com/api/v1/book-now/appointments/${therapistId}?serviceId=${serviceId}`,
+      `http://localhost:3000/api/v1/book-now/appointments/${therapistId}?serviceId=${serviceId}`,
     );
     const data = await response.json();
     // console.log(data);

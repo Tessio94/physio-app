@@ -22,7 +22,6 @@ const AdminLayout = () => {
     data: admin,
     error,
     isPending,
-    refetch,
   } = useQuery({
     queryKey: ["admin-auth", location.pathname],
     queryFn: fetchAdminInfo,

@@ -3,18 +3,45 @@ import { DataTable } from "@/components/ui/shadcn/payments/data-table";
 import { columns } from "@/components/ui/shadcn/payments/columns";
 import AdminDodaj from "@/components/AdminDodaj";
 
+type Admin = {
+  id: number;
+  name: string;
+  lastname: string;
+  email: string;
+  phone: string;
+  is_superadmin: boolean;
+  date: string;
+};
+
+type Service = {
+  id: number;
+  name: string;
+  icon: string;
+};
+
+type TherapistService = {
+  therapist_id: number;
+  service_id: number;
+};
+
+type PostavkeResponse = {
+  formattedAdminList: Admin[];
+  servicesList: Service[];
+  therapistsServices: TherapistService[];
+};
+
 const AdminPostavke = () => {
   // initial fetch of therapists
-  const { isLoading, error, data } = useQuery({
+  const { isLoading, data } = useQuery<PostavkeResponse>({
     queryKey: ["usersData"],
     queryFn: () =>
-      fetch(
-        "https://physio-app-backend-wng0.onrender.com/api/v1/admin/postavke",
-      ).then((res) => res.json()),
+      fetch("http://localhost:3000/api/v1/admin/postavke").then((res) =>
+        res.json(),
+      ),
   });
 
-  if (isLoading) return <h1>is loading...</h1>;
-  console.log(data);
+  if (isLoading || !data) return <h1>is loading...</h1>;
+  // console.log(data);
 
   const therapistIds = data.formattedAdminList.map((admin) => {
     return { id: admin.id };
@@ -23,7 +50,9 @@ const AdminPostavke = () => {
     return { id: service.id };
   });
 
-  const therapistsServicesMap = data.therapistsServices.reduce((acc, ts) => {
+  const therapistsServicesMap = data.therapistsServices.reduce<
+    Record<number, number[]>
+  >((acc, ts) => {
     if (!acc[ts.therapist_id]) acc[ts.therapist_id] = [];
     acc[ts.therapist_id].push(ts.service_id);
     return acc;
@@ -33,7 +62,8 @@ const AdminPostavke = () => {
 
   const therapistsServicesNotProvidedMap = Object.keys(
     therapistsServicesMap,
-  ).reduce((acc, therapistId) => {
+  ).reduce<Record<number, number[]>>((acc, key) => {
+    const therapistId = Number(key);
     const providedServices = therapistsServicesMap[therapistId];
 
     const notProvidedServices = allServices.filter(
@@ -43,9 +73,6 @@ const AdminPostavke = () => {
     acc[therapistId] = notProvidedServices;
     return acc;
   }, {});
-
-  // console.log(therapistsServicesNotProvidedMap);
-  // console.log(therapistIds, serviceIds, therapistsServicesMap);
 
   return (
     <>
@@ -59,16 +86,16 @@ const AdminPostavke = () => {
             <div className="flex gap-14">
               <div>
                 <div className="mb-2 font-semibold">Lista admina:</div>
-                <DataTable
-                  columns={columns(true, false)}
+                <DataTable<Admin, unknown>
+                  columns={columns<Admin>(true, false)}
                   data={data.formattedAdminList ?? []}
                   searchShow={false}
                 />
               </div>
               <div>
                 <div className="mb-2 font-semibold">Lista usluga:</div>
-                <DataTable
-                  columns={columns(false, true)}
+                <DataTable<Service, unknown>
+                  columns={columns<Service>(false, true)}
                   data={data.servicesList ?? []}
                   searchShow={false}
                 />

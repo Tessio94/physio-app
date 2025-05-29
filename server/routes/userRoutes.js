@@ -54,11 +54,11 @@ router.route("/admin/postavke/add-therapist").post(addTherapist);
 
 router.route("/admin/postavke/add-service").post(addService);
 
-router.route("/admin/postavke/add-unavailable-slots").post(removeBookingSlots);
-
 router
 	.route("/admin/postavke/add-service-for-therapist")
 	.post(addServiceForTherapist);
+
+router.route("/admin/postavke/add-unavailable-slots").post(removeBookingSlots);
 
 router.route("/admin/postavke/delete-therapist").delete(removeTherapist);
 

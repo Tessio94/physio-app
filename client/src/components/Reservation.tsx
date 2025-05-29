@@ -24,7 +24,7 @@ interface ReservationProps {
 
 async function makeReservation(data: ReservationPayload) {
   const response = await fetch(
-    "https://physio-app-backend-wng0.onrender.com/api/v1/book-now/reservations",
+    "http://localhost:3000/api/v1/book-now/reservations",
     {
       method: "POST",
       headers: {

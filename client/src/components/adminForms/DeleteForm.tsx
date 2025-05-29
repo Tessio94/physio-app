@@ -15,13 +15,12 @@ type DeleteFormProps = {
 
 const endpointsMap = {
   ukloniTerapeuta:
-    "https://physio-app-backend-wng0.onrender.com/api/v1/admin/postavke/delete-therapist",
-  ukloniUslugu:
-    "https://physio-app-backend-wng0.onrender.com/api/v1/admin/postavke/delete-service",
+    "http://localhost:3000/api/v1/admin/postavke/delete-therapist",
+  ukloniUslugu: "http://localhost:3000/api/v1/admin/postavke/delete-service",
   ukloniUsluguZaTerapeuta:
-    "https://physio-app-backend-wng0.onrender.com/api/v1/admin/postavke/delete-service-for-therapist",
+    "http://localhost:3000/api/v1/admin/postavke/delete-service-for-therapist",
   nedostupnost:
-    "https://physio-app-backend-wng0.onrender.com/api/v1/admin/postavke/add-unavailable-slots",
+    "http://localhost:3000/api/v1/admin/postavke/add-unavailable-slots",
 };
 
 const invalidationMap = {

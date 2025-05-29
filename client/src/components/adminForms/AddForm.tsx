@@ -1,10 +1,41 @@
 import { Button } from "@/components/ui/shadcn/Button";
 import { cn } from "@/lib/utils";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  UseMutationResult,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useState } from "react";
 
+type TherapistFormData = {
+  therapistName: string;
+  lastname: string;
+  email: string;
+  phone: string;
+  superadmin: boolean;
+  password: string;
+  therapistImageUrl: string;
+};
+
+type ServiceFormData = {
+  serviceName: string;
+  serviceImageUrl: string;
+};
+
+type TherapistServiceFormData = {
+  therapist_id: number;
+  service_id: number;
+};
+
+type FormDataType =
+  | TherapistFormData
+  | ServiceFormData
+  | TherapistServiceFormData;
+
+type VariantType = "terapeut" | "usluge" | "terapeutUsluge";
+
 type AddFormProps = {
-  variant: string;
+  variant: VariantType;
   dropdownData?: {
     therapists?: { id: number }[];
     services?: { id: number }[];
@@ -52,22 +83,23 @@ const fieldsAddService = [
 //   { label: "Service ID", name: "service_id", type: "number", required: true },
 // ];
 
-const variantFieldsMap = {
+const variantFieldsMap: Record<
+  VariantType,
+  { label: string; name: string; type: string; required: boolean }[]
+> = {
   terapeut: fieldsAddTherapist,
   usluge: fieldsAddService,
-  // terapeutUsluge: fieldsAddServiceForTherapist,
+  terapeutUsluge: [],
 };
 
-const endpointsMap = {
-  terapeut:
-    "https://physio-app-backend-wng0.onrender.com/api/v1/admin/postavke/add-therapist",
-  usluge:
-    "https://physio-app-backend-wng0.onrender.com/api/v1/admin/postavke/add-service",
+const endpointsMap: Record<VariantType, string> = {
+  terapeut: "http://localhost:3000/api/v1/admin/postavke/add-therapist",
+  usluge: "http://localhost:3000/api/v1/admin/postavke/add-service",
   terapeutUsluge:
-    "https://physio-app-backend-wng0.onrender.com/api/v1/admin/postavke/add-service-for-therapist",
+    "http://localhost:3000/api/v1/admin/postavke/add-service-for-therapist",
 };
 
-const invalidationMap = {
+const invalidationMap: Record<VariantType, string[]> = {
   terapeut: ["usersData"],
   usluge: ["usersData"],
   terapeutUsluge: ["therapistServicesData"],
@@ -75,12 +107,16 @@ const invalidationMap = {
 
 const AddForm = ({ variant, dropdownData = {} }: AddFormProps) => {
   const fields = variantFieldsMap[variant];
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<Partial<FormDataType>>({});
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation({
-    mutationFn: (newData: any) =>
+  const mutation: UseMutationResult = useMutation<
+    unknown,
+    Error,
+    Partial<FormDataType>
+  >({
+    mutationFn: (newData) =>
       fetch(endpointsMap[variant], {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -96,18 +132,34 @@ const AddForm = ({ variant, dropdownData = {} }: AddFormProps) => {
     e.preventDefault();
 
     // add sonner later
-    const rawPhone = formData.phone?.replace(/\D/g, "");
-    if (variant === "terapeut" && rawPhone?.length !== 10) {
-      alert("Broj mobitela mora imati točno 10 znamenki.");
-      return;
+    if (
+      variant === "terapeut" &&
+      typeof (formData as TherapistFormData).phone === "string"
+    ) {
+      const rawPhone = (formData as TherapistFormData).phone?.replace(
+        /\D/g,
+        "",
+      );
+      if (variant === "terapeut" && rawPhone?.length !== 10) {
+        alert("Broj mobitela mora imati točno 10 znamenki.");
+        return;
+      }
     }
 
     mutation.mutate(formData);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, type, value, checked } = e.target;
-    let newValue: any = value;
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, type, value, checked } = e.target as HTMLInputElement;
+    let newValue: string | boolean | number = value;
+
+    if (type === "checkbox") {
+      newValue = checked;
+    } else if (type === "number") {
+      newValue = Number(value);
+    }
 
     if (name === "phone") {
       // Remove all non-digit characters
@@ -134,7 +186,8 @@ const AddForm = ({ variant, dropdownData = {} }: AddFormProps) => {
 
   const renderFields = () => {
     if (variant === "terapeutUsluge") {
-      const selectedTherapist = formData.therapist_id;
+      const selectedTherapist = (formData as TherapistServiceFormData)
+        .therapist_id;
       const servicesForTherapist =
         dropdownData.therapistServices?.[selectedTherapist] || [];
 
@@ -145,7 +198,7 @@ const AddForm = ({ variant, dropdownData = {} }: AddFormProps) => {
             <select
               name="therapist_id"
               className="cursor-pointer rounded-lg border px-3 py-2"
-              value={formData.therapist_id || ""}
+              value={(formData as TherapistServiceFormData).therapist_id || ""}
               onChange={handleChange}
               required
             >
@@ -172,7 +225,7 @@ const AddForm = ({ variant, dropdownData = {} }: AddFormProps) => {
                 "rounded-lg border px-3 py-2",
                 selectedTherapist && "cursor-pointer",
               )}
-              value={formData.service_id || ""}
+              value={(formData as TherapistServiceFormData).service_id || ""}
               required
               disabled={!selectedTherapist}
             >
@@ -201,11 +254,13 @@ const AddForm = ({ variant, dropdownData = {} }: AddFormProps) => {
             name={field.name}
             type={field.type}
             value={
-              field.type !== "checkbox" ? formData[field.name] || "" : undefined
+              field.type !== "checkbox"
+                ? ((formData as any)[field.name] ?? "")
+                : undefined
             }
             checked={
               field.type === "checkbox"
-                ? formData[field.name] || false
+                ? Boolean((formData as any)[field.name])
                 : undefined
             }
             onChange={handleChange}

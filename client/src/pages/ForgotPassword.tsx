@@ -13,14 +13,11 @@ const forgotSchema = z.object({
 type ForgotForm = z.infer<typeof forgotSchema>;
 
 const sendResetEmail = async ({ email }: ForgotForm) => {
-  const res = await fetch(
-    "https://physio-app-backend-wng0.onrender.com/auth/forgot-password",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    },
-  );
+  const res = await fetch("http://localhost:3000/auth/forgot-password", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
   if (!res.ok) throw new Error("Neuspješno slanje emaila");
   return res.json();
 };
