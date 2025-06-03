@@ -31,14 +31,14 @@ type DeletePayload =
   | { therapist_id: number; service_id: number } // ukloniUsluguZaTerapeuta
   | AvailabilityFormData;
 
+// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 const endpointsMap: Record<VariantType, string> = {
-  ukloniTerapeuta:
-    "http://localhost:3000/api/v1/admin/postavke/delete-therapist",
-  ukloniUslugu: "http://localhost:3000/api/v1/admin/postavke/delete-service",
-  ukloniUsluguZaTerapeuta:
-    "http://localhost:3000/api/v1/admin/postavke/delete-service-for-therapist",
-  nedostupnost:
-    "http://localhost:3000/api/v1/admin/postavke/add-unavailable-slots",
+  ukloniTerapeuta: `${prodUrl}/api/v1/admin/postavke/delete-therapist`,
+  ukloniUslugu: `${prodUrl}/api/v1/admin/postavke/delete-service`,
+  ukloniUsluguZaTerapeuta: `${prodUrl}/api/v1/admin/postavke/delete-service-for-therapist`,
+  nedostupnost: `${prodUrl}/api/v1/admin/postavke/add-unavailable-slots`,
 };
 
 const invalidationMap: Partial<Record<VariantType, string[]>> = {

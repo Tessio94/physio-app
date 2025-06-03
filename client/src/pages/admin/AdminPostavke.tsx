@@ -30,14 +30,15 @@ type PostavkeResponse = {
   therapistsServices: TherapistService[];
 };
 
+// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 const AdminPostavke = () => {
   // initial fetch of therapists
   const { isLoading, data } = useQuery<PostavkeResponse>({
     queryKey: ["usersData"],
     queryFn: () =>
-      fetch("http://localhost:3000/api/v1/admin/postavke").then((res) =>
-        res.json(),
-      ),
+      fetch(`${prodUrl}/api/v1/admin/postavke`).then((res) => res.json()),
   });
 
   if (isLoading || !data) return <h1>is loading...</h1>;

@@ -1,6 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import AppointmentDays from "./AppointmentDays";
 
+// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 // Fetch the available slots for the selected service
 async function fetchAvailableSlots(
   serviceId: number,
@@ -8,7 +11,7 @@ async function fetchAvailableSlots(
 ) {
   if (therapistId === null) {
     const response = await fetch(
-      `http://localhost:3000/api/v1/book-now/appointments/all?serviceId=${serviceId}`,
+      `${prodUrl}/api/v1/book-now/appointments/all?serviceId=${serviceId}`,
     );
     const data = await response.json();
     // console.log(data);
@@ -19,7 +22,7 @@ async function fetchAvailableSlots(
     return data;
   } else {
     const response = await fetch(
-      `http://localhost:3000/api/v1/book-now/appointments/${therapistId}?serviceId=${serviceId}`,
+      `${prodUrl}/api/v1/book-now/appointments/${therapistId}?serviceId=${serviceId}`,
     );
     const data = await response.json();
     // console.log(data);

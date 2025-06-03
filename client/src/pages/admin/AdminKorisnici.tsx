@@ -2,15 +2,16 @@ import { columns } from "@/components/ui/shadcn/payments/columns";
 import { DataTable } from "@/components/ui/shadcn/payments/data-table";
 import { useQuery } from "@tanstack/react-query";
 
+// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 export default function AdminKorisnici() {
   // const [data, setData] = useState([]);
 
   const { data } = useQuery({
     queryKey: ["usersData"],
     queryFn: () =>
-      fetch("http://localhost:3000/api/v1/admin/korisnici").then((res) =>
-        res.json(),
-      ),
+      fetch(`${prodUrl}/api/v1/admin/korisnici`).then((res) => res.json()),
   });
 
   console.log("data :", data);

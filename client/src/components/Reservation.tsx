@@ -22,18 +22,18 @@ interface ReservationProps {
   serviceId: number;
 }
 
+// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 async function makeReservation(data: ReservationPayload) {
-  const response = await fetch(
-    "http://localhost:3000/api/v1/book-now/reservations",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-      credentials: "include",
+  const response = await fetch(`${prodUrl}/api/v1/book-now/reservations`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify(data),
+    credentials: "include",
+  });
 
   if (!response.ok) {
     throw new Error("Failed to make reservation");

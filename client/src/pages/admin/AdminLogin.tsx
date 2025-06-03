@@ -7,6 +7,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 const loginSchema = z.object({
   email: z.string().email({ message: "Neispravan mail" }),
   password: z
@@ -17,7 +20,7 @@ const loginSchema = z.object({
 const loginMutationFn = async (data: z.infer<typeof loginSchema>) => {
   console.log(data);
   const { email, password } = data;
-  const res = await fetch("http://localhost:3000/auth/admin/login", {
+  const res = await fetch(`${prodUrl}/auth/admin/login`, {
     method: "POST",
     credentials: "include",
     headers: {

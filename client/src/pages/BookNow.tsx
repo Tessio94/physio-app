@@ -19,6 +19,9 @@ import { cn } from "@/lib/utils";
 //   return data.payload;
 // };
 
+// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 interface Service {
   id: string;
   name: string;
@@ -72,7 +75,7 @@ function BookNow() {
   const { isPending, data } = useQuery({
     queryKey: ["serviceData"],
     queryFn: () =>
-      fetch("http://localhost:3000/api/v1/book-now").then((res) => res.json()),
+      fetch(`${prodUrl}/api/v1/book-now`).then((res) => res.json()),
   });
 
   const services = data?.services ?? [];

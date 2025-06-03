@@ -12,6 +12,9 @@ import { Bars3Icon, XMarkIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+// const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 const navigation = [
   { name: "O nama", href: "#about", current: false },
   { name: "Naš tim", href: "#team", current: false },
@@ -39,7 +42,7 @@ function NavMenu({
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch("http://localhost:3000/auth/logout", {
+      const res = await fetch(`${devUrl}/auth/logout`, {
         method: "POST",
         credentials: "include", // send cookie
       });

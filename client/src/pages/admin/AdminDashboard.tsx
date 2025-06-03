@@ -25,6 +25,9 @@ type TherapistUsageItem = {
   session_count: number | string;
 };
 
+// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 const COLORS = [
   "#94A3B8",
   "#64748B",
@@ -62,14 +65,12 @@ const renderCustomizedLabel = ({
 };
 
 const fetchDashboardData = async () => {
-  const res = await fetch("http://localhost:3000/api/v1/admin/dashboard/data");
+  const res = await fetch(`${prodUrl}/api/v1/admin/dashboard/data`);
   return res.json();
 };
 
 const fetchAdminDashboardData = async (adminId: number) => {
-  const res = await fetch(
-    `http://localhost:3000/api/v1/admin/dashboard/data/${adminId}`,
-  );
+  const res = await fetch(`${prodUrl}/api/v1/admin/dashboard/data/${adminId}`);
   return res.json();
 };
 

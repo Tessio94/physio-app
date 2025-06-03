@@ -10,6 +10,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 const loginSchema = z.object({
   email: z.string().email({ message: "Neispravan mail" }),
   password: z
@@ -44,7 +47,7 @@ const registerSchema = loginSchema
 const loginMutationFn = async (data: z.infer<typeof loginSchema>) => {
   console.log(data);
   const { email, password } = data;
-  const res = await fetch("http://localhost:3000/auth/login", {
+  const res = await fetch(`${prodUrl}/auth/login`, {
     method: "POST",
     credentials: "include",
     headers: {
@@ -68,7 +71,7 @@ export const registerMutationFn = async (
   data: z.infer<typeof registerSchema>,
 ) => {
   const { name, lastname, email, phone, password } = data;
-  const res = await fetch("http://localhost:3000/auth/register", {
+  const res = await fetch(`${prodUrl}/auth/register`, {
     method: "POST",
     credentials: "include",
     headers: {
@@ -100,7 +103,7 @@ function Login() {
     register: formRegister,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<z.infer<typeof registerSchema> | z.infer<typeof loginSchema>>({
     resolver: zodResolver(schema),
     mode: "onChange",
   });
@@ -125,8 +128,13 @@ function Login() {
     navigate(register ? "/prijava" : "/registracija");
   };
 
-  const onSubmit = (data: any) => {
-    register ? registerMutation.mutate(data) : loginMutation.mutate(data);
+  const onSubmit = (
+    data: z.infer<typeof loginSchema> | z.infer<typeof registerSchema>,
+  ) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    register
+      ? registerMutation.mutate(data as z.infer<typeof registerSchema>)
+      : loginMutation.mutate(data as z.infer<typeof loginSchema>);
   };
 
   useEffect(() => {
@@ -134,11 +142,11 @@ function Login() {
   }, [location.pathname]);
 
   const handleLoginGoogle = () => {
-    window.location.href = "http://localhost:3000/auth/login/google";
+    window.location.href = `${prodUrl}/auth/login/google`;
   };
 
   const handleLoginFacebook = () => {
-    window.location.href = "http://localhost:3000/auth/login/facebook";
+    window.location.href = `${prodUrl}/auth/login/facebook`;
   };
 
   return (

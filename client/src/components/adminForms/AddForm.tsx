@@ -39,6 +39,9 @@ type AddFormProps = {
   };
 };
 
+// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 const fieldsAddTherapist = [
   { label: "Ime", name: "therapistName", type: "text", required: true },
   { label: "Prezime", name: "lastname", type: "text", required: true },
@@ -89,10 +92,9 @@ const variantFieldsMap: Record<
 };
 
 const endpointsMap: Record<VariantType, string> = {
-  terapeut: "http://localhost:3000/api/v1/admin/postavke/add-therapist",
-  usluge: "http://localhost:3000/api/v1/admin/postavke/add-service",
-  terapeutUsluge:
-    "http://localhost:3000/api/v1/admin/postavke/add-service-for-therapist",
+  terapeut: `${prodUrl}/api/v1/admin/postavke/add-therapist`,
+  usluge: `${prodUrl}/api/v1/admin/postavke/add-service`,
+  terapeutUsluge: `${prodUrl}/api/v1/admin/postavke/add-service-for-therapist`,
 };
 
 const invalidationMap: Record<VariantType, string[]> = {

@@ -11,6 +11,9 @@ type DateInputProps = {
   minDate?: Date;
 };
 
+// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 // const bookedTimes = [
 //   new Date("2025-04-26T10:00:00"),
 //   new Date("2025-04-26T11:30:00"),
@@ -19,7 +22,7 @@ type DateInputProps = {
 
 async function fetchAdminSchedule(therapistId: number) {
   const response = await fetch(
-    `http://localhost:3000/api/v1/admin/schedule/${therapistId}`,
+    `${prodUrl}/api/v1/admin/schedule/${therapistId}`,
   );
   const data = await response.json();
   // console.log(data);

@@ -6,6 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/shadcn/Button";
 import { useMutation } from "@tanstack/react-query";
 
+// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 const forgotSchema = z.object({
   email: z.string().email("Unesite ispravnu email adresu"),
 });
@@ -13,7 +16,7 @@ const forgotSchema = z.object({
 type ForgotForm = z.infer<typeof forgotSchema>;
 
 const sendResetEmail = async ({ email }: ForgotForm) => {
-  const res = await fetch("http://localhost:3000/auth/forgot-password", {
+  const res = await fetch(`${prodUrl}/auth/forgot-password`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email }),

@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/shadcn/Button";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
 
+// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 const profileSchema = z
   .object({
     name: z.string().min(1, "Ime je obavezno"),
@@ -22,7 +25,7 @@ const profileSchema = z
 type ProfileForm = z.infer<typeof profileSchema>;
 
 const updateProfile = async (data: ProfileForm) => {
-  const res = await fetch("http://localhost:3000/users/me", {
+  const res = await fetch(`${prodUrl}/users/me`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
