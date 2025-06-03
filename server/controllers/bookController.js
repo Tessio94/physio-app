@@ -10,6 +10,7 @@ const { generateAvailabilityMap, generateDetails } = require("../utils/utils");
 // Concurrency: The two queries are independent, so you can execute them concurrently to improve performance using Promise.all.
 const getAllServicesAndTherapists = async (req, res) => {
 	try {
+		console.log("req: ", req);
 		const [resultServices, resultTherapists] = await Promise.all([
 			getServices(),
 			getTherapists(),
