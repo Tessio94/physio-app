@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/shadcn/Button";
+import { Button } from "@/components/ui/shadcn/button";
 import { cn } from "@/lib/utils";
 import DateInput from "../DateInput";
 

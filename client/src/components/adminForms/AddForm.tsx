@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/shadcn/Button";
+import { Button } from "@/components/ui/shadcn/button";
 import { cn } from "@/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";

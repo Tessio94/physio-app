@@ -23,7 +23,7 @@ const fetchCurrentUser = async () => {
 };
 
 function AppLayout() {
-  const { isLoading, isError, error, data } = useQuery({
+  const { isError, error, data } = useQuery({
     queryKey: ["fetchCurrentUser"],
     queryFn: fetchCurrentUser,
     retry: false,

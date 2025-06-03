@@ -53,7 +53,7 @@ function Gallery() {
     setSlideOrder((prev) => {
       const newOrder = [...prev];
       const firstSlide = newOrder.shift();
-      newOrder.push(firstSlide);
+      if (firstSlide) newOrder.push(firstSlide);
       return newOrder;
     });
   }
@@ -62,7 +62,7 @@ function Gallery() {
     setSlideOrder((prev) => {
       const newOrder = [...prev];
       const lastSlide = newOrder.pop();
-      newOrder.unshift(lastSlide);
+      if (lastSlide) newOrder.unshift(lastSlide);
       return newOrder;
     });
   }

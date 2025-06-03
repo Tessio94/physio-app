@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/shadcn/Button";
+import { Button } from "@/components/ui/shadcn/button";
 import Help from "@/components/Help";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";

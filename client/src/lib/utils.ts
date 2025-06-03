@@ -5,14 +5,14 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const formatDate = (date) => {
+export const formatDate = (date: Date) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
 
-export const formatSlotDate = (date) => {
+export const formatSlotDate = (date: Date) => {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   const dayOfWeek = date.getDay() + 1;
@@ -40,6 +40,9 @@ export const formatSlotDate = (date) => {
       break;
     case 7:
       dayName = "Sub";
+      break;
+    default:
+      dayName = "Nepoznat";
   }
 
   return {
@@ -48,7 +51,7 @@ export const formatSlotDate = (date) => {
   };
 };
 
-export const formatTime12Hour = (time24) => {
+export const formatTime12Hour = (time24: string) => {
   const [hour, minute] = time24.split(":").map(Number);
   const period = hour >= 12 ? "PM" : "AM";
   // const hour12 = hour % 12 === 0 ? 12 : hour % 12;
@@ -69,7 +72,7 @@ export const formatTime12Hour = (time24) => {
 //   return `${dateString} ${timeString}`;
 // };
 
-export const formatTimeRange = (date) => {
+export const formatTimeRange = (date: Date) => {
   console.log(date);
   const [month, day, year] = date.toLocaleDateString("en-US").split("/");
   console.log(month, day, year);
@@ -83,7 +86,7 @@ export const formatTimeRange = (date) => {
   return `${dateString} ${timeString}`;
 };
 
-export const formatInitials = (name, lastName) => {
+export const formatInitials = (name: string, lastName: string) => {
   const initials = name.charAt(0) + lastName.charAt(0);
   return initials;
 };

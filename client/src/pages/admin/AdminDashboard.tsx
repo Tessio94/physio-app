@@ -209,7 +209,7 @@ const AdminDashboard = () => {
               label={renderCustomizedLabel}
               labelLine={false}
             >
-              {transformedServiceUsage.map((_, index: number) => (
+              {transformedServiceUsage.map((_: unknown, index: number) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}

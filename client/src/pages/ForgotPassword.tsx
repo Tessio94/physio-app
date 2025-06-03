@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/shadcn/Button";
+import { Button } from "@/components/ui/shadcn/button";
 import { useMutation } from "@tanstack/react-query";
 
 // const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
