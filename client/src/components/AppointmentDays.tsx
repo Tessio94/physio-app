@@ -75,7 +75,7 @@ const AppointmentDays = ({ appointments, details, serviceId }: Props) => {
                           key={i}
                         >
                           <img
-                            src={`src${
+                            src={`${
                               details.therapists.find(
                                 (therapist) => therapist.therapistId === iconId,
                               )?.therapistIcon ?? ""

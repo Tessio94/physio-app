@@ -28,7 +28,7 @@ const DropdownOption = ({
           }}
         >
           <div className="flex h-fit w-fit items-center justify-center overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45 transition-all group-hover:bg-slate-200">
-            <img src={`/src${icon}`} width={30} height={30} />
+            <img src={`${icon}`} width={30} height={30} />
           </div>
           {name}
         </li>
@@ -44,7 +44,7 @@ const DropdownOption = ({
         }}
       >
         <div className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45 transition-all group-hover:bg-slate-200">
-          <img src={`/src${icon}`} width={30} height={30} />
+          <img src={`${icon}`} width={30} height={30} />
         </div>
         {name}
       </li>
@@ -60,7 +60,7 @@ const DropdownOption = ({
       }}
     >
       <div className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45 transition-all group-hover:bg-slate-200">
-        <img src={`/src${icon}`} width={30} height={30} />
+        <img src={`${icon}`} width={30} height={30} />
       </div>
       {name}
     </li>

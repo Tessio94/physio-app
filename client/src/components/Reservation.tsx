@@ -132,7 +132,7 @@ const Reservation = ({
               <div className="flex text-xl">
                 <div className="flex min-w-[55%] items-center gap-2">
                   <img
-                    src={`src${
+                    src={`${
                       details.therapists.find(
                         (therapist) =>
                           therapist.therapistId ===
@@ -165,7 +165,7 @@ const Reservation = ({
                 </div>
                 <div className="flex items-center gap-2">
                   <img
-                    src={`src${details.services[0].serviceIcon}`}
+                    src={`${details.services[0].serviceIcon}`}
                     width={24}
                     height={24}
                     className="rounded-full"

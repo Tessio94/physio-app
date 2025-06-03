@@ -46,7 +46,7 @@ const Popup = ({
                   }}
                 >
                   <img
-                    src={`src${
+                    src={`${
                       detailsTherapists.find(
                         (therapist) => therapist.therapistId === id,
                       )?.therapistIcon ?? ""
