@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import DateInput from "../DateInput";
 
 type DeleteFormProps = {
-  variant: string;
+  variant: VariantType;
   dropdownData?: {
     therapists?: { id: number }[];
     services?: { id: number }[];
@@ -13,7 +13,25 @@ type DeleteFormProps = {
   };
 };
 
-const endpointsMap = {
+type VariantType =
+  | "ukloniTerapeuta"
+  | "ukloniUslugu"
+  | "ukloniUsluguZaTerapeuta"
+  | "nedostupnost";
+
+type AvailabilityFormData = {
+  therapist_id: number | "";
+  unavailable_from: Date | null;
+  unavailable_to: Date | null;
+};
+
+type DeletePayload =
+  | { therapist_id: number } // ukloniTerapeuta
+  | { service_id: number } // ukloniUslugu
+  | { therapist_id: number; service_id: number } // ukloniUsluguZaTerapeuta
+  | AvailabilityFormData;
+
+const endpointsMap: Record<VariantType, string> = {
   ukloniTerapeuta:
     "http://localhost:3000/api/v1/admin/postavke/delete-therapist",
   ukloniUslugu: "http://localhost:3000/api/v1/admin/postavke/delete-service",
@@ -23,19 +41,26 @@ const endpointsMap = {
     "http://localhost:3000/api/v1/admin/postavke/add-unavailable-slots",
 };
 
-const invalidationMap = {
+const invalidationMap: Partial<Record<VariantType, string[]>> = {
   ukloniTerapeuta: ["usersData"],
   ukloniUslugu: ["usersData"],
   ukloniUsluguZaTerapeuta: ["therapistServicesData"],
 };
 
 const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
-  const [formData, setFormData] = useState<any>({});
-  const [formAvailabilityData, setFormAvailabilityData] = useState<any>({});
+  const [formData, setFormData] = useState<
+    Partial<{ therapist_id: number; service_id: number }>
+  >({});
+  const [formAvailabilityData, setFormAvailabilityData] =
+    useState<AvailabilityFormData>({
+      therapist_id: "",
+      unavailable_from: null,
+      unavailable_to: null,
+    });
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (data: any) =>
+    mutationFn: (data: DeletePayload) =>
       fetch(endpointsMap[variant], {
         method: variant === "nedostupnost" ? "POST" : "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -43,14 +68,16 @@ const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
       }).then((res) => res.json()),
     onSuccess: () => {
       if (variant === "nedostupnost") return;
-      queryClient.invalidateQueries({ queryKey: invalidationMap[variant] });
+      queryClient.invalidateQueries({
+        queryKey: invalidationMap[variant],
+      });
       setFormData({});
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutation.mutate(formData);
+    mutation.mutate(formData as DeletePayload);
   };
 
   const handleSubmitAvail = (e: React.FormEvent) => {
@@ -61,7 +88,7 @@ const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    setFormData((prev: any) => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -70,7 +97,7 @@ const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
   const handleChangeAvail = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    setFormAvailabilityData((prev: any) => ({
+    setFormAvailabilityData((prev: AvailabilityFormData) => ({
       ...prev,
       [name]: value,
     }));
@@ -88,7 +115,7 @@ const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
       const unavailableTo = new Date(now);
       unavailableTo.setMinutes(now.getMinutes() + 30); // default 1 hour later
 
-      setFormAvailabilityData((prev: any) => ({
+      setFormAvailabilityData((prev: AvailabilityFormData) => ({
         ...prev,
         unavailable_from: unavailableFrom,
         unavailable_to: unavailableTo,
@@ -154,9 +181,14 @@ const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
     }
 
     if (variant === "ukloniUsluguZaTerapeuta") {
-      const selectedTherapist = formData.therapist_id;
+      const selectedTherapist =
+        typeof formData.therapist_id === "number"
+          ? formData.therapist_id
+          : undefined;
       const servicesForTherapist =
-        dropdownData.therapistServices?.[selectedTherapist] || [];
+        selectedTherapist !== undefined
+          ? dropdownData.therapistServices?.[selectedTherapist] || []
+          : [];
 
       return (
         <>
@@ -246,7 +278,7 @@ const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
               type="from"
               value={formAvailabilityData.unavailable_from || null}
               onChange={(date) =>
-                setFormAvailabilityData((prev: any) => ({
+                setFormAvailabilityData((prev: AvailabilityFormData) => ({
                   ...prev,
                   unavailable_from: date,
                 }))
@@ -259,7 +291,7 @@ const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
               type="to"
               value={formAvailabilityData.unavailable_to || null}
               onChange={(date) =>
-                setFormAvailabilityData((prev: any) => ({
+                setFormAvailabilityData((prev: AvailabilityFormData) => ({
                   ...prev,
                   unavailable_to: date,
                 }))
@@ -281,7 +313,7 @@ const DeleteForm = ({ variant, dropdownData = {} }: DeleteFormProps) => {
     >
       {renderFields()}
       <Button className="h-[38px] self-end" type="submit">
-        {mutation.isLoading ? "Brisanje..." : "Ukloni"}
+        {mutation.isPending ? "Brisanje..." : "Ukloni"}
       </Button>
     </form>
   );

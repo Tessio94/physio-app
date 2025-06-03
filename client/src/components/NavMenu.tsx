@@ -8,12 +8,7 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import {
-  Bars3Icon,
-  BellIcon,
-  XMarkIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -24,7 +19,7 @@ const navigation = [
   { name: "Galerije", href: "#gallery", current: false },
 ];
 
-function classNames(...classes) {
+function classNames(...classes: (string | undefined | null | false)[]) {
   return classes.filter(Boolean).join(" ");
 }
 
@@ -162,12 +157,12 @@ function NavMenu({
                     </MenuItem>
                   ) : (
                     <MenuItem>
-                      <Link
+                      <button
                         onClick={() => logoutMutation.mutate()}
                         className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                       >
                         Odjavi se
-                      </Link>
+                      </button>
                     </MenuItem>
                   )}
                 </MenuItems>

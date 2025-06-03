@@ -7,7 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 type DateInputProps = {
   value: Date | null;
   onChange: (date: Date | null) => void;
-  type: "form" | "to";
+  type: "from" | "to";
   minDate?: Date;
 };
 
@@ -17,7 +17,7 @@ type DateInputProps = {
 //   new Date("2025-04-26T15:00:00"),
 // ];
 
-async function fetchAdminSchedule(therapistId) {
+async function fetchAdminSchedule(therapistId: number) {
   const response = await fetch(
     `http://localhost:3000/api/v1/admin/schedule/${therapistId}`,
   );
@@ -31,9 +31,9 @@ async function fetchAdminSchedule(therapistId) {
 }
 
 const DateInput = ({ value, onChange, type, minDate }: DateInputProps) => {
-  const [therapistId, setTherapistId] = useState(1);
+  const [therapistId] = useState(1);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data } = useQuery({
     queryKey: ["excludeTimes", therapistId],
     queryFn: () => fetchAdminSchedule(therapistId),
     enabled: !!therapistId,
@@ -56,7 +56,7 @@ const DateInput = ({ value, onChange, type, minDate }: DateInputProps) => {
     });
   }, [data, value]);
 
-  let handleColor = (time) => {
+  const handleColor = (time: Date) => {
     return time.getHours() > 12 ? "text-success" : "text-error";
   };
 

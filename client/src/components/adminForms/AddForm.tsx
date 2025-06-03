@@ -1,10 +1,6 @@
 import { Button } from "@/components/ui/shadcn/Button";
 import { cn } from "@/lib/utils";
-import {
-  useMutation,
-  UseMutationResult,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 
 type TherapistFormData = {
@@ -107,16 +103,14 @@ const invalidationMap: Record<VariantType, string[]> = {
 
 const AddForm = ({ variant, dropdownData = {} }: AddFormProps) => {
   const fields = variantFieldsMap[variant];
-  const [formData, setFormData] = useState<Partial<FormDataType>>({});
+  const [formData, setFormData] = useState<
+    Record<string, string | number | boolean>
+  >({});
 
   const queryClient = useQueryClient();
 
-  const mutation: UseMutationResult = useMutation<
-    unknown,
-    Error,
-    Partial<FormDataType>
-  >({
-    mutationFn: (newData) =>
+  const mutation = useMutation({
+    mutationFn: (newData: Partial<FormDataType>) =>
       fetch(endpointsMap[variant], {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -255,12 +249,15 @@ const AddForm = ({ variant, dropdownData = {} }: AddFormProps) => {
             type={field.type}
             value={
               field.type !== "checkbox"
-                ? ((formData as any)[field.name] ?? "")
+                ? typeof formData[field.name] === "boolean"
+                  ? ""
+                  : ((formData[field.name] as string | number | undefined) ??
+                    "")
                 : undefined
             }
             checked={
               field.type === "checkbox"
-                ? Boolean((formData as any)[field.name])
+                ? Boolean(formData[field.name])
                 : undefined
             }
             onChange={handleChange}
@@ -281,7 +278,7 @@ const AddForm = ({ variant, dropdownData = {} }: AddFormProps) => {
     >
       {renderFields()}
       <Button className="h-[38px] self-end" type="submit">
-        {mutation.isLoading ? "Dodavanje..." : "Dodaj"}
+        {mutation.isPending ? "Dodavanje..." : "Dodaj"}
       </Button>
     </form>
   );

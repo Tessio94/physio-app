@@ -156,9 +156,9 @@ const getAdminSettings = async (req, res) => {
 		return { id, name, lastname, email, phone, is_superadmin, date };
 	});
 
-	console.log("admin list :", formattedAdminList);
-	console.log("servicesList :", servicesList.rows);
-	console.log("therapists services :", therapistsServices.rows);
+	// console.log("admin list :", formattedAdminList);
+	// console.log("servicesList :", servicesList.rows);
+	// console.log("therapists services :", therapistsServices.rows);
 
 	res.status(200).json({
 		formattedAdminList,

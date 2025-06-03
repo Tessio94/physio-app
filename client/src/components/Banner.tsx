@@ -1,4 +1,4 @@
-function Banner({ type }) {
+function Banner({ type }: { type: string }) {
   if (type === "tim") {
     return (
       <div className="z-20 border-2 border-slate-100 bg-white py-10 text-center text-2xl font-bold text-slate-800 shadow-xl shadow-slate-700">

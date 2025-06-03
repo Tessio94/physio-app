@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
 import { IoMdCloseCircle } from "react-icons/io";
 import { Link } from "react-router-dom";
 
