@@ -48,18 +48,20 @@ const slides = [
 ];
 
 function Gallery() {
-  const slideContainerRef = useRef();
+  const slideContainerRef = useRef<HTMLDivElement>(null);
 
   const handleNext = () => {
     const container = slideContainerRef.current;
+    if (!container) return;
     const firstChild = container.firstChild;
-    container.appendChild(firstChild); // Move first child to the end
+    if (firstChild) container.appendChild(firstChild); // Move first child to the end
   };
 
   const handlePrev = () => {
     const container = slideContainerRef.current;
+    if (!container) return;
     const lastChild = container.lastChild;
-    container.insertBefore(lastChild, container.firstChild); // Move last child to the start
+    if (lastChild) container.insertBefore(lastChild, container.firstChild); // Move last child to the start
   };
 
   return (

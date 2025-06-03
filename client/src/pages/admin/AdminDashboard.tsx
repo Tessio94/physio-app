@@ -236,7 +236,7 @@ const AdminDashboard = () => {
               label={renderCustomizedLabel}
               labelLine={false}
             >
-              {transformedTherapistUsage.map((_, index: number) => (
+              {transformedTherapistUsage.map((_: unknown, index: number) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}
