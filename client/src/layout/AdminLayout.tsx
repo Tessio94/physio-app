@@ -4,6 +4,8 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { useEffect } from "react";
 
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+
 const fetchAdminInfo = async () => {
   const res = await fetch(`${prodUrl}/auth/admin/current`, {
     method: "GET",
