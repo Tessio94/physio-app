@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 const fetchCurrentUser = async () => {
-  const res = await fetch("http://localhost:3000/auth/current-user", {
+  const res = await fetch("${prodUrl}/auth/current-user", {
     method: "GET",
     credentials: "include",
   });
