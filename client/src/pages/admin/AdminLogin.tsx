@@ -18,7 +18,7 @@ const loginSchema = z.object({
 });
 
 const loginMutationFn = async (data: z.infer<typeof loginSchema>) => {
-  console.log(data);
+  // console.log(data);
   const { email, password } = data;
   const res = await fetch(`${prodUrl}/auth/admin/login`, {
     method: "POST",
