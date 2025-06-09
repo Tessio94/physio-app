@@ -77,8 +77,8 @@ const fetchAdminDashboardData = async (adminId: number) => {
 const AdminDashboard = () => {
   const admin = useOutletContext<Admin>();
   // console.log(admin); - OVJDJE UBACITI ERROR AKO JE ADMIN UNDEFINED (DA GA VRAĆA NA LOG-IN, TO JEST VIDJETI DA LI TO MOZE ICI SA SERVERA BEZ DA DODJE DO OVE LINIJE I DA KORISITIMO SOONNER UMJESTO ALERTA.)
-  const { adminId, name, lastname, superadmin } = admin;
   console.log(admin);
+  const { adminId, name, lastname, superadmin } = admin;
   const { data, isLoading } = useQuery({
     queryKey: ["monthly-users"],
     queryFn: fetchDashboardData,
