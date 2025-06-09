@@ -41,7 +41,7 @@ const AdminLayout = () => {
   // }
 
   if (isPending) return null;
-  console.log("layout admin :", admin);
+  // console.log("layout admin :", admin);
   return (
     <SidebarProvider defaultOpen={true} className="max-w-[100vw]">
       <AppSidebar />
