@@ -164,7 +164,7 @@ function BookNow() {
                   <div className="flex items-center gap-4">
                     <div className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45">
                       <img
-                        src={`src${selectedService.icon}`}
+                        src={`${selectedService.icon}`}
                         width={30}
                         height={30}
                       />
@@ -228,7 +228,7 @@ function BookNow() {
                   <div className="flex items-center gap-4">
                     <div className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45">
                       <img
-                        src={`src${selectedTherapist.icon}`}
+                        src={`${selectedTherapist.icon}`}
                         width={30}
                         height={30}
                       />
