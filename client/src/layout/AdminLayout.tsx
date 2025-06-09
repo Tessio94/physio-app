@@ -5,7 +5,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { useEffect } from "react";
 
 const fetchAdminInfo = async () => {
-  const res = await fetch("http://localhost:3000/auth/admin/current", {
+  const res = await fetch("${prodUrl}/auth/admin/current", {
     method: "GET",
     credentials: "include",
   });
