@@ -14,4 +14,4 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node . .
 
 EXPOSE 3000
-CMD ["node", "index.js"]
+CMD ["node", "app.js"]
