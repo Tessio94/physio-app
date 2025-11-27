@@ -42,7 +42,7 @@ function NavMenu({
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`${devUrl}/auth/logout`, {
+      const res = await fetch(`${prodUrl}/auth/logout`, {
         method: "POST",
         credentials: "include", // send cookie
       });
