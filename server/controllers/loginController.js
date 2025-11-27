@@ -34,7 +34,7 @@ const loginGoogle = (req, res) => {
 	authorizationURL.searchParams.set("client_id", GOOGLE_CLIENT_ID);
 	authorizationURL.searchParams.set(
 		"redirect_uri",
-		"http://localhost:3000/auth/login/google/callback"
+		"https://api.app2.tessio94.com/auth/login/google/callback"
 	);
 	authorizationURL.searchParams.set("response_type", "code");
 	authorizationURL.searchParams.set("state", state);
@@ -71,7 +71,7 @@ const loginGoogleCallback = async (req, res) => {
 		code,
 		client_id: GOOGLE_CLIENT_ID,
 		client_secret: GOOGLE_CLIENT_SECRET,
-		redirect_uri: "http://localhost:3000/auth/login/google/callback", // Must match exactly
+		redirect_uri: "https://api.app2.tessio94.com/auth/login/google/callback", // Must match exactly
 	});
 
 	try {
@@ -140,7 +140,7 @@ const loginGoogleCallback = async (req, res) => {
 		});
 		// console.log("Google user info:", userInfo);
 
-		return res.redirect("http://localhost:5173/");
+		return res.redirect("https://app2.tessio94.com");
 	} catch (err) {
 		console.error("OAuth callback failed:", err);
 		return res.status(500).send("OAuth callback failed.");
@@ -154,7 +154,7 @@ const loginFacebook = (req, res) => {
 	authURL.searchParams.set("client_id", FACEBOOK_CLIENT_ID);
 	authURL.searchParams.set(
 		"redirect_uri",
-		"http://localhost:3000/auth/login/facebook/callback"
+		"https://api.app2.tessio94.com/auth/login/facebook/callback"
 	);
 	authURL.searchParams.set("state", state);
 	authURL.searchParams.set("scope", "email,public_profile");
@@ -182,7 +182,7 @@ const loginFacebookCallback = async (req, res) => {
 
 	try {
 		// Exchange code for access token
-		const tokenURL = `https://graph.facebook.com/v18.0/oauth/access_token?client_id=${FACEBOOK_CLIENT_ID}&redirect_uri=http://localhost:3000/auth/login/facebook/callback&client_secret=${FACEBOOK_CLIENT_SECRET}&code=${code}`;
+		const tokenURL = `https://graph.facebook.com/v18.0/oauth/access_token?client_id=${FACEBOOK_CLIENT_ID}&redirect_uri=https://api.app2.tessio94.com/auth/login/facebook/callback&client_secret=${FACEBOOK_CLIENT_SECRET}&code=${code}`;
 
 		const tokenRes = await fetch(tokenURL);
 		const tokenData = await tokenRes.json();
@@ -233,7 +233,7 @@ const loginFacebookCallback = async (req, res) => {
 			maxAge: 7 * 24 * 60 * 60 * 1000,
 		});
 
-		return res.redirect("http://localhost:5173/");
+		return res.redirect("https://app2.tessio94.com");
 	} catch (err) {
 		console.error("Facebook OAuth callback failed:", err);
 		return res.status(500).send("OAuth callback failed.");
