@@ -12,8 +12,8 @@ import { Bars3Icon, XMarkIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
-// const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
+// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
+const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
 
 const navigation = [
   { name: "O nama", href: "#about", current: false },
