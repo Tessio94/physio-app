@@ -21,6 +21,8 @@ RUN npm run build
 FROM nginx:stable-alpine
 # Remove default nginx.conf if you want to mount a custom one per-site. We'll use default server.
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Expose port 80 for nginx
 EXPOSE 80
 # Use non-root user provided by image
