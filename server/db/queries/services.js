@@ -42,7 +42,8 @@ const getAvailableSlotsQuery = (therapistId, serviceId) => {
             INNER JOIN therapists t ON tr.therapist_id = t.id) ajde
         LEFT JOIN therapists_services tss ON ajde.therapist_id = tss.therapist_id
         LEFT JOIN services s ON tss.service_id = s.id AND s.id != 99999
-        ) WHERE service_id = $1;
+        ) AS FINAL 
+          WHERE service_id = $1;
     `;
 
 		return pool.query(sql, [serviceId]);
@@ -80,7 +81,8 @@ const getAvailableSlotsQuery = (therapistId, serviceId) => {
             INNER JOIN therapists t ON tr.therapist_id = t.id) ajde
         LEFT JOIN therapists_services tss ON ajde.therapist_id = tss.therapist_id
         LEFT JOIN services s ON tss.service_id = s.id AND s.id != 99999
-        ) WHERE service_id = $1;
+        ) AS FINAL
+          WHERE service_id = $1;
     `;
 
 		return pool.query(sql, [serviceId, therapistId]);
