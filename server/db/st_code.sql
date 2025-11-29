@@ -326,6 +326,156 @@ SELECT ajde.*, tss.service_id, s.name, s.icon FROM
     --    napomena text COLLATE pg_catalog."default",
     -- created_at timestamp without time zone DEFAULT now(),
 
+------------------------------------------last working query--------------------------------
+/*
+const getAvailableSlotsQuery = (therapistId, serviceId) => {
+  if (therapistId === "all") {
+    const sql = `
+    SELECT * FROM 
+    (
+    SELECT ajde.*, tss.service_id, s.name AS service_name, s.icon AS service_icon FROM
+    (SELECT tr.*, t.name as therapist_name, t.lastname as therapist_lastname, t.icon as therapist_icon
+    FROM
+    (SELECT therapist_id, available
+        FROM (
+          SELECT therapist_id,
+    CASE 
+      WHEN upper(time_range) < lower(lead(time_range) OVER (
+            PARTITION BY therapist_id ORDER BY lower(time_range)
+          ))
+      THEN tsrange(
+            upper(time_range),
+            lower(lead(time_range) OVER (
+              PARTITION BY therapist_id ORDER BY lower(time_range)
+            ))
+          )
+      ELSE NULL
+    END AS available
+    FROM (
+      -- Booked slots
+      SELECT b.therapist_id, b.time_range
+      FROM bookings b
+      JOIN therapists ts ON ts.id = b.therapist_id
+      WHERE lower(time_range)::date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '14 days'
+
+      UNION
+
+      -- Working hours for each therapist per day
+      SELECT ts.id AS therapist_id,
+            tsrange(
+                dates.closed + interval '20 hours',
+                dates.closed + interval '32 hours'
+            ) AS time_range
+      FROM generate_series((CURRENT_DATE - 1)::timestamp, CURRENT_DATE + INTERVAL '14 days', INTERVAL '1 day')
+          dates(closed)
+      INNER JOIN therapists ts ON TRUE
+       ) sub2
+      ) sub
+      WHERE upper(available) - lower(available) >= interval '30 minutes'
+        AND EXTRACT(DOW FROM lower(available)) NOT IN (0, 6)) tr
+      INNER JOIN therapists t ON tr.therapist_id = t.id) ajde
+      LEFT JOIN therapists_services tss ON ajde.therapist_id = tss.therapist_id
+      LEFT JOIN services s ON tss.service_id = s.id AND s.id != 99999
+      ) AS FINAL
+      WHERE service_id = $1;
+    `;
+
+    return pool.query(sql, [serviceId]);
+  } else {
+    const sql = `
+    SELECT * FROM 
+    (
+    SELECT ajde.*, tss.service_id, s.name AS service_name, s.icon AS service_icon FROM
+    (SELECT tr.*, t.name as therapist_name, t.lastname as therapist_lastname, t.icon as therapist_icon
+        FROM
+        (SELECT therapist_id, available
+            FROM (
+              SELECT therapist_id,
+       CASE 
+         WHEN upper(time_range) < lower(lead(time_range) OVER (
+                PARTITION BY therapist_id ORDER BY lower(time_range)
+              ))
+         THEN tsrange(
+                upper(time_range),
+                lower(lead(time_range) OVER (
+                  PARTITION BY therapist_id ORDER BY lower(time_range)
+                ))
+              )
+         ELSE NULL
+       END AS available
+FROM (
+    -- Booked slots
+    SELECT b.therapist_id, b.time_range
+    FROM bookings b
+    JOIN therapists ts ON ts.id = b.therapist_id
+    WHERE lower(time_range)::date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '14 days'
+
+    UNION
+
+    -- Working hours for each therapist per day
+    SELECT ts.id AS therapist_id,
+           tsrange(
+               dates.closed + interval '20 hours',
+               dates.closed + interval '32 hours'
+           ) AS time_range
+    FROM generate_series((CURRENT_DATE - 1)::timestamp, CURRENT_DATE + INTERVAL '14 days', INTERVAL '1 day')
+         dates(closed)
+    INNER JOIN therapists ts ON TRUE
+) sub2
+            ) sub
+            WHERE upper(available) - lower(available) >= interval '30 minutes'
+              AND EXTRACT(DOW FROM lower(available)) NOT IN (0, 6)
+              AND therapist_id = $2) tr
+            INNER JOIN therapists t ON tr.therapist_id = t.id) ajde
+        LEFT JOIN therapists_services tss ON ajde.therapist_id = tss.therapist_id
+        LEFT JOIN services s ON tss.service_id = s.id AND s.id != 99999
+        ) AS FINAL
+          WHERE service_id = $1;
+    `;
+
+    return pool.query(sql, [serviceId, therapistId]);
+  }
+};
+-------------------------------------------------------------------------------------------
+const getAdminSchedule = (therapistId) => {
+	const sql = `
+SELECT ajde.*, tss.service_id, s.name AS service_name, s.icon AS service_icon, b.user_id as user_id, u.name AS user_name, u.lastname AS user_lastname, u.phone AS user_phone, u.email AS user_email, b.napomena as napomena, b.created_at as created_at FROM
+ (SELECT tr.*, t.name as therapist_name, t.lastname as therapist_lastname, t.icon as therapist_icon
+    FROM
+    (SELECT therapist_id, available
+        FROM (
+          SELECT therapist_id,
+            tsrange(upper(time_range), lower(lead(time_range) OVER
+              (PARTITION BY therapist_id ORDER BY lower(time_range)))) AS available
+          FROM (
+            -- ✅ Booked slots - only valid therapist/service pairs
+            SELECT b.therapist_id, b.time_range
+            FROM bookings b
+            JOIN therapists ts ON ts.id = b.therapist_id
+            WHERE lower(time_range)::date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '14 days'
+    
+            UNION
+    
+            -- ✅ Working hours for all valid therapist/service pairs
+            SELECT ts.id AS therapist_id,  
+              tsrange(dates.closed + interval '20 hours', dates.closed + interval '32 hours') AS time_range
+            FROM generate_series((CURRENT_DATE - 1)::timestamp, CURRENT_DATE + INTERVAL '14 days', INTERVAL '1 day') dates(closed)
+            INNER JOIN therapists ts ON TRUE
+			WHERE ts.id = $1 ORDER BY time_range ASC
+          ) sub2
+        ) sub
+        WHERE upper(available) - lower(available) >= interval '30 minutes'
+          AND EXTRACT(DOW FROM lower(available)) NOT IN (0, 6)
+          AND therapist_id = $1) tr
+        INNER JOIN therapists t ON tr.therapist_id = t.id) ajde
+		LEFT JOIN therapists_services tss ON ajde.therapist_id = tss.therapist_id
+		LEFT JOIN services s ON tss.service_id = s.id AND s.id != 99999
+		LEFT JOIN bookings b on ajde.therapist_id = b.therapist_id
+    LEFT JOIN users u ON b.user_id = u.id;
+    `;
+*/
+--------------------------------------------------------------------------------------------
+
     
 CREATE TABLE admins (
 	id SERIAL PRIMARY KEY,
@@ -361,3 +511,5 @@ VALUES (
 ALTER TABLE users ADD COLUMN last_login TIMESTAMP DEFAULT NOW();
 
 UPDATE users SET last_login = NOW() WHERE last_login IS NULL;
+
+

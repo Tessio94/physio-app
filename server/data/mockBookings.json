@@ -1,0 +1,884 @@
+[
+  {
+    "user_id": 6,
+    "service_id": 1,
+    "therapist_id": 5,
+    "napomena_template": "29.11., 18:00, Nikola Horvat, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "18:00",
+    "date": "2025-11-29"
+  },
+  {
+    "user_id": 10,
+    "service_id": 5,
+    "therapist_id": 3,
+    "napomena_template": "29.11., 10:30, Ema Jurić, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "10:30",
+    "date": "2025-11-29"
+  },
+  {
+    "user_id": 32,
+    "service_id": 3,
+    "therapist_id": 1,
+    "napomena_template": "29.11., 12:00, Ana Barišić, Manualna terapija",
+    "duration_minutes": 30,
+    "time": "12:00",
+    "date": "2025-11-29"
+  },
+  {
+    "user_id": 14,
+    "service_id": 1,
+    "therapist_id": 2,
+    "napomena_template": "29.11., 13:00, Luka Perić, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "13:00",
+    "date": "2025-11-29"
+  },
+  {
+    "user_id": 12,
+    "service_id": 5,
+    "therapist_id": 3,
+    "napomena_template": "29.11., 17:00, Ema Jurić, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "17:00",
+    "date": "2025-11-29"
+  },
+  {
+    "user_id": 36,
+    "service_id": 5,
+    "therapist_id": 6,
+    "napomena_template": "29.11., 17:30, Dina Vuković, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "17:30",
+    "date": "2025-11-29"
+  },
+  {
+    "user_id": 32,
+    "service_id": 2,
+    "therapist_id": 4,
+    "napomena_template": "29.11., 14:00, Marija Kovačević, Masaža",
+    "duration_minutes": 30,
+    "time": "14:00",
+    "date": "2025-11-29"
+  },
+  {
+    "user_id": 32,
+    "service_id": 6,
+    "therapist_id": 4,
+    "napomena_template": "30.11., 17:00, Marija Kovačević, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "17:00",
+    "date": "2025-11-30"
+  },
+  {
+    "user_id": 34,
+    "service_id": 4,
+    "therapist_id": 1,
+    "napomena_template": "30.11., 09:30, Ana Barišić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "09:30",
+    "date": "2025-11-30"
+  },
+  {
+    "user_id": 38,
+    "service_id": 4,
+    "therapist_id": 2,
+    "napomena_template": "30.11., 11:00, Luka Perić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "11:00",
+    "date": "2025-11-30"
+  },
+  {
+    "user_id": 19,
+    "service_id": 5,
+    "therapist_id": 3,
+    "napomena_template": "30.11., 15:30, Ema Jurić, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "15:30",
+    "date": "2025-11-30"
+  },
+  {
+    "user_id": 47,
+    "service_id": 6,
+    "therapist_id": 5,
+    "napomena_template": "30.11., 16:00, Nikola Horvat, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "16:00",
+    "date": "2025-11-30"
+  },
+  {
+    "user_id": 40,
+    "service_id": 1,
+    "therapist_id": 2,
+    "napomena_template": "30.11., 15:00, Luka Perić, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "15:00",
+    "date": "2025-11-30"
+  },
+  {
+    "user_id": 47,
+    "service_id": 5,
+    "therapist_id": 3,
+    "napomena_template": "30.11., 18:00, Ema Jurić, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "18:00",
+    "date": "2025-11-30"
+  },
+  {
+    "user_id": 45,
+    "service_id": 2,
+    "therapist_id": 4,
+    "napomena_template": "30.11., 18:00, Marija Kovačević, Masaža",
+    "duration_minutes": 30,
+    "time": "18:00",
+    "date": "2025-11-30"
+  },
+  {
+    "user_id": 27,
+    "service_id": 5,
+    "therapist_id": 5,
+    "napomena_template": "01.12., 10:30, Nikola Horvat, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "10:30",
+    "date": "2025-12-01"
+  },
+  {
+    "user_id": 13,
+    "service_id": 1,
+    "therapist_id": 6,
+    "napomena_template": "01.12., 13:30, Dina Vuković, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "13:30",
+    "date": "2025-12-01"
+  },
+  {
+    "user_id": 35,
+    "service_id": 1,
+    "therapist_id": 5,
+    "napomena_template": "01.12., 11:30, Nikola Horvat, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "11:30",
+    "date": "2025-12-01"
+  },
+  {
+    "user_id": 43,
+    "service_id": 1,
+    "therapist_id": 5,
+    "napomena_template": "01.12., 15:00, Nikola Horvat, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "15:00",
+    "date": "2025-12-01"
+  },
+  {
+    "user_id": 16,
+    "service_id": 3,
+    "therapist_id": 1,
+    "napomena_template": "01.12., 11:00, Ana Barišić, Manualna terapija",
+    "duration_minutes": 30,
+    "time": "11:00",
+    "date": "2025-12-01"
+  },
+  {
+    "user_id": 24,
+    "service_id": 5,
+    "therapist_id": 5,
+    "napomena_template": "01.12., 12:30, Nikola Horvat, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "12:30",
+    "date": "2025-12-01"
+  },
+  {
+    "user_id": 2,
+    "service_id": 3,
+    "therapist_id": 1,
+    "napomena_template": "01.12., 16:00, Ana Barišić, Manualna terapija",
+    "duration_minutes": 30,
+    "time": "16:00",
+    "date": "2025-12-01"
+  },
+  {
+    "user_id": 10,
+    "service_id": 3,
+    "therapist_id": 3,
+    "napomena_template": "02.12., 17:30, Ema Jurić, Manualna terapija",
+    "duration_minutes": 30,
+    "time": "17:30",
+    "date": "2025-12-02"
+  },
+  {
+    "user_id": 39,
+    "service_id": 1,
+    "therapist_id": 5,
+    "napomena_template": "02.12., 10:00, Nikola Horvat, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "10:00",
+    "date": "2025-12-02"
+  },
+  {
+    "user_id": 32,
+    "service_id": 1,
+    "therapist_id": 1,
+    "napomena_template": "02.12., 13:30, Ana Barišić, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "13:30",
+    "date": "2025-12-02"
+  },
+  {
+    "user_id": 47,
+    "service_id": 1,
+    "therapist_id": 1,
+    "napomena_template": "02.12., 12:30, Ana Barišić, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "12:30",
+    "date": "2025-12-02"
+  },
+  {
+    "user_id": 7,
+    "service_id": 5,
+    "therapist_id": 3,
+    "napomena_template": "02.12., 18:30, Ema Jurić, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "18:30",
+    "date": "2025-12-02"
+  },
+  {
+    "user_id": 21,
+    "service_id": 6,
+    "therapist_id": 5,
+    "napomena_template": "02.12., 19:30, Nikola Horvat, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "19:30",
+    "date": "2025-12-02"
+  },
+  {
+    "user_id": 15,
+    "service_id": 4,
+    "therapist_id": 2,
+    "napomena_template": "02.12., 11:00, Luka Perić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "11:00",
+    "date": "2025-12-02"
+  },
+  {
+    "user_id": 26,
+    "service_id": 4,
+    "therapist_id": 1,
+    "napomena_template": "03.12., 12:00, Ana Barišić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "12:00",
+    "date": "2025-12-03"
+  },
+  {
+    "user_id": 26,
+    "service_id": 6,
+    "therapist_id": 5,
+    "napomena_template": "03.12., 19:00, Nikola Horvat, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "19:00",
+    "date": "2025-12-03"
+  },
+  {
+    "user_id": 10,
+    "service_id": 1,
+    "therapist_id": 1,
+    "napomena_template": "03.12., 08:30, Ana Barišić, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "08:30",
+    "date": "2025-12-03"
+  },
+  {
+    "user_id": 16,
+    "service_id": 2,
+    "therapist_id": 4,
+    "napomena_template": "03.12., 16:30, Marija Kovačević, Masaža",
+    "duration_minutes": 30,
+    "time": "16:30",
+    "date": "2025-12-03"
+  },
+  {
+    "user_id": 19,
+    "service_id": 4,
+    "therapist_id": 2,
+    "napomena_template": "03.12., 08:30, Luka Perić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "08:30",
+    "date": "2025-12-03"
+  },
+  {
+    "user_id": 21,
+    "service_id": 3,
+    "therapist_id": 3,
+    "napomena_template": "03.12., 18:30, Ema Jurić, Manualna terapija",
+    "duration_minutes": 30,
+    "time": "18:30",
+    "date": "2025-12-03"
+  },
+  {
+    "user_id": 14,
+    "service_id": 1,
+    "therapist_id": 6,
+    "napomena_template": "03.12., 18:30, Dina Vuković, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "18:30",
+    "date": "2025-12-03"
+  },
+  {
+    "user_id": 33,
+    "service_id": 6,
+    "therapist_id": 1,
+    "napomena_template": "04.12., 08:00, Ana Barišić, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "08:00",
+    "date": "2025-12-04"
+  },
+  {
+    "user_id": 34,
+    "service_id": 4,
+    "therapist_id": 2,
+    "napomena_template": "04.12., 08:00, Luka Perić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "08:00",
+    "date": "2025-12-04"
+  },
+  {
+    "user_id": 28,
+    "service_id": 4,
+    "therapist_id": 1,
+    "napomena_template": "04.12., 14:00, Ana Barišić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "14:00",
+    "date": "2025-12-04"
+  },
+  {
+    "user_id": 35,
+    "service_id": 5,
+    "therapist_id": 5,
+    "napomena_template": "04.12., 18:00, Nikola Horvat, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "18:00",
+    "date": "2025-12-04"
+  },
+  {
+    "user_id": 22,
+    "service_id": 4,
+    "therapist_id": 1,
+    "napomena_template": "04.12., 12:30, Ana Barišić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "12:30",
+    "date": "2025-12-04"
+  },
+  {
+    "user_id": 24,
+    "service_id": 2,
+    "therapist_id": 2,
+    "napomena_template": "04.12., 18:30, Luka Perić, Masaža",
+    "duration_minutes": 30,
+    "time": "18:30",
+    "date": "2025-12-04"
+  },
+  {
+    "user_id": 28,
+    "service_id": 5,
+    "therapist_id": 6,
+    "napomena_template": "04.12., 13:00, Dina Vuković, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "13:00",
+    "date": "2025-12-04"
+  },
+  {
+    "user_id": 34,
+    "service_id": 6,
+    "therapist_id": 6,
+    "napomena_template": "05.12., 09:30, Dina Vuković, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "09:30",
+    "date": "2025-12-05"
+  },
+  {
+    "user_id": 30,
+    "service_id": 1,
+    "therapist_id": 2,
+    "napomena_template": "05.12., 12:00, Luka Perić, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "12:00",
+    "date": "2025-12-05"
+  },
+  {
+    "user_id": 38,
+    "service_id": 6,
+    "therapist_id": 4,
+    "napomena_template": "05.12., 17:30, Marija Kovačević, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "17:30",
+    "date": "2025-12-05"
+  },
+  {
+    "user_id": 30,
+    "service_id": 1,
+    "therapist_id": 6,
+    "napomena_template": "05.12., 12:00, Dina Vuković, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "12:00",
+    "date": "2025-12-05"
+  },
+  {
+    "user_id": 7,
+    "service_id": 6,
+    "therapist_id": 4,
+    "napomena_template": "05.12., 15:30, Marija Kovačević, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "15:30",
+    "date": "2025-12-05"
+  },
+  {
+    "user_id": 15,
+    "service_id": 6,
+    "therapist_id": 4,
+    "napomena_template": "05.12., 17:00, Marija Kovačević, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "17:00",
+    "date": "2025-12-05"
+  },
+  {
+    "user_id": 13,
+    "service_id": 2,
+    "therapist_id": 1,
+    "napomena_template": "05.12., 14:30, Ana Barišić, Masaža",
+    "duration_minutes": 30,
+    "time": "14:30",
+    "date": "2025-12-05"
+  },
+  {
+    "user_id": 17,
+    "service_id": 1,
+    "therapist_id": 6,
+    "napomena_template": "06.12., 10:30, Dina Vuković, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "10:30",
+    "date": "2025-12-06"
+  },
+  {
+    "user_id": 21,
+    "service_id": 1,
+    "therapist_id": 6,
+    "napomena_template": "06.12., 18:00, Dina Vuković, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "18:00",
+    "date": "2025-12-06"
+  },
+  {
+    "user_id": 41,
+    "service_id": 6,
+    "therapist_id": 4,
+    "napomena_template": "06.12., 16:00, Marija Kovačević, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "16:00",
+    "date": "2025-12-06"
+  },
+  {
+    "user_id": 34,
+    "service_id": 3,
+    "therapist_id": 6,
+    "napomena_template": "06.12., 12:00, Dina Vuković, Manualna terapija",
+    "duration_minutes": 30,
+    "time": "12:00",
+    "date": "2025-12-06"
+  },
+  {
+    "user_id": 4,
+    "service_id": 3,
+    "therapist_id": 3,
+    "napomena_template": "06.12., 15:00, Ema Jurić, Manualna terapija",
+    "duration_minutes": 30,
+    "time": "15:00",
+    "date": "2025-12-06"
+  },
+  {
+    "user_id": 34,
+    "service_id": 6,
+    "therapist_id": 6,
+    "napomena_template": "06.12., 16:00, Dina Vuković, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "16:00",
+    "date": "2025-12-06"
+  },
+  {
+    "user_id": 45,
+    "service_id": 1,
+    "therapist_id": 5,
+    "napomena_template": "06.12., 16:00, Nikola Horvat, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "16:00",
+    "date": "2025-12-06"
+  },
+  {
+    "user_id": 48,
+    "service_id": 1,
+    "therapist_id": 1,
+    "napomena_template": "07.12., 15:30, Ana Barišić, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "15:30",
+    "date": "2025-12-07"
+  },
+  {
+    "user_id": 21,
+    "service_id": 5,
+    "therapist_id": 3,
+    "napomena_template": "07.12., 17:30, Ema Jurić, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "17:30",
+    "date": "2025-12-07"
+  },
+  {
+    "user_id": 1,
+    "service_id": 4,
+    "therapist_id": 1,
+    "napomena_template": "07.12., 14:00, Ana Barišić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "14:00",
+    "date": "2025-12-07"
+  },
+  {
+    "user_id": 6,
+    "service_id": 6,
+    "therapist_id": 4,
+    "napomena_template": "07.12., 17:30, Marija Kovačević, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "17:30",
+    "date": "2025-12-07"
+  },
+  {
+    "user_id": 16,
+    "service_id": 5,
+    "therapist_id": 5,
+    "napomena_template": "07.12., 14:00, Nikola Horvat, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "14:00",
+    "date": "2025-12-07"
+  },
+  {
+    "user_id": 25,
+    "service_id": 5,
+    "therapist_id": 5,
+    "napomena_template": "07.12., 11:00, Nikola Horvat, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "11:00",
+    "date": "2025-12-07"
+  },
+  {
+    "user_id": 1,
+    "service_id": 6,
+    "therapist_id": 5,
+    "napomena_template": "07.12., 10:30, Nikola Horvat, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "10:30",
+    "date": "2025-12-07"
+  },
+  {
+    "user_id": 20,
+    "service_id": 5,
+    "therapist_id": 5,
+    "napomena_template": "08.12., 12:30, Nikola Horvat, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "12:30",
+    "date": "2025-12-08"
+  },
+  {
+    "user_id": 12,
+    "service_id": 1,
+    "therapist_id": 1,
+    "napomena_template": "08.12., 18:00, Ana Barišić, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "18:00",
+    "date": "2025-12-08"
+  },
+  {
+    "user_id": 28,
+    "service_id": 1,
+    "therapist_id": 5,
+    "napomena_template": "08.12., 13:30, Nikola Horvat, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "13:30",
+    "date": "2025-12-08"
+  },
+  {
+    "user_id": 22,
+    "service_id": 3,
+    "therapist_id": 3,
+    "napomena_template": "08.12., 10:30, Ema Jurić, Manualna terapija",
+    "duration_minutes": 30,
+    "time": "10:30",
+    "date": "2025-12-08"
+  },
+  {
+    "user_id": 11,
+    "service_id": 4,
+    "therapist_id": 2,
+    "napomena_template": "08.12., 12:30, Luka Perić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "12:30",
+    "date": "2025-12-08"
+  },
+  {
+    "user_id": 14,
+    "service_id": 6,
+    "therapist_id": 5,
+    "napomena_template": "08.12., 10:00, Nikola Horvat, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "10:00",
+    "date": "2025-12-08"
+  },
+  {
+    "user_id": 36,
+    "service_id": 5,
+    "therapist_id": 6,
+    "napomena_template": "08.12., 08:00, Dina Vuković, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "08:00",
+    "date": "2025-12-08"
+  },
+  {
+    "user_id": 6,
+    "service_id": 4,
+    "therapist_id": 2,
+    "napomena_template": "09.12., 13:30, Luka Perić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "13:30",
+    "date": "2025-12-09"
+  },
+  {
+    "user_id": 31,
+    "service_id": 1,
+    "therapist_id": 2,
+    "napomena_template": "09.12., 08:00, Luka Perić, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "08:00",
+    "date": "2025-12-09"
+  },
+  {
+    "user_id": 30,
+    "service_id": 2,
+    "therapist_id": 1,
+    "napomena_template": "09.12., 19:00, Ana Barišić, Masaža",
+    "duration_minutes": 30,
+    "time": "19:00",
+    "date": "2025-12-09"
+  },
+  {
+    "user_id": 2,
+    "service_id": 5,
+    "therapist_id": 5,
+    "napomena_template": "09.12., 10:30, Nikola Horvat, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "10:30",
+    "date": "2025-12-09"
+  },
+  {
+    "user_id": 12,
+    "service_id": 4,
+    "therapist_id": 2,
+    "napomena_template": "09.12., 12:00, Luka Perić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "12:00",
+    "date": "2025-12-09"
+  },
+  {
+    "user_id": 15,
+    "service_id": 1,
+    "therapist_id": 5,
+    "napomena_template": "09.12., 13:00, Nikola Horvat, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "13:00",
+    "date": "2025-12-09"
+  },
+  {
+    "user_id": 44,
+    "service_id": 4,
+    "therapist_id": 1,
+    "napomena_template": "09.12., 14:30, Ana Barišić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "14:30",
+    "date": "2025-12-09"
+  },
+  {
+    "user_id": 39,
+    "service_id": 1,
+    "therapist_id": 5,
+    "napomena_template": "10.12., 15:00, Nikola Horvat, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "15:00",
+    "date": "2025-12-10"
+  },
+  {
+    "user_id": 28,
+    "service_id": 6,
+    "therapist_id": 1,
+    "napomena_template": "10.12., 12:30, Ana Barišić, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "12:30",
+    "date": "2025-12-10"
+  },
+  {
+    "user_id": 5,
+    "service_id": 3,
+    "therapist_id": 3,
+    "napomena_template": "10.12., 18:00, Ema Jurić, Manualna terapija",
+    "duration_minutes": 30,
+    "time": "18:00",
+    "date": "2025-12-10"
+  },
+  {
+    "user_id": 8,
+    "service_id": 5,
+    "therapist_id": 5,
+    "napomena_template": "10.12., 15:30, Nikola Horvat, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "15:30",
+    "date": "2025-12-10"
+  },
+  {
+    "user_id": 5,
+    "service_id": 5,
+    "therapist_id": 3,
+    "napomena_template": "10.12., 12:00, Ema Jurić, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "12:00",
+    "date": "2025-12-10"
+  },
+  {
+    "user_id": 12,
+    "service_id": 4,
+    "therapist_id": 1,
+    "napomena_template": "10.12., 18:30, Ana Barišić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "18:30",
+    "date": "2025-12-10"
+  },
+  {
+    "user_id": 25,
+    "service_id": 3,
+    "therapist_id": 6,
+    "napomena_template": "11.12., 16:30, Dina Vuković, Manualna terapija",
+    "duration_minutes": 30,
+    "time": "16:30",
+    "date": "2025-12-11"
+  },
+  {
+    "user_id": 41,
+    "service_id": 3,
+    "therapist_id": 1,
+    "napomena_template": "11.12., 15:00, Ana Barišić, Manualna terapija",
+    "duration_minutes": 30,
+    "time": "15:00",
+    "date": "2025-12-11"
+  },
+  {
+    "user_id": 8,
+    "service_id": 5,
+    "therapist_id": 1,
+    "napomena_template": "11.12., 09:00, Ana Barišić, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "09:00",
+    "date": "2025-12-11"
+  },
+  {
+    "user_id": 39,
+    "service_id": 1,
+    "therapist_id": 5,
+    "napomena_template": "11.12., 14:00, Nikola Horvat, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "14:00",
+    "date": "2025-12-11"
+  },
+  {
+    "user_id": 4,
+    "service_id": 1,
+    "therapist_id": 5,
+    "napomena_template": "11.12., 13:30, Nikola Horvat, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "13:30",
+    "date": "2025-12-11"
+  },
+  {
+    "user_id": 23,
+    "service_id": 3,
+    "therapist_id": 6,
+    "napomena_template": "11.12., 10:30, Dina Vuković, Manualna terapija",
+    "duration_minutes": 30,
+    "time": "10:30",
+    "date": "2025-12-11"
+  },
+  {
+    "user_id": 24,
+    "service_id": 3,
+    "therapist_id": 1,
+    "napomena_template": "11.12., 17:00, Ana Barišić, Manualna terapija",
+    "duration_minutes": 30,
+    "time": "17:00",
+    "date": "2025-12-11"
+  },
+  {
+    "user_id": 26,
+    "service_id": 6,
+    "therapist_id": 5,
+    "napomena_template": "12.12., 16:30, Nikola Horvat, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "16:30",
+    "date": "2025-12-12"
+  },
+  {
+    "user_id": 3,
+    "service_id": 6,
+    "therapist_id": 5,
+    "napomena_template": "12.12., 14:30, Nikola Horvat, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "14:30",
+    "date": "2025-12-12"
+  },
+  {
+    "user_id": 14,
+    "service_id": 4,
+    "therapist_id": 2,
+    "napomena_template": "12.12., 09:30, Luka Perić, Kineziterapija",
+    "duration_minutes": 30,
+    "time": "09:30",
+    "date": "2025-12-12"
+  },
+  {
+    "user_id": 42,
+    "service_id": 5,
+    "therapist_id": 3,
+    "napomena_template": "12.12., 08:00, Ema Jurić, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "08:00",
+    "date": "2025-12-12"
+  },
+  {
+    "user_id": 13,
+    "service_id": 5,
+    "therapist_id": 5,
+    "napomena_template": "12.12., 19:30, Nikola Horvat, Terapija laserom",
+    "duration_minutes": 30,
+    "time": "19:30",
+    "date": "2025-12-12"
+  },
+  {
+    "user_id": 49,
+    "service_id": 1,
+    "therapist_id": 6,
+    "napomena_template": "12.12., 11:30, Dina Vuković, Elektroterapija",
+    "duration_minutes": 30,
+    "time": "11:30",
+    "date": "2025-12-12"
+  },
+  {
+    "user_id": 20,
+    "service_id": 6,
+    "therapist_id": 1,
+    "napomena_template": "12.12., 10:30, Ana Barišić, Ultrazvuk",
+    "duration_minutes": 30,
+    "time": "10:30",
+    "date": "2025-12-12"
+  }
+]
