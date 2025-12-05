@@ -11,9 +11,6 @@ const { createState } = require("../utils/utils");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// const secret = require("crypto").randomBytes(64).toString("hex");
-// console.log(secret);
-
 require("dotenv").config();
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
@@ -28,7 +25,6 @@ const loginGoogle = (req, res) => {
 		"https://accounts.google.com/o/oauth2/v2/auth"
 	);
 
-	// see below for generating state
 	const state = createState();
 
 	authorizationURL.searchParams.set("client_id", GOOGLE_CLIENT_ID);
@@ -44,13 +40,12 @@ const loginGoogle = (req, res) => {
 	);
 
 	res.cookie("google_oauth_state", state, {
-		maxAge: 10 * 60 * 1000, // 10 minutes
+		maxAge: 10 * 60 * 1000,
 		httpOnly: true,
 		secure: false, // true in production with HTTPS
 		sameSite: "lax",
 	});
 
-	// Redirect the user
 	res.redirect(authorizationURL.toString());
 };
 
@@ -60,7 +55,6 @@ const loginGoogleCallback = async (req, res) => {
 	const state = url.searchParams.get("state");
 	const storedState = req.cookies.google_oauth_state;
 
-	// Validate state
 	if (!code || !state || !storedState || state !== storedState) {
 		return res.status(400).send("Invalid state or missing code.");
 	}
@@ -71,7 +65,7 @@ const loginGoogleCallback = async (req, res) => {
 		code,
 		client_id: GOOGLE_CLIENT_ID,
 		client_secret: GOOGLE_CLIENT_SECRET,
-		redirect_uri: "https://api.app2.tessio94.com/auth/login/google/callback", // Must match exactly
+		redirect_uri: "https://api.app2.tessio94.com/auth/login/google/callback",
 	});
 
 	try {
@@ -94,7 +88,6 @@ const loginGoogleCallback = async (req, res) => {
 		const accessToken = result.access_token;
 		const idToken = result.id_token;
 
-		// Fetch user info
 		const userInfoRes = await fetch(
 			"https://www.googleapis.com/oauth2/v2/userinfo",
 			{
@@ -109,8 +102,6 @@ const loginGoogleCallback = async (req, res) => {
 
 		const existingUser = await findUserByEmail(email);
 
-		// console.log(given_name, family_name, email);
-
 		let insertUser;
 
 		if (existingUser.rows.length === 0) {
@@ -119,10 +110,8 @@ const loginGoogleCallback = async (req, res) => {
 				lastname: family_name,
 				email,
 			});
-			// console.log("Created new user", insertUser);
 		} else {
 			const login = await insertLastLogin(email);
-			// console.log("Updated last login: ", login.rows[0].last_login);
 		}
 
 		const user = existingUser.rows[0] || insertUser.rows[0];
@@ -131,14 +120,13 @@ const loginGoogleCallback = async (req, res) => {
 			expiresIn: "7d",
 		});
 
-		// 🍪 Set auth token cookie
+		// Set auth token cookie
 		res.cookie("auth_token", token, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
 			sameSite: "lax",
-			maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+			maxAge: 7 * 24 * 60 * 60 * 1000,
 		});
-		// console.log("Google user info:", userInfo);
 
 		return res.redirect("https://app2.tessio94.com");
 	} catch (err) {
@@ -166,7 +154,6 @@ const loginFacebook = (req, res) => {
 		sameSite: "lax",
 	});
 
-	// console.log(authURL);
 	res.redirect(authURL.toString());
 };
 
@@ -212,20 +199,18 @@ const loginFacebookCallback = async (req, res) => {
 				lastname: last_name,
 				email,
 			});
-			// console.log("Created new Facebook user", insertUser);
 		} else {
 			const login = await insertLastLogin(email);
-			// console.log("Updated Facebook login: ", login.rows[0].last_login);
 		}
 
 		const user = existingUser.rows[0] || insertUser.rows[0];
 
-		// 🔐 Generate JWT
+		// Generate JWT
 		const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
 			expiresIn: "7d",
 		});
 
-		// 🍪 Set cookie
+		// Set cookie
 		res.cookie("auth_token", token, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === "production",
@@ -241,7 +226,6 @@ const loginFacebookCallback = async (req, res) => {
 };
 
 const register = async (req, res) => {
-	// console.log(req.body);
 	const { name, lastname, email, phone, password } = req.body;
 
 	if (!email || !password || !name || !lastname) {
@@ -266,7 +250,6 @@ const register = async (req, res) => {
 		});
 
 		const user = registerNewUser.rows[0];
-		// console.log(registerNewUser);
 
 		const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
 			expiresIn: "7d",
@@ -289,7 +272,6 @@ const register = async (req, res) => {
 const login = async (req, res) => {
 	const { email, password } = req.body;
 
-	// console.log(email, password);
 	try {
 		const userResult = await findUserByEmail(email);
 
@@ -325,7 +307,6 @@ const login = async (req, res) => {
 };
 
 const logoutUser = async (req, res) => {
-	// console.log("laweee");
 	res.clearCookie("auth_token");
 	res.json({ message: "Logged out." });
 };

@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import AppointmentDays from "./AppointmentDays";
 
-// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
 
 // Fetch the available slots for the selected service
@@ -14,7 +13,7 @@ async function fetchAvailableSlots(
       `${prodUrl}/api/v1/book-now/appointments/all?serviceId=${serviceId}`,
     );
     const data = await response.json();
-    // console.log(data);
+
     if (!response.ok) {
       throw new Error("Failed to fetch available slots");
     }
@@ -25,7 +24,7 @@ async function fetchAvailableSlots(
       `${prodUrl}/api/v1/book-now/appointments/${therapistId}?serviceId=${serviceId}`,
     );
     const data = await response.json();
-    // console.log(data);
+
     if (!response.ok) {
       throw new Error("Failed to fetch available slots");
     }
@@ -41,7 +40,6 @@ const AvailableSlots = ({
   serviceId: number;
   therapistId: number | null;
 }) => {
-  // console.log(serviceId, therapistId);
   const { data, isLoading, isError } = useQuery({
     queryKey: ["availableSlots", serviceId, therapistId],
     queryFn: () => fetchAvailableSlots(serviceId, therapistId),

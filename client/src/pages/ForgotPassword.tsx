@@ -1,12 +1,9 @@
-// ForgotPassword.tsx
-
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/shadcn/button";
 import { useMutation } from "@tanstack/react-query";
 
-// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
 
 const forgotSchema = z.object({

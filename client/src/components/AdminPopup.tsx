@@ -1,5 +1,3 @@
-// import { FaRegWindowClose } from "react-icons/fa";
-
 type AdminPopupProps = {
   bookingDetails: {
     user_full_name: string;

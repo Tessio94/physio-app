@@ -9,6 +9,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import ToastComponent from "../components/ui/ToastComponent";
 
 // const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
@@ -45,7 +47,6 @@ const registerSchema = loginSchema
   });
 
 const loginMutationFn = async (data: z.infer<typeof loginSchema>) => {
-  console.log(data);
   const { email, password } = data;
   const res = await fetch(`${prodUrl}/auth/login`, {
     method: "POST",
@@ -112,15 +113,55 @@ function Login() {
     mutationFn: loginMutationFn,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["fetchCurrentUser"] });
-      navigate("/");
+      toast.custom((id) => (
+        <ToastComponent
+          id={id.toString()}
+          type="yes"
+          title="Uspješna prijava!"
+          description="Hvala vam na povjerenju - nastavite rezervaciju"
+        />
+      ));
+      navigate("/book-now");
     },
-    onError: (err: Error) => alert(err.message),
+    onError: () =>
+      toast.custom((id) => (
+        <ToastComponent
+          id={id.toString()}
+          type="not"
+          title="Neuspješna prijava!"
+          description="Registrirajte se prvo kako bi se prijavili!"
+          button={{
+            label: "Registracija",
+            onClick: () => navigate(`/registracija`),
+          }}
+        />
+      )),
   });
 
   const registerMutation = useMutation({
     mutationFn: registerMutationFn,
-    onSuccess: () => navigate("/"),
-    onError: (err: Error) => alert(err.message),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["fetchCurrentUser"] });
+      toast.custom((id) => (
+        <ToastComponent
+          id={id.toString()}
+          type="yes"
+          title="Uspješna prijava!"
+          description="Hvala vam na povjerenju - nastavite rezervaciju"
+        />
+      ));
+      navigate("/book-now");
+    },
+    onError: () => {
+      toast.custom((id) => (
+        <ToastComponent
+          id={id.toString()}
+          type="not"
+          title="Neuspješna registracija!"
+          description="Molimo vas unesite ispravne podatke"
+        />
+      ));
+    },
   });
 
   const toggleForm = () => {

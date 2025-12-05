@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/shadcn/button";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
 
 const profileSchema = z

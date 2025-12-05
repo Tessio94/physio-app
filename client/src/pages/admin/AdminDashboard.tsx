@@ -25,7 +25,6 @@ type TherapistUsageItem = {
   session_count: number | string;
 };
 
-// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
 
 const COLORS = [
@@ -76,15 +75,13 @@ const fetchAdminDashboardData = async (adminId: number) => {
 
 const AdminDashboard = () => {
   const admin = useOutletContext<Admin>();
-  // console.log(admin); - OVJDJE UBACITI ERROR AKO JE ADMIN UNDEFINED (DA GA VRAĆA NA LOG-IN, TO JEST VIDJETI DA LI TO MOZE ICI SA SERVERA BEZ DA DODJE DO OVE LINIJE I DA KORISITIMO SOONNER UMJESTO ALERTA.)
+
   const { adminId, name, lastname, superadmin } = admin;
 
   const { data, isLoading } = useQuery({
     queryKey: ["monthly-users"],
     queryFn: fetchDashboardData,
   });
-
-  // console.log("data: ", data);
 
   const { data: adminData, isLoading: adminIsLoading } = useQuery({
     queryKey: ["admin-info", adminId],
@@ -106,8 +103,6 @@ const AdminDashboard = () => {
       session_count: Number(item.session_count),
     }),
   );
-
-  // console.log("Admin data: ", adminData);
 
   return (
     <div className="mb-5">

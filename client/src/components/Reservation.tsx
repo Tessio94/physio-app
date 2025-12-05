@@ -1,9 +1,12 @@
-import { formatSlotDate, formatTime12Hour, formatTimeRange } from "@/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { formatSlotDate, formatTime12Hour, formatTimeRange } from "@/lib/utils";
+import { toast } from "sonner";
+import ToastComponent from "./ui/ToastComponent";
+import type { ReservationData, ServiceDetails } from "types/types";
 import { IoMdTime } from "react-icons/io";
 import { IoCalendarNumberOutline } from "react-icons/io5";
-import type { ReservationData, ServiceDetails } from "types/types";
 
 type ReservationPayload = {
   user_id: number;
@@ -22,7 +25,6 @@ interface ReservationProps {
   serviceId: number;
 }
 
-// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
 
 async function makeReservation(data: ReservationPayload) {
@@ -36,6 +38,7 @@ async function makeReservation(data: ReservationPayload) {
   });
 
   if (!response.ok) {
+    console.log("response", response);
     throw new Error("Failed to make reservation");
   }
 
@@ -49,25 +52,42 @@ const Reservation = ({
   serviceId,
 }: ReservationProps) => {
   const noteRef = useRef<HTMLTextAreaElement>(null);
-  // console.log(details);
+  const navigate = useNavigate();
+
   const closeReservation = () => setSelectedReservation(null);
-  // console.log(selectedReservation);
-  // console.log(details);
-  // console.log(serviceId);
+
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: makeReservation,
     onSuccess: () => {
-      alert("Rezervacija uspješna!");
+      toast.custom((id) => (
+        <ToastComponent
+          id={id.toString()}
+          type="yes"
+          title="Rezervacija uspješna!"
+          description="Hvala vam na povjerenju - Insignia poliklinika"
+        />
+      ));
+
       queryClient.invalidateQueries({
         queryKey: ["availableSlots", serviceId],
       });
       closeReservation();
     },
-    onError: (err) => {
-      alert("Greška pri rezervaciji");
-      console.error(err);
+    onError: () => {
+      toast.custom((id) => (
+        <ToastComponent
+          id={id.toString()}
+          type="not"
+          title="Rezervacija neuspješna!"
+          description="Prijavite se kako bi napravili rezervaciju"
+          button={{
+            label: "Prijava",
+            onClick: () => navigate(`/prijava`),
+          }}
+        />
+      ));
     },
   });
 
@@ -93,10 +113,6 @@ const Reservation = ({
     };
 
     mutation.mutate(payload);
-    /*mutation.mutate(payload);
-      Sends the payload to your API via makeReservation(),
-      Tracks its status (loading, success, error),
-      Calls the appropriate callbacks (onSuccess, etc.). */
   };
 
   return (

@@ -1,3 +1,7 @@
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import ToastComponent from "./ui/ToastComponent";
 import { formatInitials } from "@/lib/utils";
 import {
   Disclosure,
@@ -9,10 +13,7 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon, UserIcon } from "@heroicons/react/24/outline";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Link, useLocation, useNavigate } from "react-router-dom";
 
-// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
 
 const navigation = [
@@ -31,12 +32,9 @@ function NavMenu({
 }: {
   user: { name: string; lastname: string } | null;
 }) {
-  // console.log("name", user.name);
-  // console.log("lastname", user.lastname);
   const initials = user ? formatInitials(user.name, user.lastname) : null;
   const navigate = useNavigate();
   const location = useLocation();
-  // console.log(location.pathname);
 
   const queryClient = useQueryClient();
 
@@ -51,6 +49,14 @@ function NavMenu({
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["fetchCurrentUser"] });
+      toast.custom((id) => (
+        <ToastComponent
+          id={id.toString()}
+          type="yes"
+          title="Uspješna odjava!"
+          description="Hvala na korištenju naših usluga, vratite nam se ponovno - Insignia poliklinika"
+        />
+      ));
       navigate("/"); // Redirect after logout
     },
   });
@@ -162,7 +168,7 @@ function NavMenu({
                     <MenuItem>
                       <button
                         onClick={() => logoutMutation.mutate()}
-                        className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                        className="block w-full px-4 py-2 text-start text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                       >
                         Odjavi se
                       </button>

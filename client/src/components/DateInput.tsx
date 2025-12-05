@@ -11,7 +11,6 @@ type DateInputProps = {
   minDate?: Date;
 };
 
-// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
 
 // const bookedTimes = [

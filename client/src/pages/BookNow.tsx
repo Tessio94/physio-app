@@ -12,14 +12,6 @@ import DropdownOption from "@/components/DropdownOption";
 import AvailableSlots from "@/components/AvaliableSlots";
 import { cn } from "@/lib/utils";
 
-// const fetchServicesAndTherapists = async ({ queryKey }) => {
-//   const [, { serviceId, minDate, maxDate }] = queryKey;
-//   const response = await fetch(`/api/v1/book-now`);
-//   const data = await response.json();
-//   return data.payload;
-// };
-
-// const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
 
 interface Service {

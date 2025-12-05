@@ -22,7 +22,6 @@ const AppointmentDays = ({ appointments, details, serviceId }: Props) => {
     useState<ReservationData | null>(null);
 
   const slots = Object.entries(appointments);
-  // console.log(slots);
 
   const dates = slots.map((slot) => {
     return formatSlotDate(new Date(slot[0]));
@@ -68,7 +67,6 @@ const AppointmentDays = ({ appointments, details, serviceId }: Props) => {
                   </span>
                   <div className="flex space-x-[-10px]">
                     {therapistIds.map((iconId, i) => {
-                      // console.log(iconId);
                       return (
                         <div
                           className="h-fit w-fit overflow-hidden rounded-full border-[1px] border-slate-500 border-opacity-45 transition-all duration-500 group-hover:border-slate-100"

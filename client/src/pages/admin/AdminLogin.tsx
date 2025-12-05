@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Toaster } from "sonner";
 
 // const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
@@ -70,6 +71,7 @@ function Login() {
 
   return (
     <>
+      <Toaster position="top-center" />
       <h5 className="mb-12 mt-20 pt-7 text-center text-3xl">
         Prijava zaposlenika
       </h5>

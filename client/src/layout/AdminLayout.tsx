@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { useEffect } from "react";
+import { toast, Toaster } from "sonner";
+import ToastComponent from "../components/ui/ToastComponent";
 
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
 
@@ -20,38 +22,55 @@ const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  console.log("location", location);
+
   const {
     data: admin,
-    error,
+    isError,
     isPending,
   } = useQuery({
     queryKey: ["admin-auth", location.pathname],
     queryFn: fetchAdminInfo,
     retry: false,
   });
+  console.log("admin", admin);
+  console.log("error", isError);
 
-  // This ensures redirect happens only after render, when error becomes truthy.
   useEffect(() => {
-    if (error) {
+    if (isError || !admin) {
+      toast.custom((id) => (
+        <ToastComponent
+          id={id.toString()}
+          type="not"
+          title="Prijava potrebna!"
+          description="Prijavite se kako bi pristupili svom admin panelu."
+        />
+      ));
       navigate("/admin/log-in");
     }
-  }, [error, navigate]);
-
-  // possible slight flicker
-  //   if (error) {
-  //   return <Navigate to="/admin-login" replace />;
-  // }
+  }, [isError, navigate, admin]);
 
   if (isPending) return null;
 
   return (
-    <SidebarProvider defaultOpen={true} className="max-w-[100vw]">
-      <AppSidebar />
-      <main className="w-full max-w-[calc(100vw-255px)]">
-        <SidebarTrigger className="mb-5 h-8 pt-2" />
-        <Outlet context={admin} />
-      </main>
-    </SidebarProvider>
+    <>
+      {location.pathname === "/admin/log-in" ? (
+        <>
+          <Outlet />
+        </>
+      ) : (
+        <>
+          <Toaster position="top-center" />
+          <SidebarProvider defaultOpen={true} className="max-w-[100vw]">
+            <AppSidebar />
+            <main className="w-full max-w-[calc(100vw-255px)]">
+              <SidebarTrigger className="mb-5 h-8 pt-2" />
+              <Outlet context={admin} />
+            </main>
+          </SidebarProvider>
+        </>
+      )}
+    </>
   );
 };
 

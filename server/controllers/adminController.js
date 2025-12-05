@@ -41,7 +41,6 @@ const getAllUsers = async (req, res) => {
 		const formattedUsers = users.rows.map((user) => {
 			let { name, lastname, email, phone, registration_date } = user;
 			let date = formatUserDate(registration_date);
-			// console.log(date);
 
 			return { name, lastname, email, phone, date };
 		});
@@ -60,18 +59,14 @@ const getAdminAppointments = async (req, res) => {
 
 	const schedule = await getAdminSchedule(therapistId);
 	const bookings = await getBookings(therapistId);
-	// console.log("shcedule :", schedule);
-	// console.log("bookings :", bookings);
+
 	const availability = generateAvailabilityMap(schedule.rows);
-	// const appointmentDetails = generateDetails(schedule.rows);
+
 	const bookedSlots = generateBookingDetails(bookings.rows);
-	// console.log("availability :", availability);
-	// console.log("booked slots :", bookedSlots);
 
 	const appointments = res.status(200).json({
 		therapistId,
 		availability,
-		// appointmentDetails,
 		bookedSlots,
 	});
 };
@@ -79,10 +74,9 @@ const getAdminAppointments = async (req, res) => {
 const getAppointmentDetails = async (req, res) => {
 	const { userId } = req.params;
 	const { timestamp } = req.query;
-	// console.log("userid :", userId);
-	// console.log("timestamp :", timestamp);
+
 	const booking = await getBookingDetails(userId, timestamp);
-	// console.log(booking);
+
 	const {
 		created_at,
 		email,
@@ -128,7 +122,6 @@ const getAllAdminDashboardData = async (req, res) => {
 		return res.status(400).json({ error: "Invalid therapist ID" });
 	}
 
-	// console.log(typeof therapistId);
 	const userCount = await getUserCount(therapistId);
 	const bookingCount = await getBookingsCount(therapistId);
 	const serviceCount = await getTopService(therapistId);
@@ -156,10 +149,6 @@ const getAdminSettings = async (req, res) => {
 		return { id, name, lastname, email, phone, is_superadmin, date };
 	});
 
-	// console.log("admin list :", formattedAdminList);
-	// console.log("servicesList :", servicesList.rows);
-	// console.log("therapists services :", therapistsServices.rows);
-
 	res.status(200).json({
 		formattedAdminList,
 		servicesList: servicesList.rows,
@@ -168,7 +157,6 @@ const getAdminSettings = async (req, res) => {
 };
 
 const addTherapist = async (req, res) => {
-	// console.log(req.body);
 	const {
 		therapistName: name,
 		lastname,
@@ -198,7 +186,6 @@ const addTherapist = async (req, res) => {
 };
 
 const addService = async (req, res) => {
-	// console.log(req.body);
 	const { serviceName: name, serviceImageUrl: icon } = req.body;
 
 	try {
@@ -212,7 +199,6 @@ const addService = async (req, res) => {
 };
 
 const addServiceForTherapist = async (req, res) => {
-	// console.log(req.body);
 	const { therapist_id, service_id } = req.body;
 
 	try {
@@ -225,7 +211,6 @@ const addServiceForTherapist = async (req, res) => {
 };
 
 const removeTherapist = async (req, res) => {
-	// console.log(req.body);
 	const { therapist_id } = req.body;
 	try {
 		const result = await deleteTherapist(therapist_id);
@@ -237,7 +222,6 @@ const removeTherapist = async (req, res) => {
 };
 
 const removeService = async (req, res) => {
-	// console.log(req.body);
 	const { service_id } = req.body;
 	try {
 		const result = await deleteService(service_id);
@@ -249,7 +233,6 @@ const removeService = async (req, res) => {
 };
 
 const removeServiceForTherapist = async (req, res) => {
-	// console.log(req.body);
 	const { therapist_id, service_id } = req.body;
 
 	try {
@@ -262,20 +245,18 @@ const removeServiceForTherapist = async (req, res) => {
 };
 
 const removeBookingSlots = async (req, res) => {
-	// console.log(req.body);
 	const { unavailable_from, unavailable_to, therapist_id } = req.body;
 
 	const start = new Date(unavailable_from);
 	const end = new Date(unavailable_to);
 
 	const unavailableSlots = splitUnavailableSlots(start, end);
-	// console.log(unavailableSlots);
+
 	// Loop through the unavailable slots and insert them
 	for (let slot of unavailableSlots) {
 		await addUnavailability(therapist_id, slot);
 	}
 
-	// console.log(timeRange);
 	// const result = await addUnavailability(therapist_id, timeRange);
 	res.status(200).json({ success: true });
 	try {
