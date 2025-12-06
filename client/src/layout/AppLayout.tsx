@@ -2,7 +2,6 @@ import Footer from "@/components/Footer";
 import NavMenu from "@/components/NavMenu";
 import { Outlet } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Toaster } from "sonner";
 
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
 
