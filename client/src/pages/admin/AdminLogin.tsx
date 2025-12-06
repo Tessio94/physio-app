@@ -6,7 +6,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Toaster } from "sonner";
+import { toast } from "sonner";
+import ToastComponent from "@/components/ui/ToastComponent";
 
 // const devUrl = import.meta.env.VITE_URL_DEVELOPMENT;
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
@@ -60,9 +61,26 @@ function Login() {
     mutationFn: loginMutationFn,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["admin-info"] });
+      toast.custom((id) => (
+        <ToastComponent
+          id={id.toString()}
+          type="yes"
+          title="Prijava uspješna!"
+          description="Dobrodošli nazad - Insignia admin panel."
+        />
+      ));
+      console.log("admin - tapir");
       navigate("/admin/dashboard");
     },
-    onError: (err: Error) => alert(err.message),
+    onError: () =>
+      toast.custom((id) => (
+        <ToastComponent
+          id={id.toString()}
+          type="not"
+          title="Prijava neuspješna!"
+          description="Molimo vas koristite ispravne podatke!"
+        />
+      )),
   });
 
   const onSubmit = (data: z.infer<typeof loginSchema>) => {
@@ -71,7 +89,6 @@ function Login() {
 
   return (
     <>
-      <Toaster position="top-center" />
       <h5 className="mb-12 mt-20 pt-7 text-center text-3xl">
         Prijava zaposlenika
       </h5>

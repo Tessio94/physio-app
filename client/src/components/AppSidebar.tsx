@@ -1,4 +1,4 @@
-import { Calendar, Home, Settings, Users } from "lucide-react";
+import { Calendar, Home, Settings, Users, LogOut } from "lucide-react";
 
 import {
   Sidebar,
@@ -34,9 +34,14 @@ const items = [
     url: "/admin/postavke",
     icon: Settings,
   },
+  {
+    title: "Odjavite se",
+    url: null,
+    icon: LogOut,
+  },
 ];
 
-export function AppSidebar() {
+export function AppSidebar({ onLogout }: { onLogout: () => void }) {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
@@ -49,10 +54,20 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+                    {item.title === "Odjavite se" ? (
+                      <button
+                        onClick={onLogout}
+                        className="flex w-full items-center gap-2 text-left"
+                      >
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </button>
+                    ) : (
+                      <a href={item.url!}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </a>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

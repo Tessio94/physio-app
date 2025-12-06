@@ -100,7 +100,7 @@ const getBookingDetails = (userId, timestamp) => {
   const sql = `SELECT b.created_at, b.napomena, u.name || ' ' || u.lastname AS        user_full_name, u.email, u.phone, u.registration_date, s.name AS service_name, t.name || ' ' || t.lastname AS therapist_full_name
   FROM
   (SELECT * FROM bookings  
-  WHERE user_id = $1 AND time_range @> $2::timestamp) b
+  WHERE user_id = $1 AND time_range @> tsrange($2, $2)) b
   LEFT JOIN users u ON b.user_id = u.id
   LEFT JOIN services s ON b.service_id = s.id
   LEFT JOIN therapists t ON b.therapist_id = t.id`;

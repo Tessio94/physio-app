@@ -1,14 +1,15 @@
 const {
-	loginGoogle,
-	loginGoogleCallback,
-	loginFacebookCallback,
-	loginFacebook,
-	register,
-	login,
-	logoutUser,
-	getCurrentUser,
-	adminLogin,
-	getAdminInfo,
+  loginGoogle,
+  loginGoogleCallback,
+  loginFacebookCallback,
+  loginFacebook,
+  register,
+  login,
+  logoutUser,
+  getCurrentUser,
+  adminLogin,
+  getAdminInfo,
+  logoutAdminUser,
 } = require("../controllers/loginController");
 
 const express = require("express");
@@ -33,6 +34,8 @@ router.route("/logout").post(logoutUser);
 router.route("/current-user").get(requireAuth, getCurrentUser);
 
 router.route("/admin/login").post(adminLogin);
+
+router.route("/admin/logout").post(logoutAdminUser);
 
 router.route("/admin/current").get(requireAdminAuth, getAdminInfo);
 

@@ -13,6 +13,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminKorisnici from "./pages/admin/AdminKorisnici";
 import AdminKalendar from "./pages/admin/AdminKalendar";
 import AdminPostavke from "./pages/admin/AdminPostavke";
+import { Toaster } from "sonner";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
+        <Toaster position="top-center" />
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<AppLayout />}>
@@ -36,14 +38,13 @@ function App() {
             {/* replace ensures the redirect doesn't stay in the browser history
             (acts like a clean redirect). */}
             <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path="log-in" element={<AdminLogin />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="kalendar" element={<AdminKalendar />} />
             <Route path="korisnici" element={<AdminKorisnici />} />
             <Route path="postavke" element={<AdminPostavke />} />
           </Route>
 
-          {/* <Route path="/admin/log-in" element={<AdminLogin />} /> */}
+          <Route path="/admin/log-in" element={<AdminLogin />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

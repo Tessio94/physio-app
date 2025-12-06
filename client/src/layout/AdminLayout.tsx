@@ -1,9 +1,9 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import { useEffect } from "react";
-import { toast, Toaster } from "sonner";
+import { useEffect, useRef } from "react";
+import { toast } from "sonner";
 import ToastComponent from "../components/ui/ToastComponent";
 
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
@@ -33,11 +33,36 @@ const AdminLayout = () => {
     queryFn: fetchAdminInfo,
     retry: false,
   });
-  console.log("admin", admin);
-  console.log("error", isError);
+
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`${prodUrl}/auth/admin/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Logout failed");
+      return res.json();
+    },
+    onSuccess: async () => {
+      toast.custom((id) => (
+        <ToastComponent
+          id={id.toString()}
+          type="yes"
+          title="Uspješna odjava!"
+          description="Hvala na korištenju naših usluga, vratite nam se ponovno."
+        />
+      ));
+
+      navigate("/admin/log-in");
+    },
+  });
+
+  const shownRef = useRef(false);
 
   useEffect(() => {
-    if (isError || !admin) {
+    if (!shownRef.current && isError) {
+      shownRef.current = true;
+
       toast.custom((id) => (
         <ToastComponent
           id={id.toString()}
@@ -46,31 +71,23 @@ const AdminLayout = () => {
           description="Prijavite se kako bi pristupili svom admin panelu."
         />
       ));
-      navigate("/admin/log-in");
+
+      navigate("/admin/log-in", { replace: true });
     }
   }, [isError, navigate, admin]);
 
   if (isPending) return null;
 
+  if (isError || !admin) return null;
+
   return (
-    <>
-      {location.pathname === "/admin/log-in" ? (
-        <>
-          <Outlet />
-        </>
-      ) : (
-        <>
-          <Toaster position="top-center" />
-          <SidebarProvider defaultOpen={true} className="max-w-[100vw]">
-            <AppSidebar />
-            <main className="w-full max-w-[calc(100vw-255px)]">
-              <SidebarTrigger className="mb-5 h-8 pt-2" />
-              <Outlet context={admin} />
-            </main>
-          </SidebarProvider>
-        </>
-      )}
-    </>
+    <SidebarProvider defaultOpen={true} className="max-w-[100vw]">
+      <AppSidebar onLogout={() => logoutMutation.mutate()} />
+      <main className="w-full max-w-[calc(100vw-255px)]">
+        <SidebarTrigger className="mb-5 h-8 pt-2" />
+        <Outlet context={admin} />
+      </main>
+    </SidebarProvider>
   );
 };
 

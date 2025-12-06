@@ -37,7 +37,6 @@ function AppLayout() {
 
   return (
     <>
-      <Toaster position="top-center" />
       <NavMenu user={user} />
       <section className="relative flex-1">
         <Outlet />
