@@ -1,5 +1,5 @@
 import AdminPopup from "@/components/AdminPopup";
-import SkelAdminKalendar from "@/components/skeleton/skelAdminKalendar";
+import SkelAdminKalendar from "@/components/skeleton/SkelAdminKalendar";
 import { formatSlotDate } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
