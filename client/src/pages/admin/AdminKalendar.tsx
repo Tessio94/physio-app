@@ -1,4 +1,5 @@
 import AdminPopup from "@/components/AdminPopup";
+import SkelAdminKalendar from "@/components/skeleton/skelAdminKalendar";
 import { formatSlotDate } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -58,26 +59,20 @@ const AdminKalendar = () => {
   const admin = useOutletContext<Admin>();
   const { adminId } = admin;
 
-  const { data } = useQuery<ScheduleResponse>({
+  const { data, isPending } = useQuery<ScheduleResponse>({
     queryKey: ["schedule", adminId],
     queryFn: () => fetchAdminSchedule(adminId),
     enabled: !!adminId,
   });
 
-  // let details;
   let appointments: [string, string[]][] = [];
   let bookedSlots: Record<string, Record<string, number>> = {};
 
-  // console.log(data);
   if (data) {
     appointments = Object.entries(data["availability"]);
-    // details = data["appointmentDetails"];
     bookedSlots = data["bookedSlots"];
   }
-  // console.log(appointments);
-  // if (data) {
-  //   console.log(typeof data["bookedSlots"]["2025-04-24"]["08:00"]);
-  // }
+
   const dates = appointments?.map((slot) => {
     return formatSlotDate(new Date(slot[0]));
   });
@@ -138,56 +133,61 @@ const AdminKalendar = () => {
       <h4 className="ml-5 text-2xl text-slate-600">
         Raspored zakazanih termina
       </h4>
-      <div className="mx-5 pb-10 pt-6">
-        <div className="flex gap-1">
-          {appointments && dates
-            ? appointments.map((slot, i) => {
-                return (
-                  <div className="flex min-w-24 flex-col gap-1" key={i}>
-                    <div className="flex flex-col items-center rounded-lg bg-slate-500 p-2 text-slate-100">
-                      <p className="text-base italic">{dates[i].dayName}</p>
-                      <p className="text-sm italic">{dates[i].dateString}</p>
+      {isPending ? (
+        <SkelAdminKalendar />
+      ) : (
+        <div className="mx-5 pb-10 pt-6">
+          <div className="flex gap-1">
+            {appointments && dates
+              ? appointments.map((slot, i) => {
+                  return (
+                    <div className="flex min-w-24 flex-col gap-1" key={i}>
+                      <div className="flex flex-col items-center rounded-lg bg-slate-500 p-2 text-slate-100">
+                        <p className="text-base italic">{dates[i].dayName}</p>
+                        <p className="text-sm italic">{dates[i].dateString}</p>
+                      </div>
+
+                      {timeSlots.map((timeSlot, i) => {
+                        const date = slot[0];
+                        const isBooked =
+                          bookedSlots &&
+                          bookedSlots[date] &&
+                          bookedSlots[date][timeSlot] !== undefined;
+
+                        const userId = isBooked
+                          ? bookedSlots[date][timeSlot]
+                          : null;
+
+                        return isBooked && userId ? (
+                          <div
+                            className="group flex cursor-pointer items-center justify-center gap-8 rounded-lg border-2 border-slate-200 bg-red-300 p-2 font-bold transition-all duration-500 hover:bg-red-500"
+                            key={i}
+                            onMouseEnter={(e) =>
+                              handleSlotSelect(e, userId, timeSlot, date)
+                            }
+                            onMouseLeave={() => setShowPopup(false)}
+                          >
+                            <span className="text-slate-900 transition-all duration-500 group-hover:text-slate-100">
+                              {timeSlot}
+                            </span>
+                          </div>
+                        ) : (
+                          <div
+                            className="group flex items-center justify-center gap-8 rounded-lg border-2 border-slate-200 p-2"
+                            key={i}
+                          >
+                            <span className="text-slate-900">{timeSlot}</span>
+                          </div>
+                        );
+                      })}
                     </div>
-
-                    {timeSlots.map((timeSlot, i) => {
-                      const date = slot[0]; // e.g. "2025-04-22" - today
-                      const isBooked =
-                        bookedSlots &&
-                        bookedSlots[date] &&
-                        bookedSlots[date][timeSlot] !== undefined;
-
-                      const userId = isBooked
-                        ? bookedSlots[date][timeSlot]
-                        : null;
-
-                      return isBooked && userId ? (
-                        <div
-                          className="group flex cursor-pointer items-center justify-center gap-8 rounded-lg border-2 border-slate-200 bg-red-300 p-2 font-bold transition-all duration-500 hover:bg-red-500"
-                          key={i}
-                          onMouseEnter={(e) =>
-                            handleSlotSelect(e, userId, timeSlot, date)
-                          }
-                          onMouseLeave={() => setShowPopup(false)}
-                        >
-                          <span className="text-slate-900 transition-all duration-500 group-hover:text-slate-100">
-                            {timeSlot}
-                          </span>
-                        </div>
-                      ) : (
-                        <div
-                          className="group flex items-center justify-center gap-8 rounded-lg border-2 border-slate-200 p-2"
-                          key={i}
-                        >
-                          <span className="text-slate-900">{timeSlot}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                );
-              })
-            : "Loadanje podataka"}
+                  );
+                })
+              : "Loadanje podataka"}
+          </div>
         </div>
-      </div>
+      )}
+
       {bookingDetails && showPopup && (
         <AdminPopup
           bookingDetails={bookingDetails}

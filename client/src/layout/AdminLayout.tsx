@@ -2,9 +2,10 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import ToastComponent from "../components/ui/ToastComponent";
+import Spinner from "@/components/skeleton/Spinner";
 
 const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
 
@@ -76,16 +77,17 @@ const AdminLayout = () => {
     }
   }, [isError, navigate, admin]);
 
-  if (isPending) return null;
+  // if (isPending) return null;
 
-  if (isError || !admin) return null;
+  // if (isError || !admin)  return null;
+  if (isError) return null;
 
   return (
     <SidebarProvider defaultOpen={true} className="max-w-[100vw]">
       <AppSidebar onLogout={() => logoutMutation.mutate()} />
       <main className="w-full max-w-[calc(100vw-255px)]">
         <SidebarTrigger className="mb-5 h-8 pt-2" />
-        <Outlet context={admin} />
+        {isPending ? <Spinner /> : <Outlet context={admin} />}
       </main>
     </SidebarProvider>
   );

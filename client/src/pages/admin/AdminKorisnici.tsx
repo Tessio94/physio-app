@@ -1,3 +1,4 @@
+import SkelAdminKorisnici from "@/components/skeleton/SkelAdminKorisnici";
 import { columns } from "@/components/ui/shadcn/payments/columns";
 import { DataTable } from "@/components/ui/shadcn/payments/data-table";
 import { useQuery } from "@tanstack/react-query";
@@ -8,7 +9,7 @@ const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
 export default function AdminKorisnici() {
   // const [data, setData] = useState([]);
 
-  const { data } = useQuery({
+  const { data, isPending } = useQuery({
     queryKey: ["usersData"],
     queryFn: () =>
       fetch(`${prodUrl}/api/v1/admin/korisnici`).then((res) => res.json()),
@@ -28,11 +29,15 @@ export default function AdminKorisnici() {
         Lista registriranih korisnika
       </h4>
       <div className="mx-5 pt-2">
-        <DataTable
-          columns={columns(false, false)}
-          data={field ?? []}
-          searchShow={true}
-        />
+        {isPending ? (
+          <SkelAdminKorisnici withSearch={true} />
+        ) : (
+          <DataTable
+            columns={columns(false, false)}
+            data={field ?? []}
+            searchShow={true}
+          />
+        )}
       </div>
     </>
   );

@@ -18,8 +18,6 @@ import { Toaster } from "sonner";
 const queryClient = new QueryClient();
 
 function App() {
-  //useLocation() may be used only in the context of a <Router> component.
-
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
@@ -33,10 +31,8 @@ function App() {
             <Route path="book-now" element={<BookNow />} />
           </Route>
 
-          {/* Admin pages with their own layout */}
+          {/* Admin pages layout */}
           <Route path="/admin" element={<AdminLayout />}>
-            {/* replace ensures the redirect doesn't stay in the browser history
-            (acts like a clean redirect). */}
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="kalendar" element={<AdminKalendar />} />
