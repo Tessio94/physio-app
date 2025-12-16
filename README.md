@@ -4,7 +4,7 @@ Insignia is a full-stack physiotherapy booking web application that allows users
 
 ---
 
-## 🧠 Project Overview
+## Project Overview
 
 After clicking **“Rezerviraj termin”**, users can choose a service or a service with a therapist to book an appointment.  
 To book an appointment, users must **register or log in**.
@@ -18,7 +18,7 @@ An **admin panel** is available at `/admin`.
 
 ---
 
-## ✨ Features
+## Features
 
 ### User Features
 - Choose from **6 therapists**, each offering **3 different services**
@@ -49,7 +49,7 @@ An **admin panel** is available at `/admin`.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - React (Vite)
@@ -67,22 +67,3 @@ An **admin panel** is available at `/admin`.
 - Docker
 - NGINX
 - VPS deployment
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js (v18+ recommended)
-- npm
-- PostgreSQL
-- Docker (optional, for deployment)
-
----
-
-## 📦 Installation & Development
-
-### 1. Clone the repository
-```bash
-git clone <repository-url>
-cd insignia
