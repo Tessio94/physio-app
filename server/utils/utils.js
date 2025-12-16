@@ -1,56 +1,45 @@
+const MINUTES_30 = 30 * 60 * 1000;
+
 function generateAvailabilityMap(slots) {
 	const result = {};
 
-	// First, group slots by date for easier pre-building
 	const therapistSlotsByDate = {};
 
 	slots.forEach(({ therapist_id, available }) => {
 		// Fix closing bracket, parse the JSON
 		const [rawStart, rawEnd] = JSON.parse(available.replace(")", "]"));
-		const start = new Date(rawStart);
-		const end = new Date(rawEnd);
+		let start = Date.parse(rawStart);
+		const end = Date.parse(rawEnd);
 
-		const current = new Date(start);
-
-		while (current < end) {
-			const dateKey = current.toISOString().split("T")[0]; // e.g. "2025-04-17"
-			const timeKey = current.toLocaleTimeString("en-GB", {
-				hour: "2-digit",
-				minute: "2-digit",
-			}); // e.g. "08:30"
+		while (start < end) {
+			const dateKey = formatDateFix(start);
+			const timeKey = formatTimeFix(start);
 
 			// Ensure date exists
 			if (!therapistSlotsByDate[dateKey]) therapistSlotsByDate[dateKey] = {};
 
 			// Ensure time exists
 			if (!therapistSlotsByDate[dateKey][timeKey])
-				therapistSlotsByDate[dateKey][timeKey] = [];
+				therapistSlotsByDate[dateKey][timeKey] = new Set();
 
-			// Add therapist if not already in the array
-			if (!therapistSlotsByDate[dateKey][timeKey].includes(therapist_id)) {
-				therapistSlotsByDate[dateKey][timeKey].push(therapist_id);
-			}
+			therapistSlotsByDate[dateKey][timeKey].add(therapist_id);
 
-			current.setMinutes(current.getMinutes() + 30);
+			start += MINUTES_30;
 		}
 	});
 
 	Object.entries(therapistSlotsByDate).forEach(([dateKey, timeslots]) => {
 		result[dateKey] = {};
-		let current = new Date(`${dateKey}T08:00:00`);
+		let current = Date.parse(`${dateKey}T08:00:00`);
 
 		for (let i = 0; i < 24; i++) {
-			// 08:00 to 19:30 = 24 slots
-			const timeKey = current.toLocaleTimeString("en-GB", {
-				hour: "2-digit",
-				minute: "2-digit",
-			});
+			const timeKey = formatTimeFix(current);
 
 			if (timeslots[timeKey]) {
 				result[dateKey][timeKey] = timeslots[timeKey];
 			}
 
-			current.setMinutes(current.getMinutes() + 30);
+			current += MINUTES_30;
 		}
 	});
 
@@ -141,7 +130,7 @@ function generateBookingDetails(appointments) {
 				minute: "2-digit",
 				hour12: false,
 			});
-			// console.log(timeFormatted);
+
 			if (!formatted[date]) {
 				formatted[date] = {};
 			}
@@ -254,6 +243,17 @@ function encodeBase64(data) {
 
 function formatDateCron(date) {
 	return date.toISOString().replace("T", " ").slice(0, 19);
+}
+
+function formatDateFix(ts) {
+	return new Date(ts).toISOString().slice(0, 10);
+}
+
+function formatTimeFix(ts) {
+	const d = new Date(ts);
+	return `${String(d.getHours()).padStart(2, "0")}:${String(
+		d.getMinutes()
+	).padStart(2, "0")}`;
 }
 
 module.exports = {

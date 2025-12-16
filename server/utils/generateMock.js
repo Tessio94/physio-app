@@ -3,11 +3,11 @@ const fs = require("fs");
 const path = require("path");
 
 const therapists = [
-	{ id: 1, name: "Ana", lastname: "Barišić" },
-	{ id: 2, name: "Luka", lastname: "Perić" },
-	{ id: 3, name: "Ema", lastname: "Jurić" },
-	{ id: 4, name: "Marija", lastname: "Kovačević" },
-	{ id: 5, name: "Nikola", lastname: "Horvat" },
+	{ id: 1, name: "Nikola", lastname: "Horvat" },
+	{ id: 2, name: "Marija", lastname: "Kovačević" },
+	{ id: 3, name: "Ana", lastname: "Barišić" },
+	{ id: 4, name: "Luka", lastname: "Perić" },
+	{ id: 5, name: "Ema", lastname: "Jurić" },
 	{ id: 6, name: "Dina", lastname: "Vuković" },
 ];
 
@@ -22,11 +22,11 @@ const therapistServices = {
 
 const serviceNames = {
 	1: "Elektroterapija",
-	2: "Masaža",
+	2: "Ultrazvučna terapija",
 	3: "Manualna terapija",
-	4: "Kineziterapija",
-	5: "Terapija laserom",
-	6: "Ultrazvuk",
+	4: "Hidroterapija",
+	5: "Laserska terapija",
+	6: "Kineziterapija",
 };
 
 function format(date) {

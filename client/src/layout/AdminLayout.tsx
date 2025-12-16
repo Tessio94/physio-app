@@ -77,9 +77,6 @@ const AdminLayout = () => {
     }
   }, [isError, navigate, admin]);
 
-  // if (isPending) return null;
-
-  // if (isError || !admin)  return null;
   if (isError) return null;
 
   return (

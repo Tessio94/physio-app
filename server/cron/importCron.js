@@ -9,6 +9,21 @@ function formatDateTime(date) {
 	return date.toISOString().slice(0, 19).replace("T", " ");
 }
 
+function computeEndStr(dateStr, timeStr, durationMinutes) {
+	const [h, m] = timeStr.split(":").map(Number);
+
+	const startMinutes = h * 60 + m;
+	const endMinutes = startMinutes + durationMinutes;
+
+	const endHour = Math.floor(endMinutes / 60);
+	const endMinute = endMinutes % 60;
+
+	const hh = String(endHour).padStart(2, "0");
+	const mm = String(endMinute).padStart(2, "0");
+
+	return `${dateStr} ${hh}:${mm}:00`;
+}
+
 async function loadTherapists() {
 	const res = await pool.query(
 		`SELECT id, name, lastname FROM therapists ORDER BY id`
@@ -40,19 +55,19 @@ async function runBookingsInsert() {
 			}
 
 			// Build the exact start datetime from tpl.date (YYYY-MM-DD) and tpl.time (HH:MM)
-			// Example: "2025-12-02" + "13:30" -> new Date("2025-12-02T13:30:00")
 			const start = new Date(`${tpl.date}T${tpl.time}:00`);
-			const end = new Date(start);
-			end.setMinutes(end.getMinutes() + tpl.duration_minutes);
+			const startStr = `${tpl.date} ${tpl.time}:00`;
 
-			// created_at should be some time *before* the slot.
-			// We'll set it to 1..5 days before the start (random) at a typical reservation time (e.g. 11:29:23)
+			const endStr = computeEndStr(tpl.date, tpl.time, tpl.duration_minutes);
+			// created_at should be some time before the slot.
+			// We'll set it to 1-5 days before the start (random) at a typical reservation time (e.g. 11:29:23)
+			console.log("start: ", startStr);
 			const daysBefore = Math.floor(Math.random() * 5) + 1; // 1..5
 			const createdAt = new Date(start);
 			createdAt.setDate(createdAt.getDate() - daysBefore);
 			// keep time-of-day for created_at more human
 			createdAt.setHours(11, 29, Math.floor(Math.random() * 1000), 0);
-
+			console.log("createdAt: ", createdAt);
 			const napomena = tpl.napomena_template
 				.replace("{DAY}", String(start.getDate()).padStart(2, "0"))
 				.replace("{MONTH}", String(start.getMonth() + 1).padStart(2, "0"))
@@ -61,9 +76,7 @@ async function runBookingsInsert() {
 				.replace("{LASTNAME}", therapist.lastname)
 				.replace("{SERVICE}", service.name);
 
-			const timeRange = `["${formatDateTime(start)}", "${formatDateTime(
-				end
-			)}")`;
+			const timeRange = `["${startStr}", "${endStr}")`;
 
 			await pool.query(
 				`INSERT INTO bookings (user_id, service_id, therapist_id, napomena, time_range, created_at)
@@ -74,7 +87,7 @@ async function runBookingsInsert() {
 					tpl.therapist_id,
 					napomena,
 					timeRange,
-					formatDateTime(createdAt), // pass created_at explicitly
+					formatDateTime(createdAt),
 				]
 			);
 		});

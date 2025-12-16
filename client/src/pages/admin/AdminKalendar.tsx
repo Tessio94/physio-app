@@ -23,8 +23,9 @@ const prodUrl = import.meta.env.VITE_URL_PRODUCTION;
 
 async function fetchAdminSchedule(adminId: number) {
   const response = await fetch(`${prodUrl}/api/v1/admin/schedule/${adminId}`);
+
   const data = await response.json();
-  // console.log(data);
+
   if (!response.ok) {
     throw new Error("Failed to fetch available slots");
   }
@@ -37,14 +38,13 @@ async function fetchAppointmentDetails(selectedAppointment: {
   time: string;
   date: string;
 }) {
-  // console.log("selectedAppointment :", selectedAppointment);
   const { userId, time, date } = selectedAppointment;
   const timestamp = `${date} ${time}:00`;
   const response = await fetch(
     `${prodUrl}/api/v1/admin/schedule/appointment-details/${userId}?timestamp=${encodeURIComponent(timestamp)}`,
   );
   const data = await response.json();
-  // console.log(data);
+
   if (!response.ok) {
     throw new Error("Failed to fetch available slots");
   }

@@ -53,6 +53,7 @@ const getAllUsers = async (req, res) => {
 
 const getAdminAppointments = async (req, res) => {
 	const therapistId = Number(req.params.therapistId);
+
 	if (isNaN(therapistId)) {
 		return res.status(400).json({ error: "Invalid therapist ID" });
 	}
@@ -61,10 +62,9 @@ const getAdminAppointments = async (req, res) => {
 	const bookings = await getBookings(therapistId);
 
 	const availability = generateAvailabilityMap(schedule.rows);
-
 	const bookedSlots = generateBookingDetails(bookings.rows);
 
-	const appointments = res.status(200).json({
+	res.status(200).json({
 		therapistId,
 		availability,
 		bookedSlots,
