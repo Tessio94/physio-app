@@ -40,7 +40,6 @@ const AppointmentDays = ({ appointments, details, serviceId }: Props) => {
     } else {
       console.log("Selected therapist ID:", therapists[0]);
       setSelectedReservation({ therapistId: therapists[0], time, date });
-      // Trigger appointment logic here...
     }
   };
 
@@ -54,6 +53,7 @@ const AppointmentDays = ({ appointments, details, serviceId }: Props) => {
               <p className="text-sm italic">{dates[i].dateString}</p>
             </div>
             {Object.entries(slot[1]).map(([time, therapistIds], i) => {
+              console.log("therapistIds", therapistIds);
               return (
                 <div
                   className="group flex cursor-pointer items-center justify-between gap-8 rounded-lg border-2 border-slate-200 p-2 transition-all duration-500 hover:bg-slate-500"

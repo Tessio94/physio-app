@@ -67,7 +67,7 @@ const AdminKalendar = () => {
 
   let appointments: [string, string[]][] = [];
   let bookedSlots: Record<string, Record<string, number>> = {};
-
+  console.log("adminData: ", data);
   if (data) {
     appointments = Object.entries(data["availability"]);
     bookedSlots = data["bookedSlots"];

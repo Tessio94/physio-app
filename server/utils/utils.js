@@ -15,19 +15,17 @@ function generateAvailabilityMap(slots) {
 			const dateKey = formatDateFix(start);
 			const timeKey = formatTimeFix(start);
 
-			// Ensure date exists
 			if (!therapistSlotsByDate[dateKey]) therapistSlotsByDate[dateKey] = {};
-
-			// Ensure time exists
 			if (!therapistSlotsByDate[dateKey][timeKey])
-				therapistSlotsByDate[dateKey][timeKey] = new Set();
+				therapistSlotsByDate[dateKey][timeKey] = [];
 
-			therapistSlotsByDate[dateKey][timeKey].add(therapist_id);
+			if (!therapistSlotsByDate[dateKey][timeKey].includes(therapist_id)) {
+				therapistSlotsByDate[dateKey][timeKey].push(therapist_id);
+			}
 
 			start += MINUTES_30;
 		}
 	});
-
 	Object.entries(therapistSlotsByDate).forEach(([dateKey, timeslots]) => {
 		result[dateKey] = {};
 		let current = Date.parse(`${dateKey}T08:00:00`);
