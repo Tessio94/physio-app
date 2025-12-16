@@ -6,7 +6,7 @@ require("dotenv").config();
 const password = process.env.DB_PSSW;
 
 const pool = new Pool({
-	host: "localhost",
+	host: "db2",
 	user: "postgres",
 	database: "postgres",
 	password: password,
