@@ -85,7 +85,8 @@ LEFT JOIN services s
 LEFT JOIN bookings b 
        ON ajde.therapist_id = b.therapist_id
 LEFT JOIN users u 
-       ON b.user_id = u.id;
+       ON b.user_id = u.id
+ORDER BY lower(ajde.available) ASC;
     `;
 
   return pool.query(sql, [therapistId]);
