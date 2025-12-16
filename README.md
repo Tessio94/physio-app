@@ -10,11 +10,7 @@ After clicking **“Rezerviraj termin”**, users can choose a service or a serv
 To book an appointment, users must **register or log in**.
 
 An **admin panel** is available at `/admin`.
-
-- **Admin login format:**  
-  `therapistName@insignia.hr` (e.g. `ana@insignia.hr`)
-- **Admin password (for all admins):**  
-  `password123`
+Admin requires username and password.
 
 ---
 
