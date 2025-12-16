@@ -1,0 +1,502 @@
+[
+  {
+    "id": 1,
+    "name": "Šime",
+    "lastname": "Klapan",
+    "email": "sime.klapan@gmail.com",
+    "phone": "091-101-0201",
+    "password": "$2b$12$o1f9obwvEm24xY768pN9SeX3s4//OUkvuazR0RkMXliY5HSoJsmjC",
+    "registration_date": "2024-03-02T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 2,
+    "name": "Ivan",
+    "lastname": "Horvat",
+    "email": "ivan.horvat@gmail.com",
+    "phone": "092-102-0202",
+    "password": "$2b$12$hTcFn0P4n5oD./UUctqEZepiQP3ZGzxtFWSfH.7WzrJNPGDHDtXKW",
+    "registration_date": "2024-03-03T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 3,
+    "name": "Ane",
+    "lastname": "Dizdar",
+    "email": "ane.dizdar@gmail.com",
+    "phone": "093-103-0203",
+    "password": "$2b$12$sbIFqgKOoeDUjvhzPfZJ4eoaLGsVYRuxKx5MApICIFpxROgMPusYa",
+    "registration_date": "2024-03-04T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 4,
+    "name": "Marta",
+    "lastname": "Raseta",
+    "email": "marta.raseta@gmail.com",
+    "phone": "094-104-0204",
+    "password": "$2b$12$HWYe/BPlLusW5DIySzyAPOsic39RuFxsziMT/LHCm0B2Cy6sHGtKq",
+    "registration_date": "2024-03-05T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 5,
+    "name": "Anton",
+    "lastname": "Vukovic",
+    "email": "anton.vukovic@gmail.com",
+    "phone": "095-105-0205",
+    "password": "$2b$12$DtKQoGUDHK9WksH6uGqHY.s.Ub/OtG.p72jKefv5YJwy8eLJB8Pvy",
+    "registration_date": "2024-03-06T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 6,
+    "name": "Vesna",
+    "lastname": "Nimac",
+    "email": "vesna.nimac@gmail.com",
+    "phone": "096-106-0206",
+    "password": "$2b$12$E3pkGHItAfMLSoxvxdeYceKpY/V6ciYR5L1xM158PqMD41iNNojVa",
+    "registration_date": "2024-03-07T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 7,
+    "name": "Milena",
+    "lastname": "Matana",
+    "email": "milena.matana@gmail.com",
+    "phone": "097-107-0207",
+    "password": "$2b$12$JxG1fG5YWGYVZqiwoek/reo1VThLZqVUGAx0NCEzX915Nt3s5c0Uy",
+    "registration_date": "2024-03-08T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 8,
+    "name": "Sara",
+    "lastname": "Lazar",
+    "email": "sara.lazar@gmail.com",
+    "phone": "098-108-0208",
+    "password": "$2b$12$7iFd0IAvXR25Etqe4z9gfuxBmd4BSj0eF47//wOAkqfTFSr6unYwS",
+    "registration_date": "2024-03-09T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 9,
+    "name": "Marko",
+    "lastname": "Kovac",
+    "email": "marko.kovac@gmail.com",
+    "phone": "099-109-0209",
+    "password": "$2b$12$rMxMzrnJ06lIwxOjWp3aSuFeKoIo0XYUPC9tr1QrdeUOSpceeOFKe",
+    "registration_date": "2024-03-10T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 10,
+    "name": "Petra",
+    "lastname": "Babic",
+    "email": "petra.babic@gmail.com",
+    "phone": "090-110-0210",
+    "password": "$2b$12$vJ8BQQYcC6Ez1IEUBVu8u.ica3a4YrH9TU58N0MQg.dvKFPiwgXQK",
+    "registration_date": "2024-03-11T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 11,
+    "name": "Luka",
+    "lastname": "Maric",
+    "email": "luka.maric@gmail.com",
+    "phone": "091-111-0211",
+    "password": "$2b$12$WyyPECSJOLVVAqcAnAyXUuQlm7zmeHx3I0s1UhmYCF.P5q/ee93Uq",
+    "registration_date": "2024-03-12T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 12,
+    "name": "Ana",
+    "lastname": "Peric",
+    "email": "ana.peric@gmail.com",
+    "phone": "092-112-0212",
+    "password": "$2b$12$fk4S7e7yLDZG49TRFYdRe.RqpZkh8LIUSBSDWMKuZvV7A4rVKjSe.",
+    "registration_date": "2024-03-13T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 13,
+    "name": "Josip",
+    "lastname": "Basic",
+    "email": "josip.basic@gmail.com",
+    "phone": "093-113-0213",
+    "password": "$2b$12$xJCPwFmPgoSxzGlDfkWmLubCnkWF47DwmWHVsS04os.fN7bfgdmUO",
+    "registration_date": "2024-03-14T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 14,
+    "name": "Ema",
+    "lastname": "Tadic",
+    "email": "ema.tadic@gmail.com",
+    "phone": "094-114-0214",
+    "password": "$2b$12$NjAGd3u3bHuPXR.iw4PpUu4/tp9Hqd99GgejU/kQZM7QK68dcoz0S",
+    "registration_date": "2024-03-15T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 15,
+    "name": "Filip",
+    "lastname": "Jurisic",
+    "email": "filip.jurisic@gmail.com",
+    "phone": "095-115-0215",
+    "password": "$2b$12$ZuwXsndqYVloYLn9YRwa7.B2WtbYQQM4eViVuydE6KU1JFm3w4LUi",
+    "registration_date": "2024-03-16T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 16,
+    "name": "Tea",
+    "lastname": "Novak",
+    "email": "tea.novak@gmail.com",
+    "phone": "096-116-0216",
+    "password": "$2b$12$uqgeQj9KnR8HFooBep8cP.2cBOHuFo3QYcHXA7XSKHfSjdsxwNEFu",
+    "registration_date": "2024-03-17T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 17,
+    "name": "Nikola",
+    "lastname": "Bozic",
+    "email": "nikola.bozic@gmail.com",
+    "phone": "097-117-0217",
+    "password": "$2b$12$KHJRp9rmDc4MWX8IVDmqq.pJe5WwLeBYLhtihJsaLYaAH9BSMtil.",
+    "registration_date": "2024-03-18T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 18,
+    "name": "Karla",
+    "lastname": "Grgic",
+    "email": "karla.grgic@gmail.com",
+    "phone": "098-118-0218",
+    "password": "$2b$12$/0D03/6uUDGkmd5OXYpzdunT1lEyiikPy2p9vEasUhAAWvGjVTE6O",
+    "registration_date": "2024-03-19T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 19,
+    "name": "Tomislav",
+    "lastname": "Vidovic",
+    "email": "tomislav.vidovic@gmail.com",
+    "phone": "099-119-0219",
+    "password": "$2b$12$QE48idOzc/aq1Sf0ScXcaurgieB0wvgviSwAHdzWuJgBMG672CSUe",
+    "registration_date": "2024-03-20T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 20,
+    "name": "Lucija",
+    "lastname": "Radic",
+    "email": "lucija.radic@gmail.com",
+    "phone": "090-120-0220",
+    "password": "$2b$12$G9Oh5Yc/oVKntnSneIDtZu/UGbnBTQFRr0Zvh0HzA8oQy5NC9aSu6",
+    "registration_date": "2024-03-21T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 21,
+    "name": "Mario",
+    "lastname": "Soldo",
+    "email": "mario.soldo@gmail.com",
+    "phone": "091-121-0221",
+    "password": "$2b$12$gSDBYnPoJBhaxVbEvkRNNexwkbHo4kBHeQljV2j.p7JS9KBvBtSlu",
+    "registration_date": "2024-03-22T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 22,
+    "name": "Ivana",
+    "lastname": "Mikic",
+    "email": "ivana.mikic@gmail.com",
+    "phone": "092-122-0222",
+    "password": "$2b$12$kY/rlLrFnoWhX9x3hvyA8ecRdpXcFe96xf64U8FU.8ndnca3B7VSi",
+    "registration_date": "2024-03-23T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 23,
+    "name": "Dario",
+    "lastname": "Knezevic",
+    "email": "dario.knezevic@gmail.com",
+    "phone": "093-123-0223",
+    "password": "$2b$12$qdNi4Fqrc.Ri.w42RQKVD.WLJvdt3oxOpBlJJhr/O2yFlkwYncHoa",
+    "registration_date": "2024-03-24T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 24,
+    "name": "Paula",
+    "lastname": "Loncar",
+    "email": "paula.loncar@gmail.com",
+    "phone": "094-124-0224",
+    "password": "$2b$12$O6teaZW/rt7gE/QYypZhdO4nHL9phglmx//OokermEjBukH3e7XPi",
+    "registration_date": "2024-03-25T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 25,
+    "name": "Kristijan",
+    "lastname": "Skoric",
+    "email": "kristijan.skoric@gmail.com",
+    "phone": "095-125-0225",
+    "password": "$2b$12$8e2wnXCzdi50ebLZzWuQAOk1durdwkK2IwOwgAiuNbyoiZI.jdxfq",
+    "registration_date": "2024-03-26T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 26,
+    "name": "Nina",
+    "lastname": "Varga",
+    "email": "nina.varga@gmail.com",
+    "phone": "096-126-0226",
+    "password": "$2b$12$r2/LvGpYnSd4kcjTZwUtWON85AJ4UFBPYJsb.mW7v8HM0Ck77LNpW",
+    "registration_date": "2024-03-27T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 27,
+    "name": "Robert",
+    "lastname": "Simic",
+    "email": "robert.simic@gmail.com",
+    "phone": "097-127-0227",
+    "password": "$2b$12$Q0GDgY2K7R1zgjtNwPw9aulawhnvTbVpzk/uGMsuG8FnQhuc9rON2",
+    "registration_date": "2024-03-28T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 28,
+    "name": "Helena",
+    "lastname": "Juric",
+    "email": "helena.juric@gmail.com",
+    "phone": "098-128-0228",
+    "password": "$2b$12$UtHD.qSa44q8UFE2J6SeYuTmjrhYLBftSY0XmisZHOK3pXsbu0dxm",
+    "registration_date": "2024-03-29T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 29,
+    "name": "Matija",
+    "lastname": "Pavic",
+    "email": "matija.pavic@gmail.com",
+    "phone": "099-129-0229",
+    "password": "$2b$12$.4/fBrzVG/anJs0mzmLoEeBUJ7UblH9IVYDgUw.mz77LXno2YP2Zy",
+    "registration_date": "2024-03-30T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 30,
+    "name": "Lorena",
+    "lastname": "Zupan",
+    "email": "lorena.zupan@gmail.com",
+    "phone": "090-130-0230",
+    "password": "$2b$12$YZBLiQlbqIJlcEjQsoZFmuhiKO68wwuMaHee9h7u3LG.U1V1s04Oi",
+    "registration_date": "2024-03-31T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 31,
+    "name": "Hrvoje",
+    "lastname": "Bencic",
+    "email": "hrvoje.bencic@gmail.com",
+    "phone": "091-131-0231",
+    "password": "$2b$12$flbZe0kq6pnwuqcUC/z9j.8pwR7RYRqzM6yPhAFFMc5br7VQB51sW",
+    "registration_date": "2024-04-01T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 32,
+    "name": "Maja",
+    "lastname": "Sever",
+    "email": "maja.sever@gmail.com",
+    "phone": "092-132-0232",
+    "password": "$2b$12$sygkbivw3qrYjlU0QMB8lOiyaxs2E1Ga83T5aOMmu5cFoDCMosouS",
+    "registration_date": "2024-04-02T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 33,
+    "name": "Stjepan",
+    "lastname": "Vuk",
+    "email": "stjepan.vuk@gmail.com",
+    "phone": "093-133-0233",
+    "password": "$2b$12$hFaSSiTMHkS9VobixQ85vezH7kLlq0W/Pf3v4XuWpaoWa42JweWq.",
+    "registration_date": "2024-04-03T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 34,
+    "name": "Iva",
+    "lastname": "Prpic",
+    "email": "iva.prpic@gmail.com",
+    "phone": "094-134-0234",
+    "password": "$2b$12$lUTgEQ2fOstRc/pTZQ8TPe9fcn9DtKUeHpMM3Di11oc5G5A.yhOWK",
+    "registration_date": "2024-04-04T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 35,
+    "name": "Dominik",
+    "lastname": "Rukavina",
+    "email": "dominik.rukavina@gmail.com",
+    "phone": "095-135-0235",
+    "password": "$2b$12$47wPjAu/BB4Ynw/1nvZQquU/Q2eURJwUtn4MWMK4057om8ND0QQV6",
+    "registration_date": "2024-04-05T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 36,
+    "name": "Lea",
+    "lastname": "Mandic",
+    "email": "lea.mandic@gmail.com",
+    "phone": "096-136-0236",
+    "password": "$2b$12$ML1PXn8H8MnYM7exxh1U1OjIv7tfL4dA0gdN60mU7K8G7m/zT5ENW",
+    "registration_date": "2024-04-06T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 37,
+    "name": "Goran",
+    "lastname": "Antic",
+    "email": "goran.antic@gmail.com",
+    "phone": "097-137-0237",
+    "password": "$2b$12$8ugTq1ZywyNiqme4EPvcPuLD.KXVwfyfPfj2KE6gFqVhYl0m0sc7S",
+    "registration_date": "2024-04-07T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 38,
+    "name": "Magdalena",
+    "lastname": "Crnic",
+    "email": "magdalena.crnic@gmail.com",
+    "phone": "098-138-0238",
+    "password": "$2b$12$UcocWuWgHNXcCB4T9sqn9ucc.UcIj.aITZiAohdiTj3vtXyAxGdJG",
+    "registration_date": "2024-04-08T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 39,
+    "name": "Patrik",
+    "lastname": "Blazevic",
+    "email": "patrik.blazevic@gmail.com",
+    "phone": "099-139-0239",
+    "password": "$2b$12$UpqeRa/8BXd0mwNZtZbsKOvLtp0Rw31BiJNmLEA6wvPzpJgZGh1Ei",
+    "registration_date": "2024-04-09T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 40,
+    "name": "Tena",
+    "lastname": "Krpan",
+    "email": "tena.krpan@gmail.com",
+    "phone": "090-140-0240",
+    "password": "$2b$12$vIfi4wUstUpVlNeMra93kuE19mJlQ8UCgjy4PcLwnT9IHv/o91I36",
+    "registration_date": "2024-04-10T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 41,
+    "name": "Alen",
+    "lastname": "Brajkovic",
+    "email": "alen.brajkovic@gmail.com",
+    "phone": "091-141-0241",
+    "password": "$2b$12$7XM.3.3n66FJE/DnzAUcweIOyJyttNo/dgEl5KIZHFCdTFMEodbJ.",
+    "registration_date": "2024-04-11T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 42,
+    "name": "Dora",
+    "lastname": "Katic",
+    "email": "dora.katic@gmail.com",
+    "phone": "092-142-0242",
+    "password": "$2b$12$DtNHYnhxXatlwxoyvizy.uFsHeONFpaxrCsqtGrkXNkXrtBk/4zf.",
+    "registration_date": "2024-04-12T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 43,
+    "name": "Vedran",
+    "lastname": "Lisjak",
+    "email": "vedran.lisjak@gmail.com",
+    "phone": "093-143-0243",
+    "password": "$2b$12$gMqLvipgn8Wab9CV6GjJy.zvG6aVsgjoee6cGdAd/K.SIX4r8KiNy",
+    "registration_date": "2024-04-13T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 44,
+    "name": "Tamara",
+    "lastname": "Bogdan",
+    "email": "tamara.bogdan@gmail.com",
+    "phone": "094-144-0244",
+    "password": "$2b$12$KmB8VNM9XRKWtBmtWZjgfuDIz.upiYc4YQDELGfvWj2munXOUNyJG",
+    "registration_date": "2024-04-14T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 45,
+    "name": "Josipa",
+    "lastname": "Rendulic",
+    "email": "josipa.rendulic@gmail.com",
+    "phone": "095-145-0245",
+    "password": "$2b$12$R3ocsMnXpZt/jVdFJN.V..ThP5AdfyXpJ61m5YNIBU85hkHUvChWO",
+    "registration_date": "2024-04-15T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 46,
+    "name": "Ivan",
+    "lastname": "Sablic",
+    "email": "ivan.sablic@gmail.com",
+    "phone": "096-146-0246",
+    "password": "$2b$12$1gTrrDqbt8cdwFyPKiXLWOFy4nI0uuiHikI1oIpNJNeQLk9xaQ8N2",
+    "registration_date": "2024-04-16T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 47,
+    "name": "Krešimir",
+    "lastname": "Pintar",
+    "email": "kresimir.pintar@gmail.com",
+    "phone": "097-147-0247",
+    "password": "$2b$12$IcmeM6XT9b2aDqXsS69KouRLSYIJrb7LodpQr4rX.FKjVTUebUSiW",
+    "registration_date": "2024-04-17T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 48,
+    "name": "Mirela",
+    "lastname": "Bosnjak",
+    "email": "mirela.bosnjak@gmail.com",
+    "phone": "098-148-0248",
+    "password": "$2b$12$dAwWien00l6ncTZWNJ9xO.MHVI57ILYn6rnpruFJcaGlNvd35tb0W",
+    "registration_date": "2024-04-18T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 49,
+    "name": "Renato",
+    "lastname": "Oreskovic",
+    "email": "renato.oreskovic@gmail.com",
+    "phone": "099-149-0249",
+    "password": "$2b$12$rYQh9NkjBact7tB2EScS9u8ml1IKB128ZYY9uctz5fnb5j8r25DDS",
+    "registration_date": "2024-04-19T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  },
+  {
+    "id": 50,
+    "name": "Mato",
+    "lastname": "Dokoza",
+    "email": "mato.dokoza@gmail.com",
+    "phone": "099-149-0249",
+    "password": "$2b$12$rYQh9NkjBact7tB2EScS9u8ml1IKB128ZYY9uctz5fnb5j8r25DDS",
+    "registration_date": "2024-04-19T00:00:00",
+    "last_login": "2025-05-09T10:20:53"
+  }
+]
